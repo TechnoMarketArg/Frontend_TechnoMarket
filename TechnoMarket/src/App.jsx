@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import axios from 'axios';
 import './App.css'
 
+import HoreCarousel from './components/carousel/Carousel';
+
 
 function App() {
   // URL de la API externa que queremos consultar
@@ -19,7 +21,7 @@ function App() {
   // useEffect se utiliza para realizar la solicitud a la API cuando el componente se monta
   useEffect(() => {
     // Función asincrónica para realizar la solicitud a la API
-    const fetchData = async () => {  
+    const fetchData = async () => {
       try {
         // Realizar la solicitud a la URL especificada
         const response = await axios.get(URL);
@@ -49,11 +51,19 @@ function App() {
   }, []);
 
   return (
-    <>
+
+    <div>
+      <HoreCarousel/>
+    </div>
       
-    </>
   )
+      
+
+    
+
+
   
+
 }
 
 export default App
