@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios';
 import './App.css'
+import Footer from './components/footer/Footer';
 
 
 function App() {
@@ -50,7 +51,7 @@ function App() {
 
   return (
     <>
-      
+      <Footer/>
     </>
   )
   
