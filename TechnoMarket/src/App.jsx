@@ -1,6 +1,13 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios';
 import './App.css'
+import ProductDetails from './components/productDetails/ProductDetails';
+import Spinner from 'react-bootstrap/Spinner';
+import { ProductCard } from './components/productCard/ProductCard'
+import { ProductCardSlider } from './components/productCardSlider/ProductCardSlider'
+import { FilterSearch } from './components/filterSearch/FilterSearch';
+import 'mdb-react-ui-kit/dist/css/mdb.min.css';
+import SortBy from './components/sortBy/SortBy';
 
 
 function App() {
@@ -11,7 +18,7 @@ function App() {
   const [Data, setData] = useState([]);
 
   // Estado para indicar si la solicitud está en curso
-  const [Cargando, setCargando] = useState(true);
+  const [Loading, setLoading] = useState(true);
 
   // Estado para almacenar cualquier error que ocurra durante la solicitud
   const [Error, setError] = useState(null);
@@ -19,7 +26,7 @@ function App() {
   // useEffect se utiliza para realizar la solicitud a la API cuando el componente se monta
   useEffect(() => {
     // Función asincrónica para realizar la solicitud a la API
-    const fetchData = async () => {  
+    const fetchData = async () => {
       try {
         // Realizar la solicitud a la URL especificada
         const response = await axios.get(URL);
@@ -33,13 +40,13 @@ function App() {
         setData(response.data);
 
         // Indicar que la solicitud ha finalizado
-        setCargando(false);
+        setLoading(false);
       } catch (error) {
         // Capturar cualquier error que ocurra durante la solicitud y actualizar el estado de error
         setError(error);
 
         // Indicar que la solicitud ha finalizado (incluso si hubo un error)
-        setCargando(false);
+        setLoading(false);
       }
     };
 
@@ -48,12 +55,39 @@ function App() {
 
   }, []);
 
+  const FiltersObject = [
+    { Brand: ["Apple", "Dell", "HP", "Lenovo", "Acer", "Asus", "Microsoft", "MSI", "Samsung", "Sony", "Toshiba", "Huawei"] },
+    { colors: ["rojo", "azul", "verde", "amarillo", "naranja", "morado", "rosa", "blanco", "negro", "gris", "marrón", "turquesa"] }
+  ];
+
   return (
-    <>
-      
-    </>
+    <div className='bg-[#333]'>
+     <FilterSearch FiltersObject={FiltersObject}/>
+     <SortBy/>
+       
+      <div className='flex justify-center'>
+        {Loading ? <Spinner animation="grow" variant="light" /> : <ProductDetails product={Data[8]} />}
+
+      </div>
+
+      <div className=''>
+      {Loading ? <Spinner animation="grow" variant="light" /> : <ProductCardSlider Title={'Offers'} Data={Data}/>}
+      </div>
+      <div className='flex flex-wrap gap-4 justify-center p-4'>
+        {Data.filter(product => product.title.length > 10).map(product => (
+            
+          <ProductCard
+            key={product.id}
+            title={product.title}
+            price={product.price}
+            description={product.description}
+            images={product.images}
+            />
+        ))}
+      </div>
+    </div>
   )
-  
+
 }
 
 export default App
