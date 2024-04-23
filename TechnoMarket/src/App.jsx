@@ -9,6 +9,8 @@ import { FilterSearch } from './components/filterSearch/FilterSearch';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import SortBy from './components/sortBy/SortBy';
 
+import HoreCarousel from './components/carousel/Carousel';
+
 
 function App() {
   // URL de la API externa que queremos consultar
@@ -55,39 +57,13 @@ function App() {
 
   }, []);
 
-  const FiltersObject = [
-    { Brand: ["Apple", "Dell", "HP", "Lenovo", "Acer", "Asus", "Microsoft", "MSI", "Samsung", "Sony", "Toshiba", "Huawei"] },
-    { colors: ["rojo", "azul", "verde", "amarillo", "naranja", "morado", "rosa", "blanco", "negro", "gris", "marrón", "turquesa"] }
-  ];
-
   return (
-    <div className='bg-[#333]'>
-     <FilterSearch FiltersObject={FiltersObject}/>
-     <SortBy/>
-       
-      <div className='flex justify-center'>
-        {Loading ? <Spinner animation="grow" variant="light" /> : <ProductDetails product={Data[8]} />}
 
-      </div>
-
-      <div className=''>
-      {Loading ? <Spinner animation="grow" variant="light" /> : <ProductCardSlider Title={'Offers'} Data={Data}/>}
-      </div>
-      <div className='flex flex-wrap gap-4 justify-center p-4'>
-        {Data.filter(product => product.title.length > 10).map(product => (
-            
-          <ProductCard
-            key={product.id}
-            title={product.title}
-            price={product.price}
-            description={product.description}
-            images={product.images}
-            />
-        ))}
-      </div>
+    <div>
+      <HoreCarousel/>
     </div>
+   
   )
-
 }
 
 export default App
