@@ -1,6 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import axios from 'axios';
-import './App.css'
+import './App.css';
+import NavBar from "./components/navBar/NavBar";
+import ButtonCategories from './components/buttonCategories/ButtonCategories';
+
 
 
 function App() {
@@ -50,7 +53,9 @@ function App() {
 
   return (
     <>
-      
+      <div>
+        <NavBar/>
+      </div>
     </>
   )
 }
