@@ -1,15 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios';
 import './App.css'
-import ProductDetails from './components/productDetails/ProductDetails';
-import Spinner from 'react-bootstrap/Spinner';
-import { ProductCard } from './components/productCard/ProductCard'
-import { ProductCardSlider } from './components/productCardSlider/ProductCardSlider'
-import { FilterSearch } from './components/filterSearch/FilterSearch';
-import 'mdb-react-ui-kit/dist/css/mdb.min.css';
-import SortBy from './components/sortBy/SortBy';
-
-import HoreCarousel from './components/carousel/Carousel';
 
 
 function App() {
@@ -58,11 +49,9 @@ function App() {
   }, []);
 
   return (
-
-    <div>
-      <HoreCarousel/>
-    </div>
-   
+    <>
+      
+    </>
   )
 }
 
