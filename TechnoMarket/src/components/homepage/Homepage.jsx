@@ -34,9 +34,15 @@ const Homepage = ({Data}) => {
                         />
                     ))
                 }
-            </div>
             <Footer/>
+            </div>
+            
+                
+            
+            
         </div>
+        
+    
     );
 };
 

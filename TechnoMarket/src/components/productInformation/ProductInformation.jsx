@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { FaCircle } from "react-icons/fa";
+import  {FaCircle}  from "react-icons/fa";
 
 
 const ProductInformation = ({ product }) => {
