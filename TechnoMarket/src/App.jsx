@@ -51,6 +51,16 @@ function App() {
 
   }, []);
 
+  // Funcion que va a Buscar el Contenido del Buscador en la API
+  const searchHandler = (searchTerm) => {
+    const filteredProduct = Data.filter((product) =>
+      product.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    
+    console.log(filteredProduct);
+  }
+  
+
   return (
     <>
       <div>
