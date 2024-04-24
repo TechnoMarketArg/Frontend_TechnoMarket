@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
-
+import img from './download.jpg'
 
 const ProductCard = ({title, price, description, images, offer}) => {
     return (
-            <div className="flex sm:min-w-[200px] sm:max-w-[220px] w-full m-1 cursor-pointer flex-col justify-between bg-gray-50 rounded-xl overflow-hidden">
+            <div className="flex sm:min-w-[200px] sm:max-w-[220px] w-full m-1 cursor-pointer flex-col justify-between bg-gray-200 rounded-xl overflow-hidden">
                 <div className="relative w-full sm:min-w-[200px] sm:max-w-[220px]">
                     {offer && <div className="absolute right-0 rounded-s-xl bg-green-500 p-2 font-medium">30% OFF</div>}
                     <img src={images[0]}  alt={title}/>

@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
-import NavBar from "./components/navBar/NavBar";
-import ButtonCategories from './components/buttonCategories/ButtonCategories';
-
-
+import Homepage from './components/homepage/Homepage';
+import Spinner from 'react-bootstrap/Spinner';
+import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 
 function App() {
   // URL de la API externa que queremos consultar
@@ -53,8 +52,8 @@ function App() {
 
   return (
     <>
-      <div>
-        <NavBar/>
+      <div className='bg-[rgb(234,247,253)]'>
+        {Loading ? <Spinner animation="grow" variant="dark" />   : <Homepage Data={Data}/>}
       </div>
     </>
   )

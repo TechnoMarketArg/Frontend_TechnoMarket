@@ -18,7 +18,7 @@ const HoreCarousel = () => {
         <Carousel.Item key={i} interval={3000} style={{ height: '400px' }}>
           <div style={{ position: 'relative', width: '100%', height: '100%' }}>
             <img src={img} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={`Slide ${i}`} />
-            <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '25%', background: 'linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1))' }}></div>
+            <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '25%', background: 'linear-gradient(to bottom, rgba(234,247,253,0), rgba(234,247,253,1))' }}></div>
           </div>
         </Carousel.Item>
       ))}

@@ -93,10 +93,10 @@ const ProductCardSlider = ({ Title, Data }) => {
     };
 
     return (
-        <div className="slider-container p-1">
-            <h2 className='text-white text-2xl font-bold mb-2'>{Title}</h2>
+        <div className="slider-container">
+            <h2 className='text-blue-500 text-2xl font-bold mb-2'>{Title}</h2>
             <Slider {...settings}>
-                {Data.slice(10, 18).map(product => (
+                {Data.slice(0, 8).map(product => (
                     <ProductCard
                         key={product.id}
                         offer={true}

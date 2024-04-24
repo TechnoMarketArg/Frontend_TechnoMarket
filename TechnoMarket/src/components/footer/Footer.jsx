@@ -7,7 +7,7 @@ const Footer = () => {
 
 
   return (
-    <MDBFooter bgColor='ligth' className='text-center text-lg-start text-muted fixed-bottom'>
+    <MDBFooter bgColor='ligth' className='text-center text-lg-start text-muted fixed-bottom block'>
       <section className='d-flex justify-content-center justify-content-lg-between p-4 border-bottom bg-[#5b5b5b]'>
         <div className='me-5 d-none d-lg-block text-white'>
           <span>Get connected with us on social networks:</span>
