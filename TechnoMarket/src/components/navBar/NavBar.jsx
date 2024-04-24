@@ -5,8 +5,9 @@ import logo from '../navBar/logo.jpg';
 import ButtonCategories from '../buttonCategories/ButtonCategories';
 import ButtonSearch from '../buttonSearch/ButtonSearch';
 import ButtonLogin from '../buttonLogin/ButtonLogin';
+import PropTypes from "prop-types";
 
-function NavScrollExample() {
+function NavScrollExample({ searchHandler }) {
   return (
     <Navbar expand="lg" className='bg-gradient-to-r from-[rgba(15,69,113,1)] via-[rgba(56,109,189,1)] to-[rgba(0,157,221,1)]'>
       <Container fluid>
@@ -22,13 +23,17 @@ function NavScrollExample() {
             navbarScroll
           >
             <ButtonCategories/>
-            <ButtonSearch/>  
+            <ButtonSearch onSearch={searchHandler}/>  
           </Nav>
           <ButtonLogin/>
         </Navbar.Collapse>
       </Container>
     </Navbar>
   );
+}
+
+NavScrollExample.propTypes = {
+  searchHandler: PropTypes.func
 }
 
 export default NavScrollExample;

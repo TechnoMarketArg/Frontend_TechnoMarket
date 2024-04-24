@@ -53,6 +53,7 @@ function App() {
 
   // Funcion que va a Buscar el Contenido del Buscador en la API
   const searchHandler = (searchTerm) => {
+    console.log("hola");
     const filteredProduct = Data.filter((product) =>
       product.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -64,7 +65,7 @@ function App() {
   return (
     <>
       <div>
-        <NavBar/>
+        <NavBar searchHandler = {searchHandler}/>
       </div>
     </>
   )
