@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
-
+import { MDBBtn } from 'mdb-react-ui-kit';
 
 const ProductCard = ({title, price, description, images, offer}) => {
     return (
-            <div className="flex sm:min-w-[200px] sm:max-w-[220px] w-full m-1 cursor-pointer flex-col justify-between bg-gray-50 rounded-xl overflow-hidden">
-                <div className="relative w-full sm:min-w-[200px] sm:max-w-[220px]">
+            <div className="flex  sm:min-w-[240px] sm:max-w-[240px] w-full cursor-pointer flex-col justify-between bg-gray-50  overflow-hidden">
+                <div className="relative w-full sm:min-w-[240px] sm:max-w-[240px]">
                     {offer && <div className="absolute right-0 rounded-s-xl bg-green-500 p-2 font-medium">30% OFF</div>}
                     <img src={images[0]}  alt={title}/>
                 </div>
@@ -43,9 +43,10 @@ const ProductCard = ({title, price, description, images, offer}) => {
                             </svg>
                         </div>*/}
                     </div>
-                    <div className="w-full flex justify-end">
+                    <div className="w-full flex justify-center gap-1 mb-2">
                         
-                        <button className="rounded-s-full bg-yellow-400 p-2 font-medium hover:bg-yellow-500">Add to cart</button>
+                        <MDBBtn size='sm'  className=' text-xs w-[110px]'>Buy now</MDBBtn>
+                        <MDBBtn size='sm' color='warning' className='text-xs w-[110px]'><span className='text-'>Add to cart</span></MDBBtn>
                     </div>
                 </div>
             </div>

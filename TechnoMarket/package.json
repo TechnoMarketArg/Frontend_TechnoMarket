@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@midudev/tailwind-animations": "^0.0.7",
+    "@nextui-org/react": "^2.3.6",
     "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
+    "framer-motion": "^11.1.7",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.4",
     "mdb-react-ui-kit": "^8.0.0",

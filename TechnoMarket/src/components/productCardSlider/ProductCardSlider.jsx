@@ -10,7 +10,7 @@ const NextArrow = (props) => {
     return (
         <IoIosArrowDroprightCircle
             className={className}
-            style={{ ...style, display: "block", size: "32px", color: "rgba(0, 115, 255, 0.7)", height: "100px", width: "40px" }} 
+            style={{ ...style, display: "block", size: "32px", color: "rgba(145, 179, 225, 0.7)", height: "100px", width: "40px" }} 
             onClick={onClick}
         />
     );
@@ -27,7 +27,7 @@ const PrevArrow = (props) => {
     return (
         <IoIosArrowDropleftCircle
             className={className}
-            style={{ ...style, display: "block", fontSize: "32px", color: "rgba(0, 115, 255, 0.7)", height: "100px", width: "40px", zIndex: "100" }}
+            style={{ ...style, display: "block", fontSize: "32px", color: "rgba(145, 179, 225, 0.7)", height: "100px", width: "40px", zIndex: "100" }}
             onClick={onClick}
         />
     );
@@ -54,7 +54,7 @@ const ProductCardSlider = ({ Title, Data }) => {
         initialSlide: 0,
         responsive: [
             {
-              breakpoint: 550,
+              breakpoint: 639,
               settings: {
                 slidesToShow: 1,
                 slidesToScroll: 1,
@@ -63,7 +63,7 @@ const ProductCardSlider = ({ Title, Data }) => {
               }
             },
             {
-              breakpoint: 660,
+              breakpoint: 783,
               settings: {
                 slidesToShow: 2,
                 slidesToScroll: 1,
@@ -72,7 +72,7 @@ const ProductCardSlider = ({ Title, Data }) => {
               }
             },
             {
-              breakpoint: 820,
+              breakpoint: 1024,
               settings: {
                 slidesToShow: 3,
                 slidesToScroll: 1,
@@ -81,9 +81,18 @@ const ProductCardSlider = ({ Title, Data }) => {
               }
             },
             {
-              breakpoint: 1020,
+              breakpoint: 1280,
               settings: {
                 slidesToShow: 4,
+                slidesToScroll: 1,
+                infinite: true,
+                dots: true
+              }
+            },
+            {
+              breakpoint: 1524,
+              settings: {
+                slidesToShow: 5,
                 slidesToScroll: 1,
                 infinite: true,
                 dots: true
@@ -93,7 +102,7 @@ const ProductCardSlider = ({ Title, Data }) => {
     };
 
     return (
-        <div className="slider-container p-1">
+        <div className="slider-container lg:ml-2 w-[380px] sm:w-[500px] md:w-[735px] lg:w-[984px] xl:w-[1240px] 2xl:w-[1524px]">
             <h2 className='text-white text-2xl font-bold mb-2'>{Title}</h2>
             <Slider {...settings}>
                 {Data.slice(10, 18).map(product => (
