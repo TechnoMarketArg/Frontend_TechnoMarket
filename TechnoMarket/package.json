@@ -10,8 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
     "@midudev/tailwind-animations": "^0.0.7",
     "@nextui-org/react": "^2.3.6",
+    "@mui/material": "^5.15.15",
+    "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
     "framer-motion": "^11.1.7",
@@ -26,7 +30,8 @@
     "react-slick": "^0.30.2",
     "slick-carousel": "^1.8.1",
     "sonner": "^1.4.41",
-    "sort-by": "^0.0.2"
+    "sort-by": "^0.0.2",
+    "styled-components": "^6.1.8"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",

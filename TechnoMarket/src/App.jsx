@@ -1,6 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import axios from 'axios';
-import './App.css'
+import './App.css';
+import NavBar from "./components/navBar/NavBar";
+import ButtonCategories from './components/buttonCategories/ButtonCategories';
+
 import ProductDetails from './components/productDetails/ProductDetails';
 import Spinner from 'react-bootstrap/Spinner';
 import { ProductCard } from './components/productCard/ProductCard'
@@ -61,6 +64,17 @@ function App() {
   ];
 
 
+
+  // Funcion que va a Buscar el Contenido del Buscador en la API
+  const searchHandler = (searchTerm) => {
+    console.log("hola");
+    const filteredProduct = Data.filter((product) =>
+      product.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    
+    console.log(filteredProduct);
+  }
+  
 
   return (
     <div className='bg-[#333]'>
