@@ -8,6 +8,7 @@ import { ProductCardSlider } from './components/productCardSlider/ProductCardSli
 import { FilterSearch } from './components/filterSearch/FilterSearch';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import {Avatar} from "@nextui-org/react";
+import ProductPage from './components/productPage/ProductPage';
 
 function App() {
   // URL de la API externa que queremos consultar
@@ -59,48 +60,16 @@ function App() {
     { colors: ["rojo", "azul", "verde", "amarillo", "naranja", "morado", "rosa", "blanco", "negro", "gris", "marrón", "turquesa"] }
   ];
 
-  const cards = [
-    // Aquí puedes pasar tus componentes de tarjeta (card)
-    <div className="bg-gray-200 p-4">Card 1</div>,
-    <div className="bg-gray-300 p-4">Card 2</div>,
-    <div className="bg-gray-400 p-4">Card 3</div>,
-    <div className="bg-gray-200 p-4">Card 4</div>,
-    <div className="bg-gray-300 p-4">Card 5</div>,
-    <div className="bg-gray-400 p-4">Card 6</div>,
-    <div className="bg-gray-200 p-4">Card 7</div>,
-    <div className="bg-gray-300 p-4">Card 8</div>,
-    <div className="bg-gray-400 p-4">Card 9</div>,
-    <div className="bg-gray-400 p-4">Card 10</div>,
-    <div className="bg-gray-400 p-4">Card 11</div>,
-    <div className="bg-gray-400 p-4">Card 12</div>,
-    <button className="bg-gray-400">ver mas</button>,
-    // Agrega más tarjetas si es necesario
-  ];
+
 
   return (
     <div className='bg-[#333]'>
 
-     <FilterSearch FiltersObject={FiltersObject}/>
-     <div className='flex justify-center'>
-        {Loading ? <Spinner animation="grow" variant="light" /> : <ProductDetails product={Data[8]} />}
+      <div className='flex justify-center'>
+        {Loading ? <Spinner animation="grow" variant="light" /> : <ProductPage product={Data[0]} Data={Data}/>}
 
-  </div>
+      </div>
 
-      <div className='w-full flex justify-center'>
-        {Loading ? <Spinner animation="grow" variant="light" /> : <ProductCardSlider Title={'Offers'} Data={Data}/>}
-      </div>
-      <div className='flex flex-wrap gap-2 justify-center p-4'>
-        {Data.filter(product => product.title.length > 10).map(product => (
-            
-          <ProductCard
-            key={product.id}
-            title={product.title}
-            price={product.price}
-            description={product.description}
-            images={product.images}
-            />
-        ))}
-      </div>
     </div>
   )
 

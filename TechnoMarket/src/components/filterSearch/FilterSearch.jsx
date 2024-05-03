@@ -50,7 +50,7 @@ const FilterSearch = ({FiltersObject}) => {
 
 
 FilterSearch.propTypes = {
-    FiltersObject: PropTypes.object,
+    FiltersObject: PropTypes.array,
 };
 
 

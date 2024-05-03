@@ -15,7 +15,7 @@ const ProductImages = ({product}) => {
 
 
     return (
-        <div className='flex flex-col-reverse sm:flex-row gap-2'>
+        <div className='sticky top-0 flex flex-col-reverse sm:flex-row gap-2 '>
             
             <div className='flex xs:flex-row  sm:flex-col gap-2'>
                 { 
@@ -28,7 +28,7 @@ const ProductImages = ({product}) => {
                 
             </div>
 
-            <div className='w-[320px] h-[320px] rounded-xl overflow-hidden'>
+            <div className='w-[380px] h-[380px] rounded-xl overflow-hidden'>
                 {image && <img src={image} key={image} alt="" className='animate-fade-in object-cover'/>}
             </div>
         </div>

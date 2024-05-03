@@ -102,7 +102,7 @@ const ProductCardSlider = ({ Title, Data }) => {
     };
 
     return (
-        <div className="slider-container lg:ml-2 w-[380px] sm:w-[500px] md:w-[735px] lg:w-[984px] xl:w-[1240px] 2xl:w-[1524px]">
+        <div className="slider-container my-4 lg:ml-2 w-[380px] sm:w-[500px] md:w-[735px] lg:w-[984px] xl:w-[1240px] 2xl:w-[1524px]">
             <h2 className='text-white text-2xl font-bold mb-2'>{Title}</h2>
             <Slider {...settings}>
                 {Data.slice(10, 18).map(product => (
