@@ -11,7 +11,8 @@ import { ProductCardSlider } from './components/productCardSlider/ProductCardSli
 import { FilterSearch } from './components/filterSearch/FilterSearch';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import {Avatar} from "@nextui-org/react";
-import ProductPage from './components/productPage/ProductPage';
+import ProductPage from './components/productPage/ProductPage';import Footer from './components/footer/Footer';
+
 
 function App() {
   // URL de la API externa que queremos consultar
