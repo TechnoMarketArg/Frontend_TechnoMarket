@@ -1,70 +1,19 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
 import './App.css';
 import NavBar from "./components/navBar/NavBar";
-import ButtonCategories from './components/buttonCategories/ButtonCategories';
-
-import ProductDetails from './components/productDetails/ProductDetails';
 import Spinner from 'react-bootstrap/Spinner';
-import { ProductCard } from './components/productCard/ProductCard'
-import { ProductCardSlider } from './components/productCardSlider/ProductCardSlider'
-import { FilterSearch } from './components/filterSearch/FilterSearch';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
-import {Avatar} from "@nextui-org/react";
-import ProductPage from './components/productPage/ProductPage';import Footer from './components/footer/Footer';
+import ProductPage from './components/productPage/ProductPage'; import Footer from './components/footer/Footer';
+import { useGET } from './components/customHook/CustomHook';
 
 
 function App() {
-  // URL de la API externa que queremos consultar
-  const URL = 'https://api.escuelajs.co/api/v1/products';
 
-  // Estado para almacenar los datos obtenidos de la API
-  const [Data, setData] = useState([]);
+  const [ProductsData, ProductsLoading, ProductsError]  = useGET('https://api.escuelajs.co/api/v1/products');
 
-  // Estado para indicar si la solicitud está en curso
-  const [Loading, setLoading] = useState(true);
-
-  // Estado para almacenar cualquier error que ocurra durante la solicitud
-  const [Error, setError] = useState(null);
-
-  // useEffect se utiliza para realizar la solicitud a la API cuando el componente se monta
-  useEffect(() => {
-    // Función asincrónica para realizar la solicitud a la API
-    const fetchData = async () => {
-      try {
-        // Realizar la solicitud a la URL especificada
-        const response = await axios.get(URL);
-
-        // Verificar si la respuesta es exitosa (código de estado 200-299)
-        if (response.status < 200 || response.status >= 300) {
-          throw new Error('Error en la red: ' + response.statusText);
-        }
-
-        // Actualizar el estado con los datos obtenidos de la API
-        setData(response.data);
-
-        // Indicar que la solicitud ha finalizado
-        setLoading(false);
-      } catch (error) {
-        // Capturar cualquier error que ocurra durante la solicitud y actualizar el estado de error
-        setError(error);
-
-        // Indicar que la solicitud ha finalizado (incluso si hubo un error)
-        setLoading(false);
-      }
-    };
-
-    // Llamar a la función fetchData para realizar la solicitud a la API
-    fetchData();
-
-  }, []);
-
-  const FiltersObject = [
+  /*const FiltersObject = [
     { Brand: ["Apple", "Dell", "HP", "Lenovo", "Acer", "Asus", "Microsoft", "MSI", "Samsung", "Sony", "Toshiba", "Huawei"] },
     { colors: ["rojo", "azul", "verde", "amarillo", "naranja", "morado", "rosa", "blanco", "negro", "gris", "marrón", "turquesa"] }
-  ];
-
-
+  ];*/
 
   // Funcion que va a Buscar el Contenido del Buscador en la API
   const searchHandler = (searchTerm) => {
@@ -72,19 +21,20 @@ function App() {
     const filteredProduct = Data.filter((product) =>
       product.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    
-    console.log(filteredProduct);
+
   }
-  
 
   return (
-    <div className='bg-[#333]'>
-
+    <div className=' min-h-[100vh]'>
+      <NavBar searchHandler={searchHandler} />
+        {/*<Stack spacing={1}>
+          <Rating name="half-rating" readOnly size="large" precision={0.5} defaultValue={2.5}/>
+  </Stack>*/}
       <div className='flex justify-center'>
-        {Loading ? <Spinner animation="grow" variant="light" /> : <ProductPage product={Data[0]} Data={Data}/>}
-
+        {ProductsLoading ? <Spinner animation="grow" variant="light" /> : <ProductPage product={ProductsData[0]} Data={ProductsData} />}
       </div>
-
+      
+    <Footer />
     </div>
   )
 
