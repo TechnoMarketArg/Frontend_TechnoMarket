@@ -4,9 +4,9 @@ import { MDBCheckbox } from 'mdb-react-ui-kit';
 const Filter = ({ filter, isChecked, handleCheckboxChange }) => {
     return (
         <>
-            <div className={`flex justify-between p-2 ${isChecked ? 'bg-blue-100/30' : 'bg-white'}`}>
+            <div className={`flex justify-between p-2`} color='info'>
                 <span>{filter}</span>
-                <MDBCheckbox name={filter} id={filter} value={filter} aria-label={filter} checked={isChecked} onChange={handleCheckboxChange}/>
+                <MDBCheckbox name={filter} id={filter} value={filter} aria-label={filter} checked={isChecked} onChange={handleCheckboxChange} />
             </div>
             <hr className="" />
         </>

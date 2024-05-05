@@ -53,7 +53,7 @@ function App() {
   return (
     <>
       <div className='bg-[rgb(234,247,253)]'>
-        {Loading ? <Spinner animation="grow" variant="dark" />   : <Homepage Data={Data}/>}
+        {Loading ? <Spinner animation="grow" variant="dark" />   : <Homepage Data={Data}/>} 
       </div>
     </>
   )
