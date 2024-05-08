@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import axios from 'axios';
-import './App.css'
-import { Toaster, toast } from 'sonner'
+import './App.css';
+import Homepage from './components/homepage/Homepage';
+import Spinner from 'react-bootstrap/Spinner';
+import 'mdb-react-ui-kit/dist/css/mdb.min.css';import { Toaster, toast } from 'sonner'
 import Cart from './components/cart/Cart';
 
 function App() {
@@ -12,7 +14,7 @@ function App() {
   const [Data, setData] = useState([]);
 
   // Estado para indicar si la solicitud está en curso
-  const [Cargando, setCargando] = useState(true);
+  const [Loading, setLoading] = useState(true);
 
   // Estado para almacenar cualquier error que ocurra durante la solicitud
   const [Error, setError] = useState(null);
@@ -20,7 +22,7 @@ function App() {
   // useEffect se utiliza para realizar la solicitud a la API cuando el componente se monta
   useEffect(() => {
     // Función asincrónica para realizar la solicitud a la API
-    const fetchData = async () => {  
+    const fetchData = async () => {
       try {
         // Realizar la solicitud a la URL especificada
         const response = await axios.get(URL);
@@ -34,13 +36,13 @@ function App() {
         setData(response.data);
 
         // Indicar que la solicitud ha finalizado
-        setCargando(false);
+        setLoading(false);
       } catch (error) {
         // Capturar cualquier error que ocurra durante la solicitud y actualizar el estado de error
         setError(error);
 
         // Indicar que la solicitud ha finalizado (incluso si hubo un error)
-        setCargando(false);
+        setLoading(false);
       }
     };
 
@@ -86,12 +88,11 @@ function App() {
 
   return (
     <>
-
-    <Cart toggleOpen={toggleOpen} setOptSmModal={setOptSmModal} optSmModal={optSmModal} ShoppingCart={ShoppingCart} removeCart={removeCart}/>
-    <Toaster richColors position="top-center"/>
+      <div className='bg-[rgb(234,247,253)]'>
+        {Loading ? <Spinner animation="grow" variant="dark" />   : <Homepage Data={Data}/>}
+      </div>
     </>
   )
-  
 }
 
 export default App
