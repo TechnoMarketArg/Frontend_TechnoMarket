@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios';
 import './App.css'
-
+import { Toaster, toast } from 'sonner'
+import Cart from './components/cart/Cart';
 
 function App() {
   // URL de la API externa que queremos consultar
@@ -48,9 +49,46 @@ function App() {
 
   }, []);
 
+  const [modalShow, setModalShow] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [optSmModal, setOptSmModal] = useState(false);
+
+  const toggleOpen = () => setOptSmModal(!optSmModal);
+
+  const openModal = (product) => {
+   
+
+    setSelectedProduct(product); // Establece el juego seleccionado
+    setModalShow(true);
+  };
+
+  //cerrar el modal de mas informacion
+  const hideModal = () => {
+    setSelectedProduct(null); // Resetea el juego seleccionado al cerrar
+    setModalShow(false);
+  };
+
+  const [ShoppingCart, setShoppingCart] = useState([]);
+
+  //agregar productos al carrito
+  const addCart = (product) => {
+    toast.success(`${product.title} added to shopping cart successfully`)
+    setShoppingCart([...ShoppingCart, product])
+  }
+
+  //FALTA LOGICA
+  //eliminar priductos del carrito
+  const removeCart = (gameTitle) => {
+    setShoppingCart(ShoppingCart.filter(game => game.title !== gameTitle))
+  }
+
+
+
   return (
     <>
-      
+
+    <Cart toggleOpen={toggleOpen} setOptSmModal={setOptSmModal} optSmModal={optSmModal} ShoppingCart={ShoppingCart} removeCart={removeCart}/>
+    <Toaster richColors position="top-center"/>
     </>
   )
   
