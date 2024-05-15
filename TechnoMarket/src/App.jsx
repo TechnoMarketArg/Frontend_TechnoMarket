@@ -30,11 +30,14 @@ function App() {
         {/*<Stack spacing={1}>
           <Rating name="half-rating" readOnly size="large" precision={0.5} defaultValue={2.5}/>
   </Stack>*/}
-      <div className='flex justify-center'>
-        {ProductsLoading ? <Spinner animation="grow" variant="light" /> : <ProductPage product={ProductsData[0]} Data={ProductsData} />}
+      <div className='flex justify-center '>
+        {ProductsLoading ? (
+          <div className='w-[100vw] h-[80vh] flex justify-center items-center'>
+            <Spinner animation="grow" variant="dark" />
+          </div>
+          ): <ProductPage product={ProductsData[0]} Data={ProductsData} />}
       </div>
       
-    <Footer />
     </div>
   )
 

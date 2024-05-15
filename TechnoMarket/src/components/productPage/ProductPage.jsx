@@ -7,7 +7,7 @@ import ProductReviews from '../productReviews/ProductReviews';
 
 const ProductPage = ({product, Data}) => {
     return (
-        <div className='flex flex-col items-center'>
+        <div className='flex flex-col items-center animate-blurred-fade-in'>
             <ProductDetails product={product} />
             <ProductCardSlider Title={'More products of the trader'} Data={Data}/>
             <ProductDescription description={product.description}/>
