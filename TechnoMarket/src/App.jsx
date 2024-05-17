@@ -5,6 +5,7 @@ import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import ProductPage from './components/productPage/ProductPage'; import Footer from './components/footer/Footer';
 import { useGET } from './components/customHook/CustomHook';
 import InventoryItem from './components/inventoryItem/InventoryItem';
+import Inventory from './components/inventory/Inventory';
 
 
 function App() {
@@ -27,7 +28,17 @@ function App() {
 
   return (
     <div className=' min-h-[100vh]'>
-      {ProductsLoading ? <Spinner/> : <InventoryItem ProductsData={ProductsData}/>}
+      <div className='flex justify-center '>
+        {ProductsLoading ? (
+          <div className='w-[100vw] h-[80vh] flex justify-center items-center'>
+            <Spinner animation="grow" variant="dark" />
+          </div>
+          ): (
+            <>
+              <Inventory products={ProductsData}/>
+            </>
+          )}
+      </div>
     </div>
   )
 
