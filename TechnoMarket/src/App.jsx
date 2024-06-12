@@ -1,4 +1,7 @@
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import './App.css';
+import Homepage from './components/homepage/Homepage';
 import NavBar from "./components/navBar/NavBar";
 import Spinner from 'react-bootstrap/Spinner';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
