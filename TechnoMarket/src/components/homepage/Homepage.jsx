@@ -8,7 +8,7 @@ import ProductDetails from '../productDetails/ProductDetails'
 import {FilterSearch} from '../filterSearch/FilterSearch'
 import Footer from '../footer/Footer'
 import SearchPage from '../searchPage/SearchPage';
-const Homepage = ({Data}) => {
+const Homepage = ({Data,openModal,addCart}) => {
     const [filteredProduct, setFilteredProduct] = useState("")
 
 
@@ -45,6 +45,8 @@ const Homepage = ({Data}) => {
                             price={product.price}
                             description={product.description}
                             images={product.images}
+                            openModal={openModal}
+                            addCart={addCart}
                         />
                     ))
                 }
@@ -60,6 +62,8 @@ const Homepage = ({Data}) => {
 
 Homepage.propTypes = {
     Data: PropTypes.array,
+    openModal: PropTypes.func,
+    addCart: PropTypes.func,    
 };
 
 
