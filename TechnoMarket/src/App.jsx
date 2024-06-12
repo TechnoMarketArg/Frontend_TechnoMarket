@@ -6,40 +6,28 @@ import ProductPage from './components/productPage/ProductPage'; import Footer fr
 import { useGET } from './components/customHook/CustomHook';
 import InventoryItem from './components/inventoryItem/InventoryItem';
 import Inventory from './components/inventory/Inventory';
+import StoreProfile from './components/storeProfile/StoreProfile';
 
 
 function App() {
 
   const [ProductsData, ProductsLoading, ProductsError]  = useGET('https://api.escuelajs.co/api/v1/products');
 
-  // const FiltersObject = [
-  //   { Brand: ["Apple", "Dell", "HP", "Lenovo", "Acer", "Asus", "Microsoft", "MSI", "Samsung", "Sony", "Toshiba", "Huawei"] },
-  //   { colors: ["rojo", "azul", "verde", "amarillo", "naranja", "morado", "rosa", "blanco", "negro", "gris", "marrón", "turquesa"] }
-  // ];
-
-  // Funcion que va a Buscar el Contenido del Buscador en la API
-  // const searchHandler = (searchTerm) => {
-  //   console.log("hola");
-  //   const filteredProduct = Data.filter((product) =>
-  //     product.title.toLowerCase().includes(searchTerm.toLowerCase())
-  //   );
-
-  // }
+  console.log(ProductsData)
 
   return (
-    <div className=' min-h-[100vh]'>
-      <div className='flex justify-center '>
+      <div>
         {ProductsLoading ? (
           <div className='w-[100vw] h-[80vh] flex justify-center items-center'>
             <Spinner animation="grow" variant="dark" />
           </div>
           ): (
             <>
-              <Inventory products={ProductsData}/>
+              <NavBar/>
+              <StoreProfile ProductsData={ProductsData}/>
             </>
           )}
       </div>
-    </div>
   )
 
 }
