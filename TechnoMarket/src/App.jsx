@@ -1,16 +1,4 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import './App.css';
-import Homepage from './components/homepage/Homepage';
-import NavBar from "./components/navBar/NavBar";
-import Spinner from 'react-bootstrap/Spinner';
-import 'mdb-react-ui-kit/dist/css/mdb.min.css';
-import ProductPage from './components/productPage/ProductPage'; import Footer from './components/footer/Footer';
-import { useGET } from './components/customHook/CustomHook';
-import InventoryItem from './components/inventoryItem/InventoryItem';
-import Inventory from './components/inventory/Inventory';
-import StoreProfile from './components/storeProfile/StoreProfile';
-
+import { useGET } from './components/customHook/CustomHook.jsx'
 
 function App() {
 
@@ -20,16 +8,7 @@ function App() {
 
   return (
       <div>
-        {ProductsLoading ? (
-          <div className='w-[100vw] h-[80vh] flex justify-center items-center'>
-            <Spinner animation="grow" variant="dark" />
-          </div>
-          ): (
-            <>
-              <NavBar/>
-              <StoreProfile ProductsData={ProductsData}/>
-            </>
-          )}
+       
       </div>
   )
 

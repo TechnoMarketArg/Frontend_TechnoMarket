@@ -119,6 +119,7 @@ const ProductCardSlider = ({ Title, Data }) => {
                 ))}
             </Slider>
         </div>
+      </div>
     );
 };
 
