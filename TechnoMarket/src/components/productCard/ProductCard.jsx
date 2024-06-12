@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { MDBBtn } from 'mdb-react-ui-kit';
 
-const ProductCard = ({title, price, description, images, offer,addCart, game}) => {
+const ProductCard = ({title, price, images, offer}) => {
     return (
             <div className="flex  sm:min-w-[240px] sm:max-w-[240px] w-full cursor-pointer flex-col justify-between bg-gray-50  overflow-hidden">
                 <div className="relative w-full sm:min-w-[240px] sm:max-w-[240px]">
