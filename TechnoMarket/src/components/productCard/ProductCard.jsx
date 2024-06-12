@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import img from './download.jpg'
+import { Button } from 'react-bootstrap';
 
-const ProductCard = ({title, price, description, images, offer}) => {
+const ProductCard = ({title, price, description, images, offer,addCart, game}) => {
     return (
             <div className="flex sm:min-w-[200px] sm:max-w-[220px] w-full m-1 cursor-pointer flex-col justify-between bg-gray-200 rounded-xl overflow-hidden">
                 <div className="relative w-full sm:min-w-[200px] sm:max-w-[220px]">
@@ -45,7 +46,8 @@ const ProductCard = ({title, price, description, images, offer}) => {
                     </div>
                     <div className="w-full flex justify-end">
                         
-                        <button className="rounded-s-full bg-yellow-400 p-2 font-medium hover:bg-yellow-500">Add to cart</button>
+                   
+                    <Button className='mx-3' onClick={() => addCart(game)} variant='warning'>Add to cart</Button>
                     </div>
                 </div>
             </div>
@@ -59,6 +61,9 @@ ProductCard.propTypes = {
     description: PropTypes.string,
     images: PropTypes.array,
     offer: PropTypes.bool,
+    addCart: PropTypes.func,
+    game: PropTypes.object
+
 };
 
 

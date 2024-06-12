@@ -3,8 +3,10 @@ import axios from 'axios';
 import './App.css';
 import Homepage from './components/homepage/Homepage';
 import Spinner from 'react-bootstrap/Spinner';
-import 'mdb-react-ui-kit/dist/css/mdb.min.css';import { Toaster, toast } from 'sonner'
+
 import Cart from './components/cart/Cart';
+import { Navbar } from 'react-bootstrap';
+
 
 function App() {
   // URL de la API externa que queremos consultar
@@ -51,30 +53,22 @@ function App() {
 
   }, []);
 
-  const [modalShow, setModalShow] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+ 
+ 
   const [optSmModal, setOptSmModal] = useState(false);
 
   const toggleOpen = () => setOptSmModal(!optSmModal);
 
-  const openModal = (product) => {
-   
 
-    setSelectedProduct(product); // Establece el juego seleccionado
-    setModalShow(true);
-  };
 
   //cerrar el modal de mas informacion
-  const hideModal = () => {
-    setSelectedProduct(null); // Resetea el juego seleccionado al cerrar
-    setModalShow(false);
-  };
+
 
   const [ShoppingCart, setShoppingCart] = useState([]);
 
   //agregar productos al carrito
   const addCart = (product) => {
-    toast.success(`${product.title} added to shopping cart successfully`)
+    
     setShoppingCart([...ShoppingCart, product])
   }
 
@@ -89,7 +83,12 @@ function App() {
   return (
     <>
       <div className='bg-[rgb(234,247,253)]'>
-        {Loading ? <Spinner animation="grow" variant="dark" />   : <Homepage Data={Data}/>}
+      
+        <Navbar bg="light" expand="lg"></Navbar>
+        {Loading ? <Spinner animation="grow" variant="dark" />   : <Homepage Data={Data} addCart={addCart} />}
+        
+        <Cart toggleOpen={toggleOpen} setOptSmModal={setOptSmModal} optSmModal={optSmModal} ShoppingCart={ShoppingCart} removeCart={removeCart}/>
+
       </div>
     </>
   )

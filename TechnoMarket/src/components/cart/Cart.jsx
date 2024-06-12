@@ -15,8 +15,11 @@ import {
     MDBModalBody
 } from "mdb-react-ui-kit";
 import PropTypes from "prop-types" 
-import CardItem from "../cartItem/CartItem";
-import CardCartChekout from "../cardCartChekout/cardCartChekout";
+
+import CardCartChekout from "../cardCartCheckout/CardCartCheckout";
+import { CartItem } from "../cartItems/CartItem";
+
+
 
 
 
@@ -50,7 +53,8 @@ const Cart = ({optSmModal, setOptSmModal, toggleOpen, ShoppingCart, removeCart})
 
                                                     {/*Componente propio*/}
                                                     {ShoppingCart.length ? ShoppingCart.map(game => (
-                                                        <CardItem 
+                                                        <CartItem
+                                                        
                                                             key={game.id}
                                                             game={game}
                                                             removeCart={removeCart}

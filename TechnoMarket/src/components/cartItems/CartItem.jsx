@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { Button } from "react-bootstrap";
 
 
-const CardItem = ({game, removeCart}) => {
+const CartItem = ({game, removeCart}) => {
     return (
     <>
         <MDBRow>
@@ -66,10 +66,10 @@ const CardItem = ({game, removeCart}) => {
 };
 
 
-CardItem.propTypes = {
+CartItem.propTypes = {
     game: PropTypes.array,
     removeCart: PropTypes.func,
 };
 
 
-export default CardItem;
+export { CartItem }  ;
