@@ -8,7 +8,7 @@ import ButtonLogin from '../buttonLogin/ButtonLogin';
 import PropTypes from "prop-types";
 import { Button } from 'react-bootstrap';
 
-function NavScrollExample({ searchHandler,ShoppingCart,toggleOpen}) {
+function NavBar({ searchHandler,ShoppingCart,toggleOpen}) {
   return (
     <Navbar expand="lg" className='bg-gradient-to-r from-[rgba(15,69,113,1)] via-[rgba(56,109,189,1)] to-[rgba(0,157,221,1)]'>
       <Container fluid>
@@ -39,19 +39,13 @@ function NavScrollExample({ searchHandler,ShoppingCart,toggleOpen}) {
   );
 }
 
-NavScrollExample.propTypes = {
+NavBar.propTypes = {
   searchHandler: PropTypes.func,
   ShoppingCart: PropTypes.array,
   toggleOpen: PropTypes.func,
 }
 
-export default NavScrollExample;
+export default NavBar;
 
 
 
-
-
-//<Navbar.Brand href="#">
-//<img src={logo} alt="Logo" width="40" height="20" className="d-inline-block align-end" style={{ marginRight: '30px', borderRadius: '50%'}} />
-//TechnoMarket 
-//</Navbar.Brand>

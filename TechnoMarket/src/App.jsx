@@ -84,8 +84,10 @@ function App() {
     <>
       <div className='bg-[rgb(234,247,253)]'>
       
-        <Navbar bg="light" expand="lg"></Navbar>
-        {Loading ? <Spinner animation="grow" variant="dark" />   : <Homepage Data={Data} addCart={addCart} />}
+        <button  onClick={toggleOpen}>tade trolo</button>
+          
+        
+        
         
         <Cart toggleOpen={toggleOpen} setOptSmModal={setOptSmModal} optSmModal={optSmModal} ShoppingCart={ShoppingCart} removeCart={removeCart}/>
 
