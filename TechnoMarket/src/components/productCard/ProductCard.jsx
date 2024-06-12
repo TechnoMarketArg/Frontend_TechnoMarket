@@ -16,7 +16,7 @@ const ProductCard = ({title, price, images, offer}) => {
                             <p className="overflow-hidden text-ellipsis text-lg font-bold">{title}</p>
                         </div>
 
-
+                                
                         {/*<div className="my-8 h-[50px] sm:min-w-[200px] sm:max-w-[220px] w-full overflow-hidden">
                             <p className="line-clamp-2">{description}</p>
                         </div>

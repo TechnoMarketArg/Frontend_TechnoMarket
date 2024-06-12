@@ -28,11 +28,11 @@ const FilterSearch = ({FiltersObject}) => {
 
     return (
         <>
-            <MDBBtn className='bg-[#1256b1] border-[#1256b1] hover:bg-[#3577d7] hover:border-[#3577d7]' onClick={handleShow}>
+            <MDBBtn onClick={handleShow} color='info'>
                 Filter
             </MDBBtn>
 
-            <Offcanvas show={show} onHide={handleClose}>
+            <Offcanvas show={show} onHide={handleClose} color='info'>
                 <Offcanvas.Header closeButton>
                     <Offcanvas.Title className='text-2xl font-mono text-blue-700'>TechnoMarket</Offcanvas.Title>
                 </Offcanvas.Header>
