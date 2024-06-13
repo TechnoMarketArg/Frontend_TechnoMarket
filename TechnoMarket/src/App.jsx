@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios';
 import './App.css'
+import Login from './components/login/Login';
+
+
 
 
 function App() {
@@ -50,7 +53,9 @@ function App() {
 
   return (
     <>
-      
+      <div>
+        <Login/>
+      </div>
     </>
   )
   
