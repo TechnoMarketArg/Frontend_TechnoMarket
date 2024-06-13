@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios';
 import './App.css'
+import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 
 
 function App() {
