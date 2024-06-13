@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios';
 import './App.css'
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
+import PublishProduct from './components/publishProduct/PublishProduct';
 
 
 function App() {
@@ -49,9 +50,16 @@ function App() {
 
   }, []);
 
+  const [optSmModal, setOptSmModal] = useState(false);
+
+  const toggleOpen = () => setOptSmModal(!optSmModal);
+
   return (
     <>
-      
+      <button onClick={toggleOpen}>tade trolo</button>
+
+      <PublishProduct toggleOpen={toggleOpen} setOptSmModal={setOptSmModal} optSmModal={optSmModal} />
+
     </>
   )
   
