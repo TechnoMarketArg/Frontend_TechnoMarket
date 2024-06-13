@@ -12,13 +12,11 @@ import {
   MDBCol,
   MDBInput
 } from 'mdb-react-ui-kit';
-import { useState, useRef, useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 
 
 function Login() {
-  const [userValid, setUserValid] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
