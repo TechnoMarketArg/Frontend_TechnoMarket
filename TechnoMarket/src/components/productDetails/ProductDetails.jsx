@@ -28,7 +28,8 @@ const ProductDetails = () => {
     price: price,
     images: images,
     description: description,
-  }
+    quantity: 1,
+  };
   return (
     <>
       <div className="flex flex-col sm:flex-row gap-2 sm:gap-10 flex-wrap m-8 p-4 rounded-xl bg-gray-100 border-white border-2">

@@ -14,7 +14,7 @@ function NavBar({ searchHandler, ShoppingCart, toggleOpen }) {
       expand="lg"
       className="bg-gradient-to-r from-[rgba(15,69,113,1)] via-[rgba(56,109,189,1)] to-[rgba(0,157,221,1)]">
       <Container fluid>
-        <Navbar.Brand href="#">
+        <Navbar.Brand href="/">
           <img
             src={logo}
             alt="Logo"
@@ -25,7 +25,7 @@ function NavBar({ searchHandler, ShoppingCart, toggleOpen }) {
           />
         </Navbar.Brand>
         <Navbar.Brand
-          href="#"
+          href="/"
           style={{ fontFamily: "monospace" }}
           className="text-white font-bold">
           TechnoMarket

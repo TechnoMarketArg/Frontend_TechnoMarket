@@ -1,6 +1,11 @@
 import Dropdown from 'react-bootstrap/Dropdown';
+import { useGET } from '../customHook/CustomHook';
+import { Spinner } from 'react-bootstrap';
 
 function ButtonCategories() {
+
+  const [Data, Loanding, Error ] = useGET("http://localhost:3000/categories")
+
   return (
     <Dropdown>
       <Dropdown.Toggle variant="outline-light" id="dropdown-basic" >
@@ -8,11 +13,13 @@ function ButtonCategories() {
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
-        <Dropdown.Item href="/Computing">Computing</Dropdown.Item>
-        <Dropdown.Item href="/Consoles-And-Videogames">Consoles and Videogames</Dropdown.Item>
-        <Dropdown.Item href="/Smartphone">Smartphone</Dropdown.Item>
-        <Dropdown.Item href="/Audio-And-Video">Audio and Video</Dropdown.Item>
-        <Dropdown.Item href="/PC-Components">PC Components</Dropdown.Item>
+      {Loanding && <Spinner/>}
+
+        {Data.map((category) => (
+
+          <Dropdown.Item key={category} href={`/category/${category}`}>{category}</Dropdown.Item>
+        ))}
+
       </Dropdown.Menu>
     </Dropdown>
   );

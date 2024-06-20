@@ -37,27 +37,25 @@ const ProductCard = ({
   };
 
   return (
-    <div
-      
-      className="flex bg-image rounded hover-zoom hover-overlay sm:min-w-[180px] sm:max-w-[200px] w-full cursor-pointer flex-col justify-between bg-white overflow-hidden">
+    <div className="flex bg-image rounded hover-zoom hover-overlay sm:min-w-[180px] sm:max-w-[200px] w-full cursor-pointer flex-col justify-between bg-white overflow-hidden">
       <button onClick={handleClick}>
-      <div className="relative w-full">
-        {offer && (
-          <div className="absolute right-0 rounded-s-xl bg-green-500 p-2 font-medium z-20">
-            30% OFF
-          </div>
-        )}
-        <MDBRipple
-          rippleTag="div"
-          rippleColor="light"
-          className="bg-image rounded hover-zoom hover-overlay object-cover min-h-60 flex justify-center items-center bg-white"
-          onClick={handleClick}>
-          <img src={images[0]} alt={title} />
-          <div
-            className="mask"
-            style={{ backgroundColor: "rgba(251, 251, 251, 0.2)" }}></div>
-        </MDBRipple>
-      </div>
+        <div className="relative w-full">
+          {offer && (
+            <div className="absolute right-0 rounded-s-xl bg-green-500 p-2 font-medium z-20">
+              30% OFF
+            </div>
+          )}
+          <MDBRipple
+            rippleTag="div"
+            rippleColor="light"
+            className="bg-image rounded hover-zoom hover-overlay object-cover min-h-60 flex justify-center items-center bg-white"
+            onClick={handleClick}>
+            <img src={images[0]} alt={title} />
+            <div
+              className="mask"
+              style={{ backgroundColor: "rgba(251, 251, 251, 0.2)" }}></div>
+          </MDBRipple>
+        </div>
       </button>
       <div className="w-full">
         <div className="p-2">
@@ -100,7 +98,6 @@ const ProductCard = ({
           </MDBBtn>
         </div>
       </div>
-              
     </div>
   );
 };

@@ -10,36 +10,41 @@ import { useGET } from "../customHook/CustomHook";
 import Cart from "../cart/Cart.jsx";
 import { Toaster, toast } from "sonner";
 import Loading from "../loading/Loading";
-import NavBar from '../navBar/NavBar';
+import NavBar from "../navBar/NavBar";
 
-const Homepage = () => {
-  const [ProductsData, ProductsLoading, ProductsError] = useGET(
+const Homepage = (
+  {
+  ProductsData,
+  addCart,
+  ProductsLoading,
+  ProductsError}
+) => {
+  /*const [ProductsData, ProductsLoading, ProductsError] = useGET(
     "http://localhost:3000/products"
-  );
+  );*/
 
-  const [filteredProduct, setFilteredProduct] = useState();
+  //const [filteredProduct, setFilteredProduct] = useState();
 
+  /*const [optSmModal, setOptSmModal] = useState(false);
 
-  const [optSmModal, setOptSmModal] = useState(false);
-
-  const toggleOpen = () => setOptSmModal(!optSmModal);
+  const toggleOpen = () => setOptSmModal(!optSmModal);*/
 
   //cerrar el modal de mas informacion
 
-  const [ShoppingCart, setShoppingCart] = useState([]);
+  //const [ShoppingCart, setShoppingCart] = useState([]);
 
   //agregar productos al carrito
-  const addCart = (product) => {
+  /*const addCart = (product) => {
     if (ShoppingCart.some((p) => p.id == product.id)) {
       toast.warning(`${product.title} already included in the cart`);
     } else {
       toast.success(`${product.title} added to shopping cart successfully`);
       setShoppingCart([...ShoppingCart, product]);
     }
-  };
+  };*/
 
   //aumentar la cantidad de un producto en el carrito
-  const increaseQuantity = (productId) => {
+  /* const increaseQuantity = (productId) => {
     setShoppingCart(
       ShoppingCart.map((item) =>
         item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
@@ -62,7 +67,7 @@ const Homepage = () => {
   //eliminar priductos del carrito
   const removeCart = (gameTitle) => {
     setShoppingCart(ShoppingCart.filter((game) => game.title !== gameTitle));
-  };
+  };*/
 
   if (ProductsLoading) {
     return <Loading />;
@@ -72,17 +77,16 @@ const Homepage = () => {
     return <h1>Error... </h1>;
   }
 
-
-  // Funcion que va a Buscar el Contenido del Buscador en la API
+  /*// Funcion que va a Buscar el Contenido del Buscador en la API
   const searchHandler = (searchTerm) => {
     const filtered = ProductsData.filter((product) =>
       product.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredProduct(filtered);
     console.log(filteredProduct);
-  };
+  };*/
 
-  const FiltersObject = [
+  /*const FiltersObject = [
     {
       Brand: [
         "Apple",
@@ -115,31 +119,12 @@ const Homepage = () => {
         "turquesa",
       ],
     },
-  ];
+  ];*/
 
   return (
     <>
-      <Toaster richColors position="top-center" />
-      <Cart
-        optSmModal={optSmModal}
-        setOptSmModal={setOptSmModal}
-        toggleOpen={toggleOpen}
-        ShoppingCart={ShoppingCart}
-        removeCart={removeCart}
-        decreaseQuantity={decreaseQuantity}
-        increaseQuantity={increaseQuantity}
-      />
+      
       <div className="animate-fade-in">
-        <NavBar
-          searchHandler={searchHandler}
-          ShoppingCart={ShoppingCart}
-          toggleOpen={toggleOpen}
-        />
-        {filteredProduct ? (
-          <SearchPage filteredProduct={filteredProduct} />
-        ) : (
-          ""
-        )}
         <Carousel />
         <div className="w-full flex justify-center">
           <div className="max-w-[100px] flex justify-center">
@@ -173,11 +158,18 @@ const Homepage = () => {
 };
 
 Homepage.propTypes = {
-  Data: PropTypes.array,
-  openModal: PropTypes.func,
-  addCart: PropTypes.func,
-  ShoppingCart: PropTypes.array,
+  optSmModal: PropTypes.bool,
+  setOptSmModal: PropTypes.func,
   toggleOpen: PropTypes.func,
+  ShoppingCart: PropTypes.array,
+  removeCart: PropTypes.func,
+  decreaseQuantity: PropTypes.func,
+  increaseQuantity: PropTypes.func,
+  ProductsData: PropTypes.array,
+  addCart: PropTypes.func,
+  ProductsLoading: PropTypes.bool,
+  ProductsError: PropTypes.bool,
+  
 };
 
 export default Homepage;

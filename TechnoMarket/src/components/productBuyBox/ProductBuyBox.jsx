@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import { MDBBtn } from 'mdb-react-ui-kit';
+import { NavBarContext } from '../navBarContext/NavBarContext';
 
 
 const ProductBuyBox = ({ product }) => {
     const [quantity, setQuantity] = useState(1);
+
+    const {
+        addCart
+      } = useContext(NavBarContext);
 
     const handleChange = (event) => {
         setQuantity(event.target.value);
@@ -46,7 +51,7 @@ const ProductBuyBox = ({ product }) => {
 
             <div className='flex flex-col gap-3'>
                 <MDBBtn rounded disabled={stock ? false : true}>BUY NOW</MDBBtn>
-                <MDBBtn rounded color='warning' disabled={stock ? false : true}>ADD TO CART</MDBBtn>
+                <MDBBtn rounded color='warning' disabled={stock ? false : true} onClick={() => addCart(product)}>ADD TO CART</MDBBtn>
             </div>
 
         </div>
