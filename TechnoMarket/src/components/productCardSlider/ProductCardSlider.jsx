@@ -49,8 +49,8 @@ const ProductCardSlider = ({ Title, Data, addCart }) => {
         speed: 500,
         autoplaySpeed: 2000,
         pauseOnHover: true,
-        nextArrow: <NextArrow/>,
-        prevArrow: <PrevArrow/>,
+        //nextArrow: <NextArrow/>,
+        //prevArrow: <PrevArrow/>,
         initialSlide: 0,
         responsive: [
             {

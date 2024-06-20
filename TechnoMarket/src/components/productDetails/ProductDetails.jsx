@@ -8,7 +8,7 @@ import { useEffect } from "react";
 const ProductDetails = () => {
   const location = useLocation();
 
-  const { id, title, price, images, description } = location.state.product;
+  const { id, title, price, images, description, variants } = location.state.product;
 
   useEffect(() => {
     if (!title) {
@@ -28,6 +28,7 @@ const ProductDetails = () => {
     price: price,
     images: images,
     description: description,
+    variants,
     quantity: 1,
   };
   return (

@@ -8,6 +8,7 @@ const ProductCard = ({
   description,
   price,
   images,
+  variants,
   offer,
   addCart,
 }) => {
@@ -17,6 +18,7 @@ const ProductCard = ({
     price: price,
     images: images,
     description: description,
+    variants,
     quantity: 1,
   };
 
@@ -31,6 +33,7 @@ const ProductCard = ({
           price,
           images,
           description,
+          variants
         },
       },
     });
@@ -108,6 +111,7 @@ ProductCard.propTypes = {
   price: PropTypes.number,
   description: PropTypes.string,
   images: PropTypes.array,
+  variants: PropTypes.object,
   offer: PropTypes.bool,
   addCart: PropTypes.func,
   openModal: PropTypes.func,

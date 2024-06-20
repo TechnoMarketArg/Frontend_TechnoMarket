@@ -120,7 +120,6 @@ const Homepage = (
       ],
     },
   ];*/
-
   return (
     <>
       
@@ -147,6 +146,7 @@ const Homepage = (
               price={product.price}
               description={product.description}
               images={product.images}
+              variants={product.variants}
               addCart={addCart}
             />
           ))}
