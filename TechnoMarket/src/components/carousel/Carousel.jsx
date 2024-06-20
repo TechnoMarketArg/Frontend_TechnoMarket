@@ -15,10 +15,10 @@ const HoreCarousel = () => {
     <div>
     <Carousel>
       {imagenes.map((img, i) => (
-        <Carousel.Item key={i} interval={3000} style={{ height: '400px' }}>
-          <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-            <img src={img} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={`Slide ${i}`} />
-            <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '25%', background: 'linear-gradient(to bottom, rgba(234,247,253,0), rgba(234,247,253,1))' }}></div>
+        <Carousel.Item key={i} interval={3000} className='h-[400px]'>
+          <div className='relative w-full h-full'>
+            <img src={img} className='w-full h-full object-cover' alt={`Slide ${i}`} />
+            <div className="absolute bottom-0 left-0 w-full h-1/4 bg-gradient-to-b from-transparent to-[#EAF7FD]" ></div>
           </div>
         </Carousel.Item>
       ))}

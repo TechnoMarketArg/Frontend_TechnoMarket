@@ -39,7 +39,7 @@ PrevArrow.propTypes = {
     onClick: PropTypes.string,
 };
 
-const ProductCardSlider = ({ Title, Data }) => {
+const ProductCardSlider = ({ Title, Data, addCart }) => {
     const settings = {
         dots: true,
         infinite: true,
@@ -49,8 +49,8 @@ const ProductCardSlider = ({ Title, Data }) => {
         speed: 500,
         autoplaySpeed: 2000,
         pauseOnHover: true,
-        nextArrow: <NextArrow />,
-        prevArrow: <PrevArrow />,
+        nextArrow: <NextArrow/>,
+        prevArrow: <PrevArrow/>,
         initialSlide: 0,
         responsive: [
             {
@@ -110,11 +110,13 @@ const ProductCardSlider = ({ Title, Data }) => {
                 {Data.slice(0, 8).map(product => (
                     <ProductCard
                         key={product.id}
+                        id={product.id}
                         offer={true}
                         title={product.title}
                         price={product.price}
                         description={product.description}
                         images={product.images}
+                        addCart={addCart}
                     />
                 ))}
             </Slider>
@@ -127,6 +129,7 @@ const ProductCardSlider = ({ Title, Data }) => {
 ProductCardSlider.propTypes = {
     Title: PropTypes.string,
     Data: PropTypes.array,
+    addCart: PropTypes.func,
 };
 
 

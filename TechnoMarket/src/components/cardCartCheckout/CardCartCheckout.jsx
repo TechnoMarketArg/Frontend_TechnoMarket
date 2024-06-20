@@ -10,7 +10,15 @@ import {
 import { Button } from 'react-bootstrap';
 
 const CardCartChekout = ({ShoppingCart}) => {
-    const total = ShoppingCart.reduce((accumulator, game) => accumulator + game.id, 0)
+    const ShoppingCartForTotal = ShoppingCart.map(p => {
+        return {
+            id: p.id,
+            name: p.name,
+            price: p.price * p.quantity,
+            quantity: p.quantity,
+        }
+    })
+    const total = ShoppingCartForTotal.reduce((accumulator, product) => accumulator + product.price, 0)
     return (
         <MDBCard className="mb-4">
             <MDBCardHeader>
