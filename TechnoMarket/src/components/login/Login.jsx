@@ -13,49 +13,14 @@ import {
   MDBInput
 } from 'mdb-react-ui-kit';
 import { useState, useRef, useEffect } from 'react';
-import axios from 'axios';
+//import { useGet } from '../customHook/CustomHook'  ------- Hook Personalizado --------------------------------
+
 
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  
-
-  const URL = 'https://api.escuelajs.co/api/v1/users';
-  
-  const [Data, setData] = useState([]);
-
-  const [Cargando, setCargando] = useState(true);
-
-
-  const [Error, setError] = useState(null);
-
-  useEffect(() => {
-    
-    const fetchData = async () => {
-      try {
-       
-        const response = await axios.get(URL);
-        
-        if (response.status < 200 || response.status >= 300) {
-          throw new Error('Error en la red: ' + response.statusText);
-        }
-
-        setData(response.data);
-
-        setCargando(false);
-      } catch (error) {
-        
-        setError(error);
-
-        setCargando(false);
-      }
-    };
-
-    fetchData();
-
-  }, []);
 
 
   //Estado para manejar los errores en los campos de entrada y la existencia de un usuario.
@@ -91,7 +56,7 @@ function Login() {
       setErrors({ ...errors, email: true });
       return;
     }
-  
+    
     if (!password) {
       passwordRef.current.focus();
       setErrors({ ...errors, password: true });
@@ -103,15 +68,7 @@ function Login() {
   
   };
 
-
-
-
-
-
-
-
-
-
+  
 
 
   return (

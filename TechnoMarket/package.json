@@ -11,10 +11,11 @@
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
+    "@emotion/styled": "emotion/react",
     "@fortawesome/fontawesome-free": "^6.5.2",
     "@midudev/tailwind-animations": "^0.0.7",
-    "@mui/material": "^5.15.17",
+    "@mui/icons-material": "^5.15.20",
+    "@mui/material": "^5.15.20",
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
@@ -27,7 +28,7 @@
     "react-router-dom": "^6.22.3",
     "sonner": "^1.4.41",
     "sort-by": "^0.0.2",
-    "styled-components": "^6.1.10",
+    "styled-components": "^6.1.11",
     "tw-elements-react": "^1.0.0-alpha2"
   },
   "devDependencies": {
