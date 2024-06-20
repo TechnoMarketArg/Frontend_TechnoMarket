@@ -31,7 +31,7 @@ const CardCartChekout = ({ShoppingCart}) => {
                     <MDBListGroupItem
                         className="d-flex justify-content-between align-items-center border-0 px-0 pb-0">
                         Products
-                        <span>${total}</span>
+                        <span>${total.toFixed(2)}</span>
                     </MDBListGroupItem>
                     <MDBListGroupItem className="d-flex justify-content-between align-items-center px-0">
                         Shipping
@@ -46,7 +46,7 @@ const CardCartChekout = ({ShoppingCart}) => {
                             </strong>
                         </div>
                         <span>
-                            <strong>${total}</strong>
+                            <strong>${total.toFixed(2)}</strong>
                         </span>
                     </MDBListGroupItem>
                 </MDBListGroup>

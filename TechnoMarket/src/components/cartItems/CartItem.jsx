@@ -22,11 +22,9 @@ const CartItem = ({
             rippleColor="light"
             className="bg-image rounded hover-zoom hover-overlay">
             <img src={images} className="w-100" />
-            <a href="#!">
-              <div
-                className="mask"
-                style={{ backgroundColor: "rgba(251, 251, 251, 0.2)" }}></div>
-            </a>
+            <div
+              className="mask"
+              style={{ backgroundColor: "rgba(251, 251, 251, 0.2)" }}></div>
           </MDBRipple>
         </MDBCol>
 
@@ -136,17 +134,17 @@ const CartItem = ({
 };
 
 CartItem.propTypes = {
-    id: PropTypes.number,
-    title: PropTypes.string,
-    description: PropTypes.string,
-    price: PropTypes.number,
-    images: PropTypes.array,
-    quantity: PropTypes.number,
-    QuantityValue: PropTypes.number,
-    setQuantityValue: PropTypes.func,
-    decreaseQuantity: PropTypes.func,
-    increaseQuantity: PropTypes.func,
-    removeCart: PropTypes.func,
+  id: PropTypes.number,
+  title: PropTypes.string,
+  description: PropTypes.string,
+  price: PropTypes.number,
+  images: PropTypes.array,
+  quantity: PropTypes.number,
+  QuantityValue: PropTypes.number,
+  setQuantityValue: PropTypes.func,
+  decreaseQuantity: PropTypes.func,
+  increaseQuantity: PropTypes.func,
+  removeCart: PropTypes.func,
 };
 
 export { CartItem };

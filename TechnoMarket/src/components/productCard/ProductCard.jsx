@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { MDBBtn, MDBRipple } from "mdb-react-ui-kit";
+import { useNavigate } from "react-router-dom";
 
 const ProductCard = ({
   id,
@@ -19,8 +20,27 @@ const ProductCard = ({
     quantity: 1,
   };
 
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/products/${id}`, {
+      state: {
+        product: {
+          id,
+          title,
+          price,
+          images,
+          description,
+        },
+      },
+    });
+  };
+
   return (
-    <div className="flex bg-image rounded hover-zoom hover-overlay sm:min-w-[180px] sm:max-w-[200px] w-full cursor-pointer flex-col justify-between bg-white overflow-hidden">
+    <div
+      
+      className="flex bg-image rounded hover-zoom hover-overlay sm:min-w-[180px] sm:max-w-[200px] w-full cursor-pointer flex-col justify-between bg-white overflow-hidden">
+      <button onClick={handleClick}>
       <div className="relative w-full">
         {offer && (
           <div className="absolute right-0 rounded-s-xl bg-green-500 p-2 font-medium z-20">
@@ -30,15 +50,15 @@ const ProductCard = ({
         <MDBRipple
           rippleTag="div"
           rippleColor="light"
-          className="bg-image rounded hover-zoom hover-overlay object-cover min-h-60 flex justify-center items-center bg-white">
+          className="bg-image rounded hover-zoom hover-overlay object-cover min-h-60 flex justify-center items-center bg-white"
+          onClick={handleClick}>
           <img src={images[0]} alt={title} />
-          <a href="#!">
-            <div
-              className="mask"
-              style={{ backgroundColor: "rgba(251, 251, 251, 0.2)" }}></div>
-          </a>
+          <div
+            className="mask"
+            style={{ backgroundColor: "rgba(251, 251, 251, 0.2)" }}></div>
         </MDBRipple>
       </div>
+      </button>
       <div className="w-full">
         <div className="p-2">
           {!offer && (
@@ -75,11 +95,12 @@ const ProductCard = ({
             onClick={() => addCart(product)}
             size="sm"
             color="warning"
-            className="text-xs w-[110px]">
+            className="text-xs w-[110px] ">
             <span className="text-">Add to cart</span>
           </MDBBtn>
         </div>
       </div>
+              
     </div>
   );
 };

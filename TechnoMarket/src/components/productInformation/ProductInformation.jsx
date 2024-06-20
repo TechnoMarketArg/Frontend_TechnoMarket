@@ -30,7 +30,7 @@ const ProductInformation = ({ product }) => {
 
     return (
         <div className='w-[380px] min-h-[380px] bg-gray-50 p-6 flex flex-col gap-2 rounded-xl'>
-            <span className='text-sm text-blue-400 cursor-pointer hover:text-blue-500'>{product.category.name}</span>
+            {/*<span className='text-sm text-blue-400 cursor-pointer hover:text-blue-500'>{product.category.name}</span>*/}
             <h2 className='text-xl font-semibold'>{product.title}</h2>
             <div className="flex">
                 <div className=' text-sm mr-2'>

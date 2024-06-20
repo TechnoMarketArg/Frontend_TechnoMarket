@@ -21,15 +21,15 @@ const ProductImages = ({product}) => {
                 { 
                     product.images.map((img, i) => (
                         <div key={i} className='w-[50px] h-[50px] cursor-pointer rounded-sm overflow-hidden' onClick={() => handleImage(img)}>
-                            <img src={img} alt="" />
+                            <img src={img} alt="" className='w-[50px] h-[50px] object-contain'/>
                         </div>
                     ))
                 }
                 
             </div>
 
-            <div className='w-[380px] h-[380px] rounded-xl overflow-hidden'>
-                {image && <img src={image} key={image} alt="" className='animate-fade-in object-cover'/>}
+            <div className='w-[380px] h-[380px] rounded-xl overflow-hidden bg-white'>
+                {image && <img src={image} key={image} alt="" className='animate-fade-in w-[380px] h-[380px] object-contain'/>}
             </div>
         </div>
     );
