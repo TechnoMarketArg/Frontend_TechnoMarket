@@ -17,7 +17,7 @@ function ButtonCategories() {
 
         {Data.map((category) => (
 
-          <Dropdown.Item key={category} href={`/category/${category}`}>{category}</Dropdown.Item>
+          <Dropdown.Item key={category.id} href={`/category/${category.id}`}>{category.name}</Dropdown.Item>
         ))}
 
       </Dropdown.Menu>
