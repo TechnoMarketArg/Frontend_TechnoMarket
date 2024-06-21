@@ -4,13 +4,17 @@ import { NextUIProvider } from "@nextui-org/react";
 import App from "./App";
 import "./index.css";
 import { NavBarProvider } from "./components/navBarContext/NavBarContext";
+import { AuthenticationContextProvider } from './services/authentication/Authentication.context.jsx'
+
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <NextUIProvider>
       <NavBarProvider>
-        <App />
+        <AuthenticationContextProvider>
+      <App />
       </NavBarProvider>
     </NextUIProvider>
+    </AuthenticationContextProvider>,
   </React.StrictMode>
 );

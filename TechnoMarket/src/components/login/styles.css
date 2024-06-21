@@ -1,0 +1,8 @@
+.full-bg {
+    background-color: #f1f8fd;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
