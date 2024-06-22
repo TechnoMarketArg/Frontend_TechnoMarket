@@ -24,20 +24,6 @@ const ProductInformation = ({ product }) => {
 
   const rating = 3.5;
 
-  useEffect(() => {
-    console.log("Product data:", product);
-    if (!product.variants) {
-      console.log("Variants are undefined");
-    } else {
-      console.log("Product variants:", product.variants);
-      if (!product.variants.ROM) {
-        console.log("ROM variants are undefined");
-      } else {
-        console.log("Product ROM variants:", product.variants.ROM);
-      }
-    }
-  }, [product]);
-
   return (
     <div className="w-[380px] min-h-[380px] bg-gray-50 p-6 flex flex-col gap-2 rounded-xl">
       {/*<span className='text-sm text-blue-400 cursor-pointer hover:text-blue-500'>{product.category.name}</span>*/}
@@ -70,7 +56,7 @@ const ProductInformation = ({ product }) => {
         ))}
       </table>
       <div>
-        {Object.keys(product.variants).map((variantType) => (
+        {product.variants && Object.keys(product.variants).map((variantType) => (
           <div className="flex flex-col my-4" key={variantType}>
             <h5 className="text-sm font-bold">{variantType}:</h5>
             <MDBBtnGroup shadow="10">

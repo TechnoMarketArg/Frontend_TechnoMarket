@@ -18,17 +18,19 @@ import PropTypes from "prop-types";
 
 import CardCartChekout from "../cardCartCheckout/CardCartCheckout";
 import { CartItem } from "../cartItems/CartItem";
+import { NavBarContext } from "../navBarContext/NavBarContext";
+import { useContext } from "react";
 
-const Cart = ({
-  optSmModal,
-  setOptSmModal,
-  toggleOpen,
-  ShoppingCart,
-  removeCart,
-  decreaseQuantity,
-  increaseQuantity
-}) => {
-    
+const Cart = () => {
+  const {
+    ShoppingCart,
+    increaseQuantity,
+    decreaseQuantity,
+    removeCart,
+    optSmModal,
+    setOptSmModal,
+    toggleOpen,
+  } = useContext(NavBarContext);
 
   return (
     <>
@@ -94,14 +96,6 @@ const Cart = ({
   );
 };
 
-Cart.propTypes = {
-  toggleOpen: PropTypes.func,
-  optSmModal: PropTypes.bool,
-  setOptSmModal: PropTypes.func,
-  ShoppingCart: PropTypes.array,
-  removeCart: PropTypes.func,
-  decreaseQuantity: PropTypes.func,
-  increaseQuantity: PropTypes.func,
-};
+Cart.propTypes = {};
 
 export default Cart;

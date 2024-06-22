@@ -1,14 +1,15 @@
-import React, { useState, createContext } from "react";
+import { useState, createContext, useContext } from "react";
 import PropTypes from "prop-types";
 import { toast } from "sonner";
 import { useGET } from "../customHook/CustomHook";
+import { AuthenticationContext } from "../../services/authentication/Authentication.context";
 
 const NavBarContext = createContext();
 
 const NavBarProvider = ({ children }) => {
-  const [ProductsData, ProductsLoading, ProductsError] = useGET(
-    "http://localhost:3000/products"
-  );
+  const [ProductsData, ProductsLoading, ProductsError] = useGET("http://localhost:3000/products");
+
+  const {user} = useContext(AuthenticationContext)
 
   const [ShoppingCart, setShoppingCart] = useState([]);
 
@@ -20,17 +21,21 @@ const NavBarProvider = ({ children }) => {
       product.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredProduct(filtered);
-    console.log(filteredProduct);
   };
 
   //agregar productos al carrito
   const addCart = (product) => {
-    if (ShoppingCart.some((p) => p.id == product.id)) {
-      toast.warning(`${product.title} already included in the cart`);
-    } else {
-      toast.success(`${product.title} added to shopping cart successfully`);
-      setShoppingCart([...ShoppingCart, product]);
+    if(user){
+      if (ShoppingCart.some((p) => p.id == product.id)) {
+        toast.warning(`${product.title} already included in the cart`);
+      } else {
+        toast.success(`${product.title} added to shopping cart successfully`);
+        setShoppingCart([...ShoppingCart, product]);
+      }
+    }else{
+      toast.error(`Sign in to add ${product.title} to cart`);
     }
+    
   };
 
   //aumentar la cantidad de un producto en el carrito

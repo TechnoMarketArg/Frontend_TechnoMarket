@@ -8,6 +8,7 @@ import {
     MDBTypography,
 } from "mdb-react-ui-kit";
 import { Button } from 'react-bootstrap';
+import Payment from '../payment/Payment';
 
 const CardCartChekout = ({ShoppingCart}) => {
     const ShoppingCartForTotal = ShoppingCart.map(p => {
@@ -52,6 +53,7 @@ const CardCartChekout = ({ShoppingCart}) => {
                 </MDBListGroup>
 
                 <Button>Go to checkout</Button>
+                
             </MDBCardBody>
         </MDBCard>
     );

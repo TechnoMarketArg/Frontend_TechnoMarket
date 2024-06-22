@@ -15,6 +15,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         </NavBarProvider>
       </NextUIProvider>
     </AuthenticationContextProvider>
-    ,
   </React.StrictMode>
 );

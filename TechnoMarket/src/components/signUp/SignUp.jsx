@@ -7,14 +7,13 @@ import {
   MDBCardBody,
   MDBCardImage,
   MDBInput,
-  MDBIcon,
 } from 'mdb-react-ui-kit';
 import { Toaster, toast } from 'sonner';
-import technoMarket from '../register/technoMarket.png';
+import technoMarket from './technoMarket.png';
 import { useState, useRef } from 'react';
 import { useContext } from 'react';
 import { AuthenticationContext } from '../../services/authentication/Authentication.context.jsx';
-
+import { MDBIcon } from 'mdb-react-ui-kit';
 const SignUp = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");

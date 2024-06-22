@@ -4,11 +4,19 @@ import Navbar from "react-bootstrap/Navbar";
 import logo from "../navBar/logo.jpg";
 import ButtonCategories from "../buttonCategories/ButtonCategories";
 import ButtonSearch from "../buttonSearch/ButtonSearch";
-import ButtonLogin from "../buttonLogin/ButtonLogin";
 import PropTypes from "prop-types";
 import { Button } from "react-bootstrap";
+import { useContext } from "react";
+import { AuthenticationContext } from "../../services/authentication/Authentication.context";
+import ButtonUser from "../buttonUser/ButtonUser";
+import ButtonSignUp from "../buttonSignUp/ButtonSignUp";
+
 
 function NavBar({ searchHandler, ShoppingCart, toggleOpen }) {
+
+  const {user} = useContext(AuthenticationContext)
+
+
   return (
     <Navbar
       expand="lg"
@@ -20,8 +28,7 @@ function NavBar({ searchHandler, ShoppingCart, toggleOpen }) {
             alt="Logo"
             width="40"
             height="20"
-            className="d-inline-block align-end"
-            style={{ marginRight: "20px", borderRadius: "50%" }}
+            className="d-inline-block align-end rounded-full m-0"
           />
         </Navbar.Brand>
         <Navbar.Brand
@@ -39,8 +46,10 @@ function NavBar({ searchHandler, ShoppingCart, toggleOpen }) {
             <ButtonCategories />
             <ButtonSearch onSearch={searchHandler} />
           </Nav>
-          <ButtonLogin />
-          <div>
+
+          {!user && <ButtonSignUp/>}
+          {user && <ButtonUser />}
+          {user && <div>
             <Button
               variant="outline-warning"
               onClick={toggleOpen}
@@ -65,7 +74,7 @@ function NavBar({ searchHandler, ShoppingCart, toggleOpen }) {
             <span className="absolute top-0 right-0 mt-1 mr-1 bg-green-500 px-2 rounded-full text-white">
               {ShoppingCart.length}
             </span>
-          </div>
+          </div>}
         </Navbar.Collapse>
       </Container>
     </Navbar>

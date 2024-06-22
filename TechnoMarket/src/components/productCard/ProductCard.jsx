@@ -10,8 +10,10 @@ const ProductCard = ({
   images,
   variants,
   offer,
+  discount,
   addCart,
 }) => {
+
   const product = {
     id: id,
     title: title,
@@ -39,13 +41,16 @@ const ProductCard = ({
     });
   };
 
+
+
+
   return (
     <div className="flex bg-image rounded hover-zoom hover-overlay sm:min-w-[180px] sm:max-w-[200px] w-full cursor-pointer flex-col justify-between bg-white overflow-hidden">
       <button onClick={handleClick}>
         <div className="relative w-full">
           {offer && (
             <div className="absolute right-0 rounded-s-xl bg-green-500 p-2 font-medium z-20">
-              30% OFF
+              {discount * 100}% OFF
             </div>
           )}
           <MDBRipple
@@ -69,9 +74,9 @@ const ProductCard = ({
           )}
           {offer && (
             <h4 className=" text-2xl font-bold text-green-700">
-              ${(price * 0.7).toFixed(1)}{" "}
+              ${(price - (price * discount)).toFixed(1)}
               {offer && (
-                <span className="text-base font-medium text-red-500 line-through">
+                <span className="text-base font-medium text-red-500 line-through mx-2">
                   ${price.toFixed(1)}
                 </span>
               )}
@@ -113,6 +118,7 @@ ProductCard.propTypes = {
   images: PropTypes.array,
   variants: PropTypes.object,
   offer: PropTypes.bool,
+  discount: PropTypes.number,
   addCart: PropTypes.func,
   openModal: PropTypes.func,
 };

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import Carousel from "../carousel/Carousel";
 import { ProductCardSlider } from "../productCardSlider/ProductCardSlider";
@@ -11,63 +11,18 @@ import Cart from "../cart/Cart.jsx";
 import { Toaster, toast } from "sonner";
 import Loading from "../loading/Loading";
 import NavBar from "../navBar/NavBar";
+import { NavBarContext } from "../navBarContext/NavBarContext.jsx";
 
-const Homepage = (
-  {
-  ProductsData,
-  addCart,
-  ProductsLoading,
-  ProductsError}
-) => {
-  /*const [ProductsData, ProductsLoading, ProductsError] = useGET(
-    "http://localhost:3000/products"
-  );*/
-
-  //const [filteredProduct, setFilteredProduct] = useState();
-
-  /*const [optSmModal, setOptSmModal] = useState(false);
-
-  const toggleOpen = () => setOptSmModal(!optSmModal);*/
-
-  //cerrar el modal de mas informacion
-
-  //const [ShoppingCart, setShoppingCart] = useState([]);
-
-  //agregar productos al carrito
-  /*const addCart = (product) => {
-    if (ShoppingCart.some((p) => p.id == product.id)) {
-      toast.warning(`${product.title} already included in the cart`);
-    } else {
-      toast.success(`${product.title} added to shopping cart successfully`);
-      setShoppingCart([...ShoppingCart, product]);
-    }
-  };*/
-
-  //aumentar la cantidad de un producto en el carrito
-  /* const increaseQuantity = (productId) => {
-    setShoppingCart(
-      ShoppingCart.map((item) =>
-        item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
-      )
-    );
-  };
-
-  //disminuir la cantidad de un producto en el carrito
-  const decreaseQuantity = (productId) => {
-    setShoppingCart(
-      ShoppingCart.map((item) =>
-        item.id === productId && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
-      )
-    );
-  };
-
-  //FALTA LOGICA
-  //eliminar priductos del carrito
-  const removeCart = (gameTitle) => {
-    setShoppingCart(ShoppingCart.filter((game) => game.title !== gameTitle));
-  };*/
+const Homepage = () => {
+  const {
+    ProductsData,
+    ProductsLoading,
+    ProductsError,
+    ShoppingCart,
+    searchHandler,
+    addCart,
+    toggleOpen,
+  } = useContext(NavBarContext);
 
   if (ProductsLoading) {
     return <Loading />;
@@ -77,76 +32,49 @@ const Homepage = (
     return <h1>Error... </h1>;
   }
 
-  /*// Funcion que va a Buscar el Contenido del Buscador en la API
-  const searchHandler = (searchTerm) => {
-    const filtered = ProductsData.filter((product) =>
-      product.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredProduct(filtered);
-    console.log(filteredProduct);
-  };*/
-
-  /*const FiltersObject = [
-    {
-      Brand: [
-        "Apple",
-        "Dell",
-        "HP",
-        "Lenovo",
-        "Acer",
-        "Asus",
-        "Microsoft",
-        "MSI",
-        "Samsung",
-        "Sony",
-        "Toshiba",
-        "Huawei",
-      ],
-    },
-    {
-      colors: [
-        "rojo",
-        "azul",
-        "verde",
-        "amarillo",
-        "naranja",
-        "morado",
-        "rosa",
-        "blanco",
-        "negro",
-        "gris",
-        "marrón",
-        "turquesa",
-      ],
-    },
-  ];*/
   return (
     <>
-      
+      <NavBar
+        searchHandler={searchHandler}
+        ShoppingCart={ShoppingCart}
+        toggleOpen={toggleOpen}
+      />
+
       <div className="animate-fade-in">
         <Carousel />
-        <div className="w-full flex justify-center">
-          <div className="max-w-[100px] flex justify-center">
-            <ProductCardSlider
-              Title={"Ofertas"}
-              Data={ProductsData}
-              addCart={addCart}
-            />
+        <div className="flex flex-col gap-16">
+          <div className="w-full flex justify-center">
+            <div className="max-w-[100px] flex justify-center">
+              <ProductCardSlider
+                Title={"Ofertas"}
+                Data={ProductsData}
+                addCart={addCart}
+              />
+            </div>
+          </div>
+          <div className="w-full flex justify-center">
+            <div className="max-w-[100px] flex justify-center">
+              <ProductCardSlider
+                Title={"Computing"}
+                Data={ProductsData}
+                addCart={addCart}
+              />
+            </div>
           </div>
         </div>
 
-        {/*<ProductDetails product={Data[0]}/>*/}
         <div className="flex flex-wrap gap-2 mt-8">
           {ProductsData.map((product) => (
             <ProductCard
               key={product.id}
-              offer={false}
+              offer={product.offer}
               id={product.id}
               title={product.title}
               price={product.price}
               description={product.description}
               images={product.images}
               variants={product.variants}
+              discount={product.discount}
               addCart={addCart}
             />
           ))}
@@ -157,19 +85,6 @@ const Homepage = (
   );
 };
 
-Homepage.propTypes = {
-  optSmModal: PropTypes.bool,
-  setOptSmModal: PropTypes.func,
-  toggleOpen: PropTypes.func,
-  ShoppingCart: PropTypes.array,
-  removeCart: PropTypes.func,
-  decreaseQuantity: PropTypes.func,
-  increaseQuantity: PropTypes.func,
-  ProductsData: PropTypes.array,
-  addCart: PropTypes.func,
-  ProductsLoading: PropTypes.bool,
-  ProductsError: PropTypes.bool,
-  
-};
+Homepage.propTypes = {};
 
 export default Homepage;
