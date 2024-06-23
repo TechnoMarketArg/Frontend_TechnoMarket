@@ -7,7 +7,7 @@ const NavBarContext = createContext();
 
 const NavBarProvider = ({ children }) => {
   const [ProductsData, ProductsLoading, ProductsError] = useGET(
-    "http://localhost:3000/products"
+    "https://cvrdqj9p-3000.brs.devtunnels.ms/products"
   );
 
   const [ShoppingCart, setShoppingCart] = useState([]);

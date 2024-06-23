@@ -5,12 +5,14 @@ import "mdb-react-ui-kit/dist/css/mdb.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ProductDetails from "./components/productDetails/ProductDetails.jsx";
 import NavBar from "./components/navBar/NavBar.jsx";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { NavBarContext } from "./components/navBarContext/NavBarContext.jsx";
 import SearchPage from "./components/searchPage/SearchPage.jsx";
 import { CartItem } from "./components/cartItems/CartItem.jsx";
 import Cart from "./components/cart/Cart.jsx";
 import { Toaster } from "sonner";
+import PublishProduct from "./components/publishProduct/PublishProduct.jsx";
+
 
 function App() {
   const {
@@ -61,6 +63,10 @@ function App() {
     },
   ]);
 
+  const [publishModal, setPublishModal] = useState(false);
+
+  const toggleOpenModal = () => setPublishModal(!publishModal);
+
   return (
     <div className="bg-gray-100">
       <Toaster richColors position="top-center" />
@@ -79,6 +85,10 @@ function App() {
         ShoppingCart={ShoppingCart}
         toggleOpen={toggleOpen}
       />
+
+      <button onClick={toggleOpenModal}>tade trolo</button>
+
+      <PublishProduct toggleOpen={toggleOpenModal} setOptSmModal={setPublishModal} optSmModal={publishModal} />
       {filteredProduct ? <SearchPage filteredProduct={filteredProduct} /> : ""}
       {<RouterProvider router={router} />}
     </div>
