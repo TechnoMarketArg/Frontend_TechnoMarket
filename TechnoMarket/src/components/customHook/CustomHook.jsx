@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import { toast } from 'sonner';
 
 
 const useGET = (url, updateData) => {
@@ -44,13 +45,36 @@ useGET.propTypes = {
 };
 
 const usePOST = () => {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
-    return {}
-};
+    const publishProduct = async (productData) => {
+      setLoading(true);
+      setError(null);
+
+    try{
+        const response = await axios.post('http://localhost:3000/products', productData);
+        toast.success("Producto publicado con exito");
+        return response.data
+    }catch (error){
+      setError(error);
+      toast.error("Error al publicar el producto");
+      throw error;
+    }finally{
+      setLoading(false);
+    }
+    
+  };
+
+  return {publishProduct, loading, error}
+
+}
+
+
 
 
 usePOST.propTypes = {
-
+  
 };
 
 
