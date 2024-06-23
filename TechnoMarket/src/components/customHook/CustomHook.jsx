@@ -44,6 +44,8 @@ useGET.propTypes = {
     url: PropTypes.string
 };
 
+
+
 const usePOST = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -53,7 +55,7 @@ const usePOST = () => {
       setError(null);
 
     try{
-        const response = await axios.post('http://localhost:3000/products', productData);
+        const response = await axios.post('https://cvrdqj9p-3000.brs.devtunnels.ms/products', productData);
         toast.success("Producto publicado con exito");
         return response.data
     }catch (error){
@@ -98,6 +100,10 @@ const useDELETE = () => {
 useDELETE.propTypes = {
 
 };
+
+
+
+
 
 
 
