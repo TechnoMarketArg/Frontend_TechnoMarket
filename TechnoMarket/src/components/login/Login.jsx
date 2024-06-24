@@ -12,50 +12,39 @@ import {
   MDBCol,
   MDBInput,
 } from "mdb-react-ui-kit";
-import { useState, useRef, useEffect, useContext } from "react";
+import { useState, useRef, useContext } from "react";
 import { AuthenticationContext } from "../../services/authentication/Authentication.context";
 import { useNavigate } from "react-router-dom";
 import { useGET } from "../customHook/CustomHook";
 import { toast } from "sonner";
-//import { useGet } from '../customHook/CustomHook'  ------- Hook Personalizado --------------------------------
 
 function Login() {
-
-  
-  const {handleLogin} = useContext(AuthenticationContext)
-  const navigate = useNavigate()
+  const { handleLogin } = useContext(AuthenticationContext);
+  const navigate = useNavigate();
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+  const [users, loanding, error] = useGET('http://localhost:3000/users');
 
-  const [users, loanding, error] = useGET('http://localhost:3000/users')
-
-  //Estado para manejar los errores en los campos de entrada y la existencia de un usuario.
   const [errors, setErrors] = useState({
     email: false,
     password: false,
     exist: false,
   });
 
-  //Referencias a los campos de entrada.
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
-  //Actualiza el estado del email y resetea el error de email.
   const changeEmailHandler = (event) => {
     setErrors({ ...errors, email: false });
     setEmail(event.target.value);
   };
 
-  //Actualiza el estado de la contraseña y resetea el error de contraseña.
   const changePasswordHandler = (event) => {
     setErrors({ ...errors, password: false });
     setPassword(event.target.value);
   };
 
-  //Maneja el envío del formulario. Valida que los campos no estén vacíos, muestra los errores si es necesario
-  //y llama a handleLogin para iniciar sesión. Luego navega a la página principal.
   const loginHandler = (event) => {
     event.preventDefault();
 
@@ -73,20 +62,18 @@ function Login() {
 
     setErrors({ ...errors, exist: false });
 
-
-    const foundUser = users.find(user => user.Email === email && user.Password === password );
+    const foundUser = users.find(user => user.Email === email && user.Password === password);
 
     if (foundUser) {
-      handleLogin(foundUser);
-      navigate("/")
-    }else{
-      toast.error('Email o Contraseña incorrecto')
+      handleLogin(foundUser); // Se llama con el usuario encontrado
+      navigate("/");
+    } else {
+      toast.error('Email o Contraseña incorrecto');
     }
-
   };
 
   if (loanding) {
-    return <h1>Cargando...</h1>
+    return <h1>Cargando...</h1>;
   }
 
   return (
@@ -163,15 +150,6 @@ function Login() {
   );
 }
 
-
-
-
-
-Login.propTypes = {
-
-};
-
-
-
+Login.propTypes = {};
 
 export default Login;

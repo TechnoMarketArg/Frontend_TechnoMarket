@@ -12,7 +12,7 @@ import { CartItem } from "./components/cartItems/CartItem.jsx";
 import Cart from "./components/cart/Cart.jsx";
 import { Toaster } from "sonner";
 import Login from "./components/login/Login.jsx";
-import { AuthenticationContextProvider } from "./services/authentication/Authentication.context.jsx";
+import { AuthenticationContext, AuthenticationContextProvider } from "./services/authentication/Authentication.context.jsx";
 import SignUp from "./components/signUp/SignUp.jsx";
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 
@@ -33,7 +33,7 @@ function App() {
       element: <ProductDetails />,
     },
     {
-      path: "store/:id",
+      path: "stores/:id",
       element: <StoreProfile />,
     },
     {
@@ -46,6 +46,12 @@ function App() {
       path: "SignUp",
       element: (
           <SignUp />
+      ),
+    },
+    {
+      path: "user/:id",
+      element: (
+          <h1>perfil del usuario</h1>
       ),
     },
   ]);

@@ -8,8 +8,13 @@ import Tooltip from "@mui/material/Tooltip";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
-import { Fragment, useState } from "react";
+import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
+import { Fragment, useContext, useState } from "react";
+import { AuthenticationContext } from "../../services/authentication/Authentication.context";
+import { useNavigate } from "react-router-dom";
 function ButtonUser() {
+  const { user, handleLogout } = useContext(AuthenticationContext);
+
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -18,11 +23,30 @@ function ButtonUser() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleLogoutHandler = () => {
+    handleLogout();
+  };
+
+  const id = user.IdStore
+
+  const navigate = useNavigate();
+
+  const handleClickStore = () => {
+    navigate(`/stores/${user.IdStore}`, {
+      state: {
+        stores: {
+          id
+        },
+      },
+    });
+  };
+
+
   return (
     <>
       <Fragment>
-        <div
-          >
+        <div>
           <Tooltip title="Account settings">
             <IconButton
               onClick={handleClick}
@@ -85,12 +109,21 @@ function ButtonUser() {
           }}
           transformOrigin={{ horizontal: "right", vertical: "top" }}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
-          <MenuItem onClick={handleClose}>
-            <Avatar /> Profile
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <Avatar /> My account
-          </MenuItem>
+          <a href={`user/${user.id}`}>
+            <MenuItem onClick={handleClose}>
+              <Avatar /> {user.FirstName} {user.LastName}
+            </MenuItem>
+          </a>
+
+          {user.RoleId === 2 && (
+            <button onClick={handleClickStore}>
+              <MenuItem onClick={handleClose}>
+                <Avatar>
+                  <LocalGroceryStoreIcon/>
+                  </Avatar> My Store
+              </MenuItem>
+            </button>
+          )}
           <Divider />
           <MenuItem onClick={handleClose}>
             <ListItemIcon>
@@ -108,7 +141,7 @@ function ButtonUser() {
             <ListItemIcon>
               <Logout fontSize="small" />
             </ListItemIcon>
-            Logout
+            <button onClick={handleLogoutHandler}>Logout</button>
           </MenuItem>
         </Menu>
       </Fragment>

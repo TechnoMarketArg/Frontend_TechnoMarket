@@ -1,29 +1,52 @@
-import { useState, createContext } from "react";
+import { useState, createContext, useEffect } from "react";
 import PropTypes from "prop-types";
 
 const AuthenticationContext = createContext({});
 
 const AuthenticationContextProvider = ({ children }) => {
-  /**const userValueString = localStorage.getItem("user");
-  const userValue = userValueString ? JSON.parse(userValueString) : null*/
-
   const [user, setUser] = useState(null);
 
-  const handleLogin = (foundUser) => {
+  // Recuperar usuario del Local Storage al montar el componente
+  useEffect(() => {
+    const email = localStorage.getItem("email");
+    const password = localStorage.getItem("password");
 
+    if (email && password) {
+      // Aquí debes implementar la lógica para validar el usuario
+      validateUser(email, password);
+    }
+  }, []);
+
+  const validateUser = async (email, password) => {
+    // Lógica para validar el usuario con los datos almacenados
+    // Esta lógica debe incluir la llamada al backend para validar al usuario
+    const response = await fetch("http://localhost:3000/users");
+    const users = await response.json();
+    const foundUser = users.find(user => user.Email === email && user.Password === password);
+
+    if (foundUser) {
+      setUser(foundUser);
+    } else {
+      handleLogout();
+    }
+  };
+
+  const handleLogin = (foundUser) => {
     setUser(foundUser);
-    /*localStorage.setItem("user", JSON.stringify({ email }));
-    setUser({ email });*/
+    localStorage.setItem("email", foundUser.Email);
+    localStorage.setItem("password", foundUser.Password);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
+    localStorage.removeItem("email");
+    localStorage.removeItem("password");
     setUser(null);
   };
 
   const handleRegister = (fullName, email, password) => {
     const newUser = { fullName, email, password };
-    localStorage.setItem("user", JSON.stringify(newUser));
+    localStorage.setItem("email", email);
+    localStorage.setItem("password", password);
     setUser(newUser);
   };
 

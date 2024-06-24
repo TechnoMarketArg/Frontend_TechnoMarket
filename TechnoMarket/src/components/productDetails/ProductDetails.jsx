@@ -19,18 +19,6 @@ const ProductDetails = () => {
 
   const { id, title, price, images, description, variants } = location.state.product;
 
-  useEffect(() => {
-    if (!title) {
-      // Redirige a una página de error o a la página principal si el producto no está disponible
-      // navigate("/error"); Asegúrate de tener una ruta de error configurada
-      console.log("Error");
-    }
-  }, [title]);
-
-  if (!title) {
-    return <div>Loading...</div>; // Muestra un mensaje de carga mientras redirige
-  }
-
   const product = {
     id: id,
     title: title,

@@ -7,8 +7,7 @@ import { Toaster, toast } from "sonner";
 const StoreHeader = ({ store, user }) => {
   const [IsFollower, setIsFollower] = useState(false);
   const [show, setShow] = useState(false);
-  const [ImgStore, setImgStore] = useState(store.img);
-
+  const [ImgStore, setImgStore] = useState(store.image);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -17,7 +16,7 @@ const StoreHeader = ({ store, user }) => {
         <Toaster richColors position="top-center"/>
         <ModalChangeImageStore show={show} handleClose={handleClose} toast={toast} setImgStore={setImgStore}/>
       <div
-        className={`flex justify-between items-center px-4 p-3 ${store.bgHeader}`}>
+        className={`flex justify-between items-center px-4 p-3 ${store.color}`}>
         <div className="flex items-center gap-12 ">
           <div className="relative rounded-full overflow-hidden">
             <img src={ImgStore} alt="" className="w-32 h-32 object-cover" />
@@ -33,7 +32,7 @@ const StoreHeader = ({ store, user }) => {
           </div>
           <div className="flex flex-col">
             <div className="flex gap-4 items-center">
-              <h2 className="text-3xl font-black font-kanit">{store.name}</h2>
+              <h2 className="text-3xl font-black font-kanit">{store.Name}</h2>
               {user.RoleId == 3 ? (
                 <div className="cursor-pointer animate-zoom-in bg-gray-100/30 rounded-lg hover:bg-gray-100/40">
                   {!IsFollower && (
@@ -81,18 +80,18 @@ const StoreHeader = ({ store, user }) => {
                 <></>
               )}
             </div>
-            <p className="text-lg font-medium">{store.followers} followers</p>
+            <p className="text-lg font-medium">0 followers</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <h3 className="font-bold text-2xl">{store.rating}</h3>
+          <h3 className="font-bold text-2xl">{store.Rating}</h3>
           <div className="p-2 bg-gray-500/30 rounded-2xl flex">
             <Rating
               name="half-rating"
               readOnly
               size="large"
               precision={0.5}
-              defaultValue={store.rating}
+              defaultValue={store.Rating}
             />
           </div>
         </div>
