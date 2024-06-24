@@ -45,7 +45,7 @@ const ProductCard = ({
 
 
   return (
-    <div className="flex bg-image rounded hover-zoom hover-overlay sm:min-w-[180px] sm:max-w-[200px] w-full cursor-pointer flex-col justify-between bg-white overflow-hidden">
+    <div className="flex bg-image rounded hover-zoom hover-overlay h-[380px]  sm:min-w-[180px] sm:max-w-[200px] w-full cursor-pointer flex-col justify-between bg-white overflow-hidden">
       <button onClick={handleClick}>
         <div className="relative w-full">
           {offer && (
@@ -56,7 +56,7 @@ const ProductCard = ({
           <MDBRipple
             rippleTag="div"
             rippleColor="light"
-            className="bg-image rounded hover-zoom hover-overlay object-cover min-h-60 flex justify-center items-center bg-white"
+            className="bg-image rounded hover-zoom hover-overlay object-cover h-[250px] flex justify-center items-center bg-white"
             onClick={handleClick}>
             <img src={images[0]} alt={title} />
             <div

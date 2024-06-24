@@ -15,6 +15,7 @@ import Login from "./components/login/Login.jsx";
 import { AuthenticationContext, AuthenticationContextProvider } from "./services/authentication/Authentication.context.jsx";
 import SignUp from "./components/signUp/SignUp.jsx";
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
+import CategoryPage from "./components/categoryPage/CategoryPage.jsx";
 
 
 function App() {
@@ -52,6 +53,12 @@ function App() {
       path: "user/:id",
       element: (
           <h1>perfil del usuario</h1>
+      ),
+    },
+    {
+      path: "categories/:name/:id",
+      element: (
+        <CategoryPage/>
       ),
     },
   ]);

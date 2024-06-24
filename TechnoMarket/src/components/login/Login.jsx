@@ -17,6 +17,7 @@ import { AuthenticationContext } from "../../services/authentication/Authenticat
 import { useNavigate } from "react-router-dom";
 import { useGET } from "../customHook/CustomHook";
 import { toast } from "sonner";
+import Loading from "../loading/Loading";
 
 function Login() {
   const { handleLogin } = useContext(AuthenticationContext);
@@ -73,7 +74,7 @@ function Login() {
   };
 
   if (loanding) {
-    return <h1>Cargando...</h1>;
+    return <Loading/>;
   }
 
   return (

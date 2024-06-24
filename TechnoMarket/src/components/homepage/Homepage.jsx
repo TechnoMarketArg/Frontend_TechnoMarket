@@ -31,6 +31,21 @@ const Homepage = () => {
   if (ProductsError) {
     return <h1>Error... </h1>;
   }
+  
+
+  const getProductsByDiscount = (products, minDiscount) => {
+    return products.filter(product => product.offer && product.discount >= minDiscount);
+  };
+
+  const getProductsByCategory = (products, categoryName) => {
+    return products.filter(
+      product => product.category && product.category.some(c => c.name === categoryName)
+    );
+  };
+  
+  const offersAbove10 = getProductsByDiscount(ProductsData, 0.10);
+  const computingProducts = getProductsByCategory(ProductsData, "Computing");
+  const gamingProduct = getProductsByCategory(ProductsData, "Gaming");
 
   return (
     <>
@@ -42,12 +57,12 @@ const Homepage = () => {
 
       <div className="animate-fade-in">
         <Carousel />
-        <div className="flex flex-col gap-16">
+        <div className="flex flex-col gap-16 mb-10">
           <div className="w-full flex justify-center">
-            <div className="max-w-[100px] flex justify-center">
+            <div className="max-w-[100px] flex justify-center ">
               <ProductCardSlider
-                Title={"Ofertas"}
-                Data={ProductsData}
+                Title={"Best Offers"}
+                Data={offersAbove10}
                 addCart={addCart}
               />
             </div>
@@ -56,14 +71,23 @@ const Homepage = () => {
             <div className="max-w-[100px] flex justify-center">
               <ProductCardSlider
                 Title={"Computing"}
-                Data={ProductsData}
+                Data={computingProducts}
+                addCart={addCart}
+              />
+            </div>
+          </div>
+          <div className="w-full flex justify-center">
+            <div className="max-w-[100px] flex justify-center">
+              <ProductCardSlider
+                Title={"Gaming"}
+                Data={gamingProduct}
                 addCart={addCart}
               />
             </div>
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2 mt-8">
+        {/*<div className="flex flex-wrap gap-2 mt-8">
           {ProductsData.map((product) => (
             <ProductCard
               key={product.id}
@@ -78,8 +102,8 @@ const Homepage = () => {
               addCart={addCart}
             />
           ))}
+        </div>*/}
           <Footer />
-        </div>
       </div>
     </>
   );

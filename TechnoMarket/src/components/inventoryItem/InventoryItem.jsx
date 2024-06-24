@@ -2,26 +2,19 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { MDBBtn, MDBCheckbox } from 'mdb-react-ui-kit';
 
-const InventoryItem = ({ product, AllChecked, AllActive }) => {
-  const [IsChecked, setIsChecked] = useState(AllChecked);
-  const [Active, setActive] = useState(product.status);  // Inicializa con el estado del producto
-  
-  // Effect de actualizar la casilla de verificación individual cuando cambia AllChecked
-  useEffect(() => {
-    setIsChecked(AllChecked);
-  }, [AllChecked]);
+const InventoryItem = ({ product, IsChecked, handleClickCheckbox, handleClickActive }) => {
+  const [Active, setActive] = useState(product.status);
 
-  // Effect de actualizar el estado activo individual cuando cambia AllActive
   useEffect(() => {
-    setActive(AllActive);
-  }, [AllActive]);
+    setActive(product.status);
+  }, [product.status]);
 
   const handleCheckboxChange = () => {
-    setIsChecked(!IsChecked);
+    handleClickCheckbox(product.id, !IsChecked);
   };
 
-  const handleClickActive = () => {
-    setActive(!Active);
+  const handleButtonClick = () => {
+    handleClickActive(product.id, !Active);
   };
 
   const stock = 10;
@@ -47,7 +40,7 @@ const InventoryItem = ({ product, AllChecked, AllActive }) => {
       <td className="text-center">
         <MDBBtn 
           rounded 
-          onClick={handleClickActive} 
+          onClick={handleButtonClick} 
           color={Active ? 'success' : 'danger'} 
           className={Active ? "px-8 mx-2" : "mx-2"}
         >
@@ -70,8 +63,9 @@ const InventoryItem = ({ product, AllChecked, AllActive }) => {
 
 InventoryItem.propTypes = {
   product: PropTypes.object,
-  AllChecked: PropTypes.bool,
-  AllActive: PropTypes.bool,
+  IsChecked: PropTypes.bool,
+  handleClickCheckbox: PropTypes.func,
+  handleClickActive: PropTypes.func,
 };
 
 export default InventoryItem;

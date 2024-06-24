@@ -7,20 +7,23 @@ import StoreNavItem from "../storeNavItem/StoreNavItem";
 import { AuthenticationContext } from "../../services/authentication/Authentication.context";
 import { useGET } from "../customHook/CustomHook";
 import { useLocation } from "react-router-dom";
+import { NavBarContext } from "../navBarContext/NavBarContext";
+import NavBar from "../navBar/NavBar";
 
 const StoreProfile = () => {
+
+  const {
+    ShoppingCart,
+    searchHandler,
+    toggleOpen,
+  } = useContext(NavBarContext);
+
   const { user } = useContext(AuthenticationContext);
   const location = useLocation();
   const { id } = location.state.stores;
 
   const [store, loading, error] = useGET(`http://localhost:3000/stores/${id}`);
   const [activePage, setActivePage] = useState(1);
-
-  useEffect(() => {
-    if (user) {
-      console.log(user);
-    }
-  }, [user]);
 
   const changePage = (page) => {
     setActivePage(page);
@@ -29,13 +32,19 @@ const StoreProfile = () => {
   if (loading || !user) {
     return <>CARGANDO...</>; // Muestra estado de carga hasta que user esté disponible
   }
+  
   if (error) {
     return <>error...</>;
   }
 
   return (
     <>
-      {user &&
+      <NavBar
+        searchHandler={searchHandler}
+        ShoppingCart={ShoppingCart}
+        toggleOpen={toggleOpen}
+      />
+      {user && (
         <div>
           <StoreHeader store={store} user={user} />
           <StoreNav>
@@ -43,28 +52,37 @@ const StoreProfile = () => {
               changePage={changePage}
               activePage={activePage}
               numPage={1}>
-              {user.RoleId === 2 && user.IdStore == store.id ? "Inventory" : "Products"}
+              {user.RoleId === 2 && user.IdStore == store.id
+                ? "Inventory"
+                : "Products"}
             </StoreNavItem>
             <StoreNavItem
               changePage={changePage}
               activePage={activePage}
               numPage={2}>
-              {user.RoleId === 2 && user.IdStore == store.id ? "My Offers" : "Offers"}
+              {user.RoleId === 2 && user.IdStore == store.id
+                ? "My Offers"
+                : "Offers"}
             </StoreNavItem>
             <StoreNavItem
               changePage={changePage}
               activePage={activePage}
               numPage={3}>
-              {user.RoleId === 2 && user.IdStore == store.id ? "Sales" : "Best sellers"}
+              {user.RoleId === 2 && user.IdStore == store.id
+                ? "Sales"
+                : "Best sellers"}
             </StoreNavItem>
           </StoreNav>
           <div
-            className={`flex justify-center w-full ${activePage === 1 && user.RoleId === 2 && user.IdStore == store.id ? "" : "hidden"}`}
-          >
+            className={`flex justify-center w-full ${
+              activePage === 1 && user.RoleId === 2 && user.IdStore == store.id
+                ? ""
+                : "hidden"
+            }`}>
             <Inventory inventory={store.inventory} />
           </div>
         </div>
-      }
+      )}
     </>
   );
 };

@@ -1,67 +1,56 @@
 import PropTypes from "prop-types";
 import { MDBBtn, MDBCheckbox } from "mdb-react-ui-kit";
 import InventoryItem from "../inventoryItem/InventoryItem";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const Inventory = ({ inventory }) => {
   const [AllChecked, setAllChecked] = useState(false);
-  const [AllActive, setAllActive] = useState(true);
   const [activePage, setActivePage] = useState(1);
 
+  const handleClickCheckbox = (productId, isChecked) => {
+    // Aquí deberías actualizar el estado de IsChecked para el producto específico
+    console.log(`Checkbox clicked for product ${productId}, checked: ${isChecked}`);
+  };
 
-  // Effect to handle the global check/uncheck
-  useEffect(() => {
-    if (AllChecked) {
-      inventory.forEach((product) => {
-        product.status = true;
-      });
-    } else {
-      inventory.forEach((product) => {
-        product.status = false;
-      });
-    }
-  }, [AllChecked, inventory]);
+  const handleClickActive = (productId, isActive) => {
+    // Aquí deberías actualizar el estado de Active para el producto específico
+    console.log(`Active button clicked for product ${productId}, active: ${isActive}`);
+  };
 
   const changePage = (page) => {
     setActivePage(page);
   };
 
   return (
-    <div className="font-mono w-[1000px]">
+    <div className="font-mono w-[1000px] min-h-[80vh] mb-8">
       <div className="flex justify-between px-4 py-2 bg-gray-400 mt-6 rounded-t-2xl font-bold">
         <div className="flex gap-2">
           <MDBBtn
             color="tertiary"
-            className={`hover:text-gray-700 font-bold  ${
-              activePage === 1 ? "bg-blue-300/30" : ""
-            }`}
+            className={`hover:text-gray-700 font-bold  ${activePage === 1 ? "bg-blue-300/30" : ""}`}
             onClick={() => changePage(1)}>
             All
           </MDBBtn>
           <MDBBtn
             color="tertiary"
-            className={`hover:text-gray-700 font-bold  ${
-              activePage === 2 ? "bg-blue-300/30" : ""
-            }`}
+            className={`hover:text-gray-700 font-bold  ${activePage === 2 ? "bg-blue-300/30" : ""}`}
             onClick={() => changePage(2)}>
             Active
           </MDBBtn>
           <MDBBtn
             color="tertiary"
-            className={`hover:text-gray-700 font-bold  ${
-              activePage === 3 ? "bg-blue-300/30" : ""
-            }`}
+            className={`hover:text-gray-700 font-bold  ${activePage === 3 ? "bg-blue-300/30" : ""}`}
             onClick={() => changePage(3)}>
-            disabled
+            Disabled
           </MDBBtn>
         </div>
         {AllChecked && (
           <div className="flex gap-8 animate-fade-in">
             <MDBBtn
-              onClick={() => setAllActive(!AllActive)}
-              color={AllActive ? "danger" : "success"}
-              className={AllActive ? "" : "px-8"}>
-              {AllActive ? "Disabled all" : "Active all"}
+              onClick={() => setAllChecked(!AllChecked)}
+              color="danger"
+              className="px-8">
+              Disable all
             </MDBBtn>
           </div>
         )}
@@ -69,7 +58,7 @@ const Inventory = ({ inventory }) => {
       <table className="table-fixed text-center w-full">
         <thead>
           <tr className="bg-gray-300 text-sm font-mono">
-            <th className="lg:px-4 md:px-3 sm:px-2 p-2">
+            <th className="lg:px-4 md:px-3 sm:px-2 p-2 w-20">
               <MDBCheckbox
                 checked={AllChecked}
                 onChange={() => setAllChecked(!AllChecked)}
@@ -87,20 +76,35 @@ const Inventory = ({ inventory }) => {
             <InventoryItem
               key={product.id}
               product={product}
-              AllChecked={AllChecked}
-              AllActive={AllActive}
+              IsChecked={AllChecked}
+              handleClickCheckbox={handleClickCheckbox}
+              handleClickActive={handleClickActive}
             />
           ))}
         </tbody>
         <tbody className={activePage === 2 ? "" : "hidden"}>
           {inventory
-            .filter((p) => p.status === false)
+            .filter((p) => p.status)
             .map((product) => (
               <InventoryItem
                 key={product.id}
                 product={product}
-                AllChecked={AllChecked}
-                AllActive={AllActive}
+                IsChecked={AllChecked}
+                handleClickCheckbox={handleClickCheckbox}
+                handleClickActive={handleClickActive}
+              />
+            ))}
+        </tbody>
+        <tbody className={activePage === 3 ? "" : "hidden"}>
+          {inventory
+            .filter((p) => !p.status)
+            .map((product) => (
+              <InventoryItem
+                key={product.id}
+                product={product}
+                IsChecked={AllChecked}
+                handleClickCheckbox={handleClickCheckbox}
+                handleClickActive={handleClickActive}
               />
             ))}
         </tbody>

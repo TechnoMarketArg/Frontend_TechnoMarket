@@ -26,6 +26,7 @@ function ButtonUser() {
 
   const handleLogoutHandler = () => {
     handleLogout();
+    navigate("/")
   };
 
   const id = user.IdStore
