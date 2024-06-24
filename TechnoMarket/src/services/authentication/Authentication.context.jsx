@@ -20,7 +20,7 @@ const AuthenticationContextProvider = ({ children }) => {
   const validateUser = async (email, password) => {
     // Lógica para validar el usuario con los datos almacenados
     // Esta lógica debe incluir la llamada al backend para validar al usuario
-    const response = await fetch("http://localhost:3000/users");
+    const response = await fetch("https://cvrdqj9p-3000.brs.devtunnels.ms/users");
     const users = await response.json();
     const foundUser = users.find(user => user.Email === email && user.Password === password);
 

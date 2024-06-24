@@ -42,6 +42,10 @@ function ButtonUser() {
     });
   };
 
+  const handleClickProfile = () => {
+    navigate(`/user/${user.id}` );
+  };
+
 
   return (
     <>
@@ -109,11 +113,11 @@ function ButtonUser() {
           }}
           transformOrigin={{ horizontal: "right", vertical: "top" }}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
-          <a href={`user/${user.id}`}>
+          <button onClick={handleClickProfile}>
             <MenuItem onClick={handleClose}>
               <Avatar /> {user.FirstName} {user.LastName}
             </MenuItem>
-          </a>
+          </button>
 
           {user.RoleId === 2 && (
             <button onClick={handleClickStore}>
