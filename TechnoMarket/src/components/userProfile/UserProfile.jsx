@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { useContext, useState, useEffect } from "react";
 import { AuthenticationContext } from "../../services/authentication/Authentication.context";
 import UserNav from "../userNav/UserNav";
@@ -13,12 +12,17 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import Button from '@mui/material/Button';
-import { useUpdateUser } from "../customHook/CustomHook";
+import {  useUpdateUser } from "../customHook/CustomHook";
 import { toast } from "sonner";
-// Importa el custom hook
+import NavBar from "../navBar/NavBar";
+import { NavBarContext } from "../navBarContext/NavBarContext";
+
+
 
 const UserProfile = () => {
     const { user } = useContext(AuthenticationContext);
+
+    const {searchHandler, ShoppingCart, toggleOpen} = useContext(NavBarContext);
 
     const [showPassword, setShowPassword] = useState(false);
     const [firstName, setFirstName] = useState(user?.FirstName || "");
@@ -28,6 +32,7 @@ const UserProfile = () => {
     const [activePage, setActivePage] = useState(1);
 
     const { loading, userUpdate, error, updateUser } = useUpdateUser();  // Usa el custom hook
+
 
     useEffect(() => {
         if (user) {
@@ -40,13 +45,12 @@ const UserProfile = () => {
 
     const handleUpdateUser = () => {
         const updatedData = {
+            id: user.id,
             FirstName: firstName,
             LastName: lastName,
             Email: email,
             Password: password,
-    
-    
-    
+            
         };
         updateUser(user.id, updatedData);
         toast.success(`Updated user ${user.FirstName} ${user.LastName}`)
@@ -58,15 +62,13 @@ const UserProfile = () => {
         event.preventDefault();
     };
 
-
-    
-
     const changePage = (page) => {
         setActivePage(page);
     };
 
     return (
         <>
+            <NavBar searchHandler={searchHandler} ShoppingCart={ShoppingCart} toggleOpen={toggleOpen}/>
             {user && (
                 <div>
                     <UserNav>
@@ -150,17 +152,46 @@ const UserProfile = () => {
                                 {loading ? 'Guardando...' : 'Guardar Cambios'}
                             </Button>
                             {error && <p className="text-red-500">{error}</p>}
-
                         </div>
                     </div>
                     <div className={`flex justify-center w-full ${activePage === 2 ? "" : "hidden"}`}>
-                        Productos Comprados
+                        
+                    <ul>
+                                {user.ProductsPurchased.map(product => (
+                                    <li key={product.id}>
+                                        <h3>{product.title}</h3>
+                                        <p>{product.description}</p>
+                                        <p>Precio: ${product.price}</p>
+                                        <img src={product.images[0]} alt={product.title} style={{ width: '100px' }} />
+                                    </li>
+                                ))}
+                            </ul>
+                        
                     </div>
                     <div className={`flex justify-center w-full ${activePage === 3 ? "" : "hidden"}`}>
-                        Productos Favoritos
+                       
+                        <ul>
+                                {user.ProductsFavorites.map(product => (
+                                    <li key={product.id}>
+                                        <h3>{product.title}</h3>
+                                        <p>{product.description}</p>
+                                        <p>Precio: ${product.price}</p>
+                                        <img src={product.images[0]} alt={product.title} style={{ width: '100px' }} />
+                                    </li>
+                                ))}
+                            </ul>
                     </div>
                     <div className={`flex justify-center w-full ${activePage === 4 ? "" : "hidden"}`}>
-                        Tiendas Favoritas
+                        
+                        <ul>
+                                {user.StoresFavorites.map(product => (
+                                    <li key={product.id}>
+                                        <h3>{product.Name}</h3>
+                                        <p>{product.description}</p>
+                                        <img src={product.image} alt={product.title} style={{ width: '100px' }} />
+                                    </li>
+                                ))}
+                            </ul>
                     </div>
                 </div>
             )}
