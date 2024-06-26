@@ -2,10 +2,6 @@ import technoMarket from "./technoMarket.jpg";
 import "mdb-react-ui-kit/dist/css/mdb.min.css";
 import "./styles.css";
 import PropTypes from 'prop-types';
-import technoMarket from "./technoMarket.jpg";
-import "mdb-react-ui-kit/dist/css/mdb.min.css";
-import "./styles.css";
-import PropTypes from 'prop-types';
 import {
   MDBBtn,
   MDBContainer,
@@ -23,17 +19,13 @@ import { useGET } from "../customHook/CustomHook";
 import { toast } from "sonner";
 import Loading from "../loading/Loading";
 
-function Login() {
-  const { handleLogin } = useContext(AuthenticationContext);
-  const navigate = useNavigate();
-  
+const Login = () => {
   const { handleLogin } = useContext(AuthenticationContext);
   const navigate = useNavigate();
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [users, loanding, error] = useGET('http://localhost:3000/users');
-  const [users, loanding, error] = useGET('http://localhost:3000/users');
+  const [users, loading, error] = useGET('http://localhost:3000/users');
 
   const [errors, setErrors] = useState({
     email: false,
@@ -57,13 +49,11 @@ function Login() {
   const loginHandler = (event) => {
     event.preventDefault();
 
-
     if (!emailRef.current.value) {
       emailRef.current.focus();
       setErrors({ ...errors, email: true });
       return;
     }
-
 
     if (!password) {
       passwordRef.current.focus();
@@ -71,170 +61,92 @@ function Login() {
       return;
     }
 
-
     setErrors({ ...errors, exist: false });
 
     const foundUser = users.find(user => user.Email === email && user.Password === password);
 
     if (foundUser) {
-      handleLogin(foundUser); // Se llama con el usuario encontrado
+      handleLogin(foundUser);
       navigate("/");
     } else {
       toast.error('Email o Contraseña incorrecto');
     }
   };
 
-  if (loanding) {
-    return <Loading/>;
-  }
-
-    const foundUser = users.find(user => user.Email === email && user.Password === password);
-
-    if (foundUser) {
-      handleLogin(foundUser); // Se llama con el usuario encontrado
-      navigate("/");
-    } else {
-      toast.error('Email o Contraseña incorrecto');
-    }
-  };
-
-  if (loanding) {
-    return <Loading/>;
+  if (loading) {
+    return <Loading />;
   }
 
   return (
-    <div className="full-bg">
-      <MDBContainer className="my-5">
-        <MDBCard>
-          <MDBRow className="g-0">
-            <MDBCol md="6">
-              <MDBCardImage
-                src={technoMarket}
-                alt="login form"
-                className="rounded-start w-100"
-                style={{ borderRadius: "%" }}
+    <MDBContainer className="my-5">
+      <MDBCard>
+        <MDBRow className="g-0">
+          <MDBCol md="6">
+            <MDBCardImage
+              src={technoMarket}
+              alt="login form"
+              className="rounded-start w-100"
+              style={{ borderRadius: "%" }}
+            />
+          </MDBCol>
+          <MDBCol md="6">
+            <MDBCardBody className="d-flex flex-column">
+              <div className="d-flex flex-row mt-2"></div>
+              <h5 className="fw-normal my-4 pb-3" style={{ letterSpacing: "1px" }}>
+                Accede a tu Cuenta
+              </h5>
+              <MDBInput
+                wrapperClass="mb-4"
+                label="Email address"
+                id="formControlLg"
+                type="email"
+                size="lg"
+                onChange={changeEmailHandler}
+                ref={emailRef}
+                value={email}
+                className={errors.email && "border border-danger"}
               />
-          <MDBRow className="g-0">
-            <MDBCol md="6">
-              <MDBCardImage
-                src={technoMarket}
-                alt="login form"
-                className="rounded-start w-100"
-                style={{ borderRadius: "%" }}
+              <MDBInput
+                wrapperClass="mb-4"
+                label="Password"
+                id="formControlLg"
+                type="password"
+                size="lg"
+                className={errors.password && "border border-danger"}
+                onChange={changePasswordHandler}
+                value={password}
+                ref={passwordRef}
               />
-            </MDBCol>
-            <MDBCol md="6">
-              <MDBCardBody className="d-flex flex-column">
-                <div className="d-flex flex-row mt-2"></div>
-                <h5
-                  className="fw-normal my-4 pb-3"
-                  style={{ letterSpacing: "1px" }}>
-                  Accede a tu Cuenta
-                </h5>
-                <MDBInput
-                  wrapperClass="mb-4"
-                  label="Email address"
-                  id="formControlLg"
-                  type="email"
-                  size="lg"
-                  onChange={changeEmailHandler}
-                  ref={emailRef}
-                  value={email}
-                  className={errors.email && "border border-danger"}
-                />
-                <MDBInput
-                  wrapperClass="mb-4"
-                  label="Password"
-                  id="formControlLg"
-                  type="password"
-                  size="lg"
-                  className={errors.password && "border border-danger"}
-                  onChange={changePasswordHandler}
-                  value={password}
-                  ref={passwordRef}
-                />
-                <MDBBtn
-                  className="mb-4 px-5"
-                  color="dark"
-                  size="lg"
-                  type="submit"
-                  onClick={loginHandler}
-                  block>
-                  Login
-                </MDBBtn>
-            <MDBCol md="6">
-              <MDBCardBody className="d-flex flex-column">
-                <div className="d-flex flex-row mt-2"></div>
-                <h5
-                  className="fw-normal my-4 pb-3"
-                  style={{ letterSpacing: "1px" }}>
-                  Accede a tu Cuenta
-                </h5>
-                <MDBInput
-                  wrapperClass="mb-4"
-                  label="Email address"
-                  id="formControlLg"
-                  type="email"
-                  size="lg"
-                  onChange={changeEmailHandler}
-                  ref={emailRef}
-                  value={email}
-                  className={errors.email && "border border-danger"}
-                />
-                <MDBInput
-                  wrapperClass="mb-4"
-                  label="Password"
-                  id="formControlLg"
-                  type="password"
-                  size="lg"
-                  className={errors.password && "border border-danger"}
-                  onChange={changePasswordHandler}
-                  value={password}
-                  ref={passwordRef}
-                />
-                <MDBBtn
-                  className="mb-4 px-5"
-                  color="dark"
-                  size="lg"
-                  type="submit"
-                  onClick={loginHandler}
-                  block>
-                  Login
-                </MDBBtn>
-
-                <p className="mb-5 pb-lg-2" style={{ color: "#393f81" }}>
-                  No tienes una Cuenta?{" "}
-                  <a href="" style={{ color: "#393f81" }}>
-                    Registrate Aqui
-                  </a>
-                </p>
-                <div className="d-flex flex-row justify-content-start">
-                  <a href="" className="small text-muted me-1"></a>
-                  <a href="" className="small text-muted">
-                    Copyright By TechnoMarket
-                  </a>
-                <p className="mb-5 pb-lg-2" style={{ color: "#393f81" }}>
-                  No tienes una Cuenta?{" "}
-                  <a href="" style={{ color: "#393f81" }}>
-                    Registrate Aqui
-                  </a>
-                </p>
-                <div className="d-flex flex-row justify-content-start">
-                  <a href="" className="small text-muted me-1"></a>
-                  <a href="" className="small text-muted">
-                    Copyright By TechnoMarket
-                  </a>
-                </div>
-              </MDBCardBody>
-            </MDBCol>
-          </MDBRow>
-        </MDBCard>
-      </MDBContainer>
-    </div>
+              <MDBBtn
+                className="mb-4 px-5"
+                color="dark"
+                size="lg"
+                type="submit"
+                onClick={loginHandler}
+                block
+              >
+                Login
+              </MDBBtn>
+              <p className="mb-5 pb-lg-2" style={{ color: "#393f81" }}>
+                No tienes una Cuenta?{" "}
+                <a href="" style={{ color: "#393f81" }}>
+                  Registrate Aqui
+                </a>
+              </p>
+              <div className="d-flex flex-row justify-content-start">
+                <a href="" className="small text-muted me-1"></a>
+                <a href="" className="small text-muted">
+                  Copyright By TechnoMarket
+                </a>
+              </div>
+            </MDBCardBody>
+          </MDBCol>
+        </MDBRow>
+      </MDBCard>
+    </MDBContainer>
   );
 }
 
-Login.propTypes = {};
 Login.propTypes = {};
 
 export default Login;
