@@ -8,7 +8,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import SortBy from '../sortBy/SortBy';
 
 
-const NavFilter = ({  }) => {
+const NavFilter = () => {
 
     const FiltersObject = [
         { Brand: ["Apple", "Dell", "HP", "Lenovo", "Acer", "Asus", "Microsoft", "MSI", "Samsung", "Sony", "Toshiba", "Huawei"] },

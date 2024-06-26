@@ -1,4 +1,4 @@
-import { useState, createContext, useEffect } from "react";
+import { useState, createContext, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 
 const AuthenticationContext = createContext({});
@@ -40,6 +40,7 @@ const AuthenticationContextProvider = ({ children }) => {
   const handleLogout = () => {
     localStorage.removeItem("email");
     localStorage.removeItem("password");
+    localStorage.removeItem('cart')
     setUser(null);
   };
 
@@ -47,6 +48,7 @@ const AuthenticationContextProvider = ({ children }) => {
     const newUser = { fullName, email, password };
     localStorage.setItem("email", email);
     localStorage.setItem("password", password);
+    localStorage.removeItem('cart')
     setUser(newUser);
   };
 

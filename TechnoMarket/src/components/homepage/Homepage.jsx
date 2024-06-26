@@ -1,14 +1,6 @@
-import { useContext, useState } from "react";
-import PropTypes from "prop-types";
+import { useContext } from "react";
 import Carousel from "../carousel/Carousel";
 import { ProductCardSlider } from "../productCardSlider/ProductCardSlider";
-import { ProductCard } from "../productCard/ProductCard";
-import { FilterSearch } from "../filterSearch/FilterSearch";
-import Footer from "../footer/Footer";
-import SearchPage from "../searchPage/SearchPage";
-import { useGET } from "../customHook/CustomHook";
-import Cart from "../cart/Cart.jsx";
-import { Toaster, toast } from "sonner";
 import Loading from "../loading/Loading";
 import NavBar from "../navBar/NavBar";
 import { NavBarContext } from "../navBarContext/NavBarContext.jsx";
@@ -103,7 +95,6 @@ const Homepage = () => {
             />
           ))}
         </div>*/}
-          <Footer />
       </div>
     </>
   );

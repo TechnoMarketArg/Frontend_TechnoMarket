@@ -30,12 +30,7 @@ const ProductCard = ({
     navigate(`/products/${id}`, {
       state: {
         product: {
-          id,
-          title,
-          price,
-          images,
-          description,
-          variants
+          id
         },
       },
     });
@@ -111,7 +106,7 @@ const ProductCard = ({
 };
 
 ProductCard.propTypes = {
-  id: PropTypes.number,
+  id: PropTypes.string,
   title: PropTypes.string,
   price: PropTypes.number,
   description: PropTypes.string,

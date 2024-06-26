@@ -16,6 +16,7 @@ import { AuthenticationContext, AuthenticationContextProvider } from "./services
 import SignUp from "./components/signUp/SignUp.jsx";
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import CategoryPage from "./components/categoryPage/CategoryPage.jsx";
+import Footer from "./components/footer/Footer.jsx";
 
 
 function App() {
@@ -69,9 +70,10 @@ function App() {
 
       <Cart />
 
-      {filteredProduct ? <SearchPage filteredProduct={filteredProduct} /> : ""}
+      {/*filteredProduct ? <SearchPage filteredProduct={filteredProduct} /> : ""*/}
 
       {<RouterProvider router={router} />}
+      <Footer/>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { useState, createContext, useContext } from "react";
+import { useState, createContext, useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import { toast } from "sonner";
 import { useGET } from "../customHook/CustomHook";
@@ -8,14 +8,22 @@ const NavBarContext = createContext();
 
 const NavBarProvider = ({ children }) => {
   const [ProductsData, ProductsLoading, ProductsError] = useGET("http://localhost:3000/products");
+  const { user } = useContext(AuthenticationContext);
 
-  const {user} = useContext(AuthenticationContext)
+  // Inicializar el carrito desde localStorage
+  const [ShoppingCart, setShoppingCart] = useState(() => {
+    const cart = localStorage.getItem('cart');
+    return cart ? JSON.parse(cart) : [];
+  });
 
-  const [ShoppingCart, setShoppingCart] = useState([]);
+  const [filteredProduct, setFilteredProduct] = useState([]);
 
-  const [filteredProduct, setFilteredProduct] = useState();
+  // Guardar el carrito en localStorage cada vez que se actualice
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(ShoppingCart));
+  }, [ShoppingCart]);
 
-  // Funcion que va a Buscar el Contenido del Buscador en la API
+  // Función que busca el contenido del buscador en la API
   const searchHandler = (searchTerm) => {
     const filtered = ProductsData.filter((product) =>
       product.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -23,22 +31,21 @@ const NavBarProvider = ({ children }) => {
     setFilteredProduct(filtered);
   };
 
-  //agregar productos al carrito
+  // Agregar productos al carrito
   const addCart = (product) => {
-    if(user){
-      if (ShoppingCart.some((p) => p.id == product.id)) {
+    if (user) {
+      if (ShoppingCart.some((p) => p.id === product.id)) {
         toast.warning(`${product.title} already included in the cart`);
       } else {
         toast.success(`${product.title} added to shopping cart successfully`);
-        setShoppingCart([...ShoppingCart, product]);
+        setShoppingCart([...ShoppingCart, { ...product, quantity: 1 }]);
       }
-    }else{
+    } else {
       toast.error(`Sign in to add ${product.title} to cart`);
     }
-    
   };
 
-  //aumentar la cantidad de un producto en el carrito
+  // Aumentar la cantidad de un producto en el carrito
   const increaseQuantity = (productId) => {
     setShoppingCart(
       ShoppingCart.map((item) =>
@@ -47,7 +54,7 @@ const NavBarProvider = ({ children }) => {
     );
   };
 
-  //disminuir la cantidad de un producto en el carrito
+  // Disminuir la cantidad de un producto en el carrito
   const decreaseQuantity = (productId) => {
     setShoppingCart(
       ShoppingCart.map((item) =>
@@ -58,11 +65,18 @@ const NavBarProvider = ({ children }) => {
     );
   };
 
-  //FALTA LOGICA
-  //eliminar priductos del carrito
-  const removeCart = (gameTitle) => {
-    setShoppingCart(ShoppingCart.filter((game) => game.title !== gameTitle));
+  // Eliminar productos del carrito
+  const removeCart = (productId) => {
+    const updatedCart = ShoppingCart.filter((item) => item.id !== productId);
+    setShoppingCart(updatedCart);
+    localStorage.setItem('cart', JSON.stringify(updatedCart));
   };
+
+  const cleanCart = () => {
+    setShoppingCart([]);
+    localStorage.removeItem('cart')
+    toast.success("All items have been removed from the cart");
+  }
 
   const [optSmModal, setOptSmModal] = useState(false);
 
@@ -86,6 +100,7 @@ const NavBarProvider = ({ children }) => {
         toggleOpen,
         filteredProduct,
         setFilteredProduct,
+        cleanCart
       }}>
       {children}
     </NavBarContext.Provider>

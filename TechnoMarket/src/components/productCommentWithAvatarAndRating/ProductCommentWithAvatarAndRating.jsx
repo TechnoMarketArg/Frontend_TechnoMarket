@@ -2,12 +2,10 @@ import PropTypes from 'prop-types';
 import Avatar from '@mui/material/Avatar';
 import { Rating } from '@mui/material';
 
-const ProductCommentWithAvatarAndRating = () => {
+const ProductCommentWithAvatarAndRating = ({name, rating, comment}) => {
 
 
-    const name = 'Sebastian'
-    const rating = 3.5
-    const comment = 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Unde voluptatibus dolores minima, quasi sint harum doloremque, placeat pariatur exercitationem animi perferendis blanditiis facere cum sequi expedita assumenda optio non repellat?'
+   
 
     return (
         <div className='max-w-[1240px] my-2 p-4'>
@@ -31,7 +29,9 @@ const ProductCommentWithAvatarAndRating = () => {
 
 
 ProductCommentWithAvatarAndRating.propTypes = {
-
+    name: PropTypes.string,
+    rating: PropTypes.number,
+    comment: PropTypes.string,
 };
 
 

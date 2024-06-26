@@ -30,6 +30,7 @@ const Cart = () => {
     optSmModal,
     setOptSmModal,
     toggleOpen,
+    cleanCart
   } = useContext(NavBarContext);
 
   return (
@@ -50,11 +51,18 @@ const Cart = () => {
                   <MDBRow className="justify-content-center my-4">
                     <MDBCol md="8">
                       <MDBCard className="mb-4">
-                        <MDBCardHeader className="py-3">
+                        <MDBCardHeader className="py-3 flex items-center justify-between">
                           <MDBTypography tag="h5" className="mb-0">
-                            {ShoppingCart.length}{" "}
-                            {ShoppingCart.length == 1 ? "Product" : "Products"}
+                            {ShoppingCart.length}
+                            {ShoppingCart.length == 1
+                              ? " Product"
+                              : " Products"}
                           </MDBTypography>
+                          {ShoppingCart.length >= 1 &&
+                            <MDBBtn outline color="danger" size='sm' onClick={cleanCart}>
+                              clean cart
+                            </MDBBtn>
+                          }
                         </MDBCardHeader>
                         <MDBCardBody className="h-[350px] overflow-y-scroll">
                           {/*Componente propio*/}
@@ -71,6 +79,7 @@ const Cart = () => {
                                   quantity={product.quantity}
                                   decreaseQuantity={decreaseQuantity}
                                   increaseQuantity={increaseQuantity}
+                                  cleanCart={cleanCart}
                                 />
                               ))
                             : "Shopping Cart empty"}

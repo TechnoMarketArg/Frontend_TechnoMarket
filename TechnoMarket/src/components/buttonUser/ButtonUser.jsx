@@ -8,13 +8,20 @@ import Tooltip from "@mui/material/Tooltip";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
-import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
+import LocalGroceryStoreIcon from "@mui/icons-material/LocalGroceryStore";
 import { Fragment, useContext, useState } from "react";
 import { AuthenticationContext } from "../../services/authentication/Authentication.context";
 import { useNavigate } from "react-router-dom";
+import AddBusinessIcon from "@mui/icons-material/AddBusiness";
+import CreateStore from "../createStore/CreateStore";
+
 function ButtonUser() {
   const { user, handleLogout } = useContext(AuthenticationContext);
 
+  const [show, setShow] = useState(false);
+
+  const handleShowModalStore = () => setShow(true);
+  
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -26,26 +33,26 @@ function ButtonUser() {
 
   const handleLogoutHandler = () => {
     handleLogout();
-    navigate("/")
+    navigate("/");
   };
 
-  const id = user.IdStore
-
+  
   const navigate = useNavigate();
-
+  
   const handleClickStore = () => {
-    navigate(`/stores/${user.IdStore}`, {
+    const id = user.Store.id;
+    navigate(`/stores/${user.Store.id}`, {
       state: {
         stores: {
-          id
+          id,
         },
       },
     });
   };
 
-
   return (
     <>
+      <CreateStore show={show} setShow={setShow}  user={user}/>
       <Fragment>
         <div>
           <Tooltip title="Account settings">
@@ -120,18 +127,21 @@ function ButtonUser() {
             <button onClick={handleClickStore}>
               <MenuItem onClick={handleClose}>
                 <Avatar>
-                  <LocalGroceryStoreIcon/>
-                  </Avatar> My Store
+                  <LocalGroceryStoreIcon fontSize="small" />
+                </Avatar>{" "}
+                My Store
               </MenuItem>
             </button>
           )}
           <Divider />
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <PersonAdd fontSize="small" />
-            </ListItemIcon>
-            Add another account
-          </MenuItem>
+          {user.RoleId === 3 && (
+            <MenuItem onClick={handleShowModalStore}>
+              <ListItemIcon>
+                <AddBusinessIcon fontSize="small" />
+              </ListItemIcon>
+              Open my Store
+            </MenuItem>
+            )}
           <MenuItem onClick={handleClose}>
             <ListItemIcon>
               <Settings fontSize="small" />
@@ -149,5 +159,6 @@ function ButtonUser() {
     </>
   );
 }
+
 
 export default ButtonUser;

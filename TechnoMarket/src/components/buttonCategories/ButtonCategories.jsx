@@ -5,7 +5,9 @@ import { button } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
 
 function ButtonCategories() {
-  const [categories, Loanding, Error] = useGET("http://localhost:3000/categories");
+  const [categories, Loanding, Error] = useGET(
+    "http://localhost:3000/categories"
+  );
 
   const navegate = useNavigate();
 
@@ -14,7 +16,7 @@ function ButtonCategories() {
       state: {
         category: {
           id,
-          name
+          name,
         },
       },
     });
@@ -31,10 +33,10 @@ function ButtonCategories() {
 
         {!Loanding &&
           categories.map((category) => (
-            <Dropdown.Item key={category.id}>
-              <button onClick={() => navigateCategory(category.id, category.name)}>
-                {category.name}
-              </button>
+            <Dropdown.Item
+              onClick={() => navigateCategory(category.id, category.name)}
+              key={category.id}>
+              {category.name}
             </Dropdown.Item>
           ))}
       </Dropdown.Menu>

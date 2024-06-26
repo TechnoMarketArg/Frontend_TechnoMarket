@@ -37,7 +37,7 @@ const CartItem = ({
             variant="secondary"
             className="mr-2"
             title="Remove item"
-            onClick={() => removeCart(title)}>
+            onClick={() => removeCart(id)}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="18"
@@ -124,7 +124,7 @@ const CartItem = ({
           </div>
 
           <p className="text-start text-md-center">
-            <strong>${price * quantity}</strong>
+            <strong>${(price * quantity).toFixed(1)}</strong>
           </p>
         </MDBCol>
       </MDBRow>
@@ -134,7 +134,7 @@ const CartItem = ({
 };
 
 CartItem.propTypes = {
-  id: PropTypes.number,
+  id: PropTypes.string,
   title: PropTypes.string,
   description: PropTypes.string,
   price: PropTypes.number,

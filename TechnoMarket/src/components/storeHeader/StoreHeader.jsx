@@ -16,11 +16,11 @@ const StoreHeader = ({ store, user }) => {
         <Toaster richColors position="top-center"/>
         <ModalChangeImageStore show={show} handleClose={handleClose} toast={toast} setImgStore={setImgStore}/>
       <div
-        className={`flex justify-between items-center px-4 p-3 ${store.color}`}>
+        className='flex justify-between items-center px-4 p-3' style={{ backgroundColor: store.color }}>
         <div className="flex items-center gap-12 ">
           <div className="relative rounded-full overflow-hidden">
             <img src={ImgStore} alt="" className="w-32 h-32 object-cover" />
-            {user.RoleId == 2 ? (
+            {user.RoleId == 2 && user.Store.id == store.id ? (
               <button
                 onClick={handleShow}
                 className="absolute cursor-pointer bottom-0 text-center py-1 text-white/50 bg-gray-500/40 hover:bg-gray-500/60 hover:text-white/70 w-32">
