@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import ProductDetails from "./components/productDetails/ProductDetails.jsx";
 import NavBar from "./components/navBar/NavBar.jsx";
 import { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { NavBarContext } from "./components/navBarContext/NavBarContext.jsx";
 import SearchPage from "./components/searchPage/SearchPage.jsx";
 import { CartItem } from "./components/cartItems/CartItem.jsx";
@@ -63,6 +64,10 @@ function App() {
       ),
     },
   ]);
+
+  const [publishModal, setPublishModal] = useState(false);
+
+  const toggleOpenModal = () => setPublishModal(!publishModal);
 
   return (
     <div className="bg-gray-100">

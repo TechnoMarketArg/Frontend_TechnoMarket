@@ -1,0 +1,82 @@
+// 20240623184845
+// https://cvrdqj9p-3000.brs.devtunnels.ms/products
+
+{
+  "id": "c9bf9e57-1685-4c89-bafb-ff5af830be8a",
+  "FirstName": "Sebastian",
+  "LastName": "Almiron",
+  "Email": "sebastianr_almiron@hotmail.com",
+  "Password": "sebastian123",
+  "address": {
+    "street": "Victor Plains",
+    "suite": "Suite 879",
+    "city": "Wisokyburgh",
+    "zipcode": "90566-7771",
+    "geo": {
+      "lat": "-43.9509",
+      "lng": "-34.4618"
+    }
+  },
+  "RoleId": 1,
+  "Role": {
+    "id": 1,
+    "name": "Admin"
+  },
+  "Store": null,
+  "ProductsPurchased": {
+    
+  },
+  "ProductsFavorites": {
+    
+  },
+  "StoresFavorites": {
+    
+  }
+},
+{
+  "id": "2a6f7c15-4b97-4c58-b915-b0d2c85e07c8",
+  "FirstName": "Tadeo",
+  "LastName": "Junco",
+  "Email": "tadeojunco@hotmail.com",
+  "Password": "tadeo123",
+  "address": {
+    "street": "Douglas Extension",
+    "suite": "Suite 847",
+    "city": "McKenziehaven",
+    "zipcode": "59590-4157",
+    "geo": {
+      "lat": "47.5162",
+      "lng": "-122.5316"
+    }
+  },
+  "RoleId": 1,
+  "Role": {
+    "id": 1,
+    "name": "Admin"
+  },
+  "Store": null,
+  "ProductsPurchased": {
+    
+  },
+  "ProductsFavorites": {
+    
+  },
+  "StoresFavorites": {
+    
+  }
+},
+{
+  "id": "9b2e17a6-c4de-4a3f-94ff-5a2e6b2b7f3e",
+  "FirstName": "Augusto",
+  "LastName": "Poratti",
+  "Email": "augusto.poratti1@gmail.com",
+  "Password": "augusto123",
+  "address": {
+    "street": "Hoeger Mall",
+    "suite": "Apt. 692",
+    "city": "South Elvis",
+    "zipcode": "53919-4257",
+    "geo": {
+      "lat": "29.4572",
+      "lng": "-164.2990"
+    }  

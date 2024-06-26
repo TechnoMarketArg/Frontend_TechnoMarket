@@ -58,9 +58,16 @@ const AuthenticationContextProvider = ({ children }) => {
       {children}
     </AuthenticationContext.Provider>
   );
+  return (
+    <AuthenticationContext.Provider
+      value={{ user, handleLogin, handleLogout, handleRegister }}>
+      {children}
+    </AuthenticationContext.Provider>
+  );
 };
 
 AuthenticationContextProvider.propTypes = {
+  children: PropTypes.node.isRequired,
   children: PropTypes.node.isRequired,
 };
 
