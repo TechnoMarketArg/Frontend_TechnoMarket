@@ -4,7 +4,7 @@ import { Spinner } from 'react-bootstrap';
 
 function ButtonCategories() {
 
-  const [Data, Loanding, Error ] = useGET("http://localhost:3000/categories")
+  const [Data, Loanding, Error ] = useGET("https://cvrdqj9p-3000.brs.devtunnels.ms/categories")
 
   return (
     <Dropdown>

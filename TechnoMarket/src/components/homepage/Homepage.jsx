@@ -30,7 +30,7 @@ const Homepage = (
   const toggleOpen = () => setOptSmModal(!optSmModal);*/
 
   //cerrar el modal de mas informacion
-
+  
   //const [ShoppingCart, setShoppingCart] = useState([]);
 
   //agregar productos al carrito

@@ -106,7 +106,7 @@ const ProductCard = ({
 };
 
 ProductCard.propTypes = {
-  id: PropTypes.number,
+  id: PropTypes.string,
   title: PropTypes.string,
   price: PropTypes.number,
   description: PropTypes.string,
