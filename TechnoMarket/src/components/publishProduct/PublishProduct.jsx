@@ -13,16 +13,19 @@ import Box from '@mui/material/Box';
 
 import PropTypes from 'prop-types';
 
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Toaster, toast } from 'sonner';
 import { useGET, usePOST } from "../customHook/CustomHook";
 import DropDownCategories from "../dropDown/DropDownCategories";
 import { AuthenticationContext } from "../../services/authentication/Authentication.context.jsx";
+import { useNavigate } from "react-router-dom";
+
 
 const PublishProduct = ({ optSmModal, setOptSmModal, toggleOpen }) => {
     const [Data, Loading, Error] = useGET(
         "https://www.uuidtools.com/api/generate/v1"
     );
+    const navigate = useNavigate()
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -36,7 +39,7 @@ const PublishProduct = ({ optSmModal, setOptSmModal, toggleOpen }) => {
     const [showVariantsInputs, setShowVariantsInputs] = useState(false); // Estado para mostrar/ocultar inputs de variantes
     const [status, setStatus] = useState(true);
     
-    const [variant, setVariant] = useState({});
+    
 
     const { user } = useContext(AuthenticationContext);
 
@@ -172,13 +175,15 @@ const PublishProduct = ({ optSmModal, setOptSmModal, toggleOpen }) => {
 
 
 
-        setVariant({ 
+        const Variant = { 
             [variantTitle]: [variantsOptions]
-        });
+        }
 
         console.log(variantsOptions);
-        console.log(variant);
-        console.log(variantTitle);
+        console.log(Variant);
+
+        
+        const id = Data[0];
 
         const productData = {
             id: Data[0],
@@ -192,9 +197,17 @@ const PublishProduct = ({ optSmModal, setOptSmModal, toggleOpen }) => {
             quantity: parseInt(inventory),
             offer: false,
             discount: 0,
-            variants: variant,
+            variants: Variant,
             comment: []
         };
+
+        /*navigate(`/products/${Data[0]}`, {
+            state: {
+                product: {
+                    id
+                }
+            }
+        })*/
 
         try {
             await publishProduct(productData);
@@ -209,10 +222,11 @@ const PublishProduct = ({ optSmModal, setOptSmModal, toggleOpen }) => {
             setVariantsOptions([]);
             setShowVariantsInputs(false);
             setVariantTitle("");
-            setVariant({});
         } catch (error) {
             // Manejar error si es necesario
         }
+
+        
     };
 
     return (
