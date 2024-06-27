@@ -158,7 +158,7 @@ const Listbox = styled('ul')(
 );
 
 const DropDownCategories = ( {selectedCategories, setSelectedCategories} ) => {
-  const [DataCategory, LoadingCategory, ErrorCategory] = useGET("https://cvrdqj9p-3000.brs.devtunnels.ms/categories");
+  const [DataCategory, LoadingCategory, ErrorCategory] = useGET("http://localhost:3000/categories");
   const categories = DataCategory || [];
 
 

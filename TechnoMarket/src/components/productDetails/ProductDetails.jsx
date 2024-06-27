@@ -22,6 +22,9 @@ const ProductDetails = () => {
   if (l) {
     return <Loading />;
   }
+  if (e) {
+    return <>Error...</>;
+  }
 
   return (
     <div>

@@ -11,8 +11,14 @@ import { NavBarContext } from "../navBarContext/NavBarContext";
 import NavBar from "../navBar/NavBar";
 import Loading from "../loading/Loading";
 import Offers from "../offers/Offers";
+import PublishProduct from "../publishProduct/PublishProduct";
 
 const StoreProfile = () => {
+
+  const [publishModal, setPublishModal] = useState(false);
+
+  const toggleOpenModal = () => setPublishModal(!publishModal);
+
   const { ShoppingCart, searchHandler, toggleOpen } = useContext(NavBarContext);
 
   const { user } = useContext(AuthenticationContext);
@@ -50,10 +56,13 @@ const StoreProfile = () => {
         ShoppingCart={ShoppingCart}
         toggleOpen={toggleOpen}
       />
+
+
       {user && (
         <div>
+          <PublishProduct toggleOpen={toggleOpenModal} setOptSmModal={setPublishModal} optSmModal={publishModal} />
           <StoreHeader store={store} user={user} />
-          <StoreNav>
+          <StoreNav toggleOpenModal={toggleOpenModal}>
             <StoreNavItem
               changePage={changePage}
               activePage={activePage}

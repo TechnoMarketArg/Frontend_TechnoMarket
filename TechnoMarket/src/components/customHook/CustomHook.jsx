@@ -1,49 +1,46 @@
-import { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import axios from 'axios';
-import { toast } from 'sonner';
+import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import axios from "axios";
+import { toast } from "sonner";
 
 const useGET = (url, updateData) => {
-    const [Data, setData] = useState([]);
-    const [Loading, setLoading] = useState(true);
-    const [Error, setError] = useState(null);
-  
-    useEffect(() => {
-      if (!url) return;
-  
-      const fetchData = async () => {
-        setLoading(true);
-        try {
-          const response = await axios.get(url);
-  
-          if (response.status < 200 || response.status >= 300) {
-            throw new Error('Error en la red: ' + response.statusText);
-          }
-  
-          setData(response.data);
-          if (updateData) {
-            updateData(response.data);
-          }
-          setError(null);
-          setLoading(false);
-        } catch (error) {
-          setError(error);
-          setLoading(false);
+  const [Data, setData] = useState([]);
+  const [Loading, setLoading] = useState(true);
+  const [Error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!url) return;
+
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(url);
+
+        if (response.status < 200 || response.status >= 300) {
+          throw new Error("Error en la red: " + response.statusText);
         }
-      };
-  
-      fetchData();
-    }, [url, updateData]);
-  
-    return [Data, Loading, Error];
-  };
 
+        setData(response.data);
+        if (updateData) {
+          updateData(response.data);
+        }
+        setError(null);
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+    };
 
-useGET.propTypes = {
-    url: PropTypes.string
+    fetchData();
+  }, [url, updateData]);
+
+  return [Data, Loading, Error];
 };
 
-
+useGET.propTypes = {
+  url: PropTypes.string,
+};
 
 const usePOST = (url) => {
   const [loading, setLoading] = useState(false);
@@ -64,6 +61,7 @@ const usePOST = (url) => {
     } catch (error) {
       setError(error);
       toast.error("The action failed");
+      console.log('Error:', error.response ? error.response.data : error.message);
       throw error;
     } finally {
       setLoading(false);
@@ -75,7 +73,7 @@ const usePOST = (url) => {
 
 
 usePOST.propTypes = {
-  url: PropTypes.string
+  url: PropTypes.string,
 };
 
 const useUpdateUser = () => {
@@ -86,8 +84,10 @@ const useUpdateUser = () => {
   const updateUser = async (userId, updatedData) => {
     setLoading(true);
     try {
-      
-      const response = await axios.put(`https://cvrdqj9p-3000.brs.devtunnels.ms/users/${userId}`, updatedData);
+      const response = await axios.put(
+        `https://cvrdqj9p-3000.brs.devtunnels.ms/users/${userId}`,
+        updatedData
+      );
       setUser(response.data);
       setLoading(false);
       setError(null);
@@ -100,18 +100,14 @@ const useUpdateUser = () => {
   return { loading, user, error, updateUser };
 };
 
-
-useUpdateUser.propTypes = {
-
-};
-
+useUpdateUser.propTypes = {};
 
 const usePUT = (url) => {
   const [loading, setLoading] = useState(false);
   const [UpdatedData, setUpdatedData] = useState(null);
   const [error, setError] = useState(null);
 
-  const PutData = async (ID, DATA) => {
+  const PutData = async (DATA, ID) => {
     setLoading(true);
     try {
       const response = await axios.put(`${url}/${ID}`, DATA);
@@ -129,27 +125,14 @@ const usePUT = (url) => {
   return [UpdatedData, PutData, loading, error];
 };
 
-
 usePUT.propTypes = {
-  url: PropTypes.string
+  url: PropTypes.string,
 };
-
 
 const useDELETE = () => {
-
-    return {}
+  return {};
 };
 
-
-useDELETE.propTypes = {
-
-};
-
-
-
-
-
-
-
+useDELETE.propTypes = {};
 
 export { useGET, usePOST, usePUT, useDELETE };

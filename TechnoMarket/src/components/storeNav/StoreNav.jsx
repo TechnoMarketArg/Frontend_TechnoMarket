@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { MDBBtn } from "mdb-react-ui-kit";
 
-const StoreNav = ({ children }) => {
+const StoreNav = ({ children, toggleOpenModal }) => {
   return (
     <div className="sticky top-0 z-10">
       <div className="flex justify-between items-center px-8 bg-gray-300">
@@ -9,7 +9,7 @@ const StoreNav = ({ children }) => {
           {children}
         </div>
         <div className="my-2">
-          <MDBBtn color="info">Post</MDBBtn>
+          <MDBBtn color="" onClick={toggleOpenModal}>Post</MDBBtn>
         </div>
       </div>
     </div>
@@ -18,6 +18,7 @@ const StoreNav = ({ children }) => {
 
 StoreNav.propTypes = {
   children: PropTypes.node.isRequired,
+  toggleOpenModal: PropTypes.func.isRequired,
 };
 
 export default StoreNav;
