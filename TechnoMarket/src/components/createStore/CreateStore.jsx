@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import PropTypes from "prop-types";
@@ -11,23 +11,10 @@ function CreateStore({ show, setShow, user }) {
   const [NameStore, setNameStore] = useState('');
   const [DescriptionStore, setDescriptionStore] = useState('');
   const [ImageStore, setImageStore] = useState('');
-  const [ColorStore, setColorStore] = useState(null);
-
-  const handleCloseModalStore = () => {
-    setNameStore('')
-    setDescriptionStore('')
-    setImageStore('')
-    setColorStore(null)
-    setNameStoreValidate(false);
-    setDescriptionStoreValidate(false);
-    setImageStoreValidate(false);
-    setColorStoreValidate(false);
-    setShow(false);
-  };
+  const [ColorStore, setColorStore] = useState('');
 
   const [NameStoreValidate, setNameStoreValidate] = useState(false);
-  const [DescriptionStoreValidate, setDescriptionStoreValidate] =
-    useState(false);
+  const [DescriptionStoreValidate, setDescriptionStoreValidate] = useState(false);
   const [ImageStoreValidate, setImageStoreValidate] = useState(false);
   const [ColorStoreValidate, setColorStoreValidate] = useState(false);
 
@@ -43,94 +30,83 @@ function CreateStore({ show, setShow, user }) {
     "http://localhost:3000/users"
   );
 
-  const handleCreateStore = () => {
-    if (!NameStore) {
-      setNameStoreValidate(true);
-      return;
-    }
-    if (!DescriptionStore) {
-      setNameStoreValidate(false);
-      setDescriptionStoreValidate(true);
-      return;
-    }
-    if (!ImageStore) {
-      setNameStoreValidate(false);
-      setDescriptionStoreValidate(false);
-      setImageStoreValidate(true);
-      return;
-    }
-    if (!ColorStore) {
-      setNameStoreValidate(false);
-      setDescriptionStoreValidate(false);
-      setImageStoreValidate(false);
-      setColorStoreValidate(true);
-      return;
-    }
-    if (
-      NameStoreValidate ||
-      DescriptionStoreValidate ||
-      ImageStoreValidate ||
-      ColorStoreValidate
-    ) {
-
-      if(storesData.some(s => s.Name === NameStore)) {
-        toast.error(`Store ${NameStore} already exists`);
-        return;
-      }
-
-      setNameStoreValidate(false);
-      setDescriptionStoreValidate(false);
-      setImageStoreValidate(false);
-      setColorStoreValidate(false);
-
-      const storeData = {
-        id: idGenerate[0],
-        Name: NameStore,
-        description: DescriptionStore,
-        image: ImageStore,
-        color: ColorStore,
-        Rating: 0,
-        inventory: [],
-        seles: [],
-        idOwner: user.id,
-        Owner: {
-          FirstName: user.FirstName,
-          LastName: user.LastName,
-          Email: user.Email,
-        },
-      };
-
-      handlePost(storeData);
-    }
+  const handleCloseModalStore = () => {
+    setNameStore('');
+    setDescriptionStore('');
+    setImageStore('');
+    setColorStore('');
+    setNameStoreValidate(false);
+    setDescriptionStoreValidate(false);
+    setImageStoreValidate(false);
+    setColorStoreValidate(false);
+    setShow(false);
   };
 
-  const handlePost = async (storeData) => {
+  useEffect(() => {
+    if (errorID || storesError) {
+      toast.error("Error loading data");
+    }
+  }, [errorID, storesError]);
+
+  const handleCreateStore = async () => {
+    let valid = true;
+    if (!NameStore) {
+      setNameStoreValidate(true);
+      valid = false;
+    }
+    if (!DescriptionStore) {
+      setDescriptionStoreValidate(true);
+      valid = false;
+    }
+    if (!ImageStore) {
+      setImageStoreValidate(true);
+      valid = false;
+    }
+    if (!ColorStore) {
+      setColorStoreValidate(true);
+      valid = false;
+    }
+
+    if (!valid) return;
+
+    if (storesData && storesData.some(s => s.Name === NameStore)) {
+      toast.error(`Store ${NameStore} already exists`);
+      return;
+    }
+
+    const storeData = {
+      id: idGenerate[0],
+      Name: NameStore,
+      description: DescriptionStore,
+      image: ImageStore,
+      color: ColorStore,
+      Rating: 0,
+      inventory: [],
+      seles: [],
+      idOwner: user.id,
+      Owner: {
+        FirstName: user.FirstName,
+        LastName: user.LastName,
+        email: user.email,
+      },
+    };
+
     try {
       const response = await PostData(storeData);
       toast.success(`Store ${response.Name} created successfully`);
 
       const userData = {
         id: user.id,
+        status: user.status,
         FirstName: user.FirstName,
         LastName: user.LastName,
-        Email: user.Email,
-        Password: user.Password,
-        address: {
-          street: "Douglas Extension",
-          suite: "Suite 847",
-          city: "McKenziehaven",
-          zipcode: "59590-4157",
-          geo: {
-            lat: "47.5162",
-            lng: "-122.5316",
-          },
-        },
+        email: user.email,
+        password: user.password,
         RoleId: 2,
         Role: {
           id: 2,
           name: "Seller",
         },
-
         Store: {
           id: idGenerate[0],
           Name: NameStore,
@@ -144,99 +120,75 @@ function CreateStore({ show, setShow, user }) {
         StoresFavorites: [],
       };
 
-      handlePut(user.id, userData);
-
-      console.log("Server response:", response);
+      await PutData(userData, user.id );
+      window.location.reload();
     } catch (error) {
       toast.error("Error when trying to create the store");
       console.error("Error posting data:", error);
     }
   };
 
-  const handlePut = async (Id, Data) => {
-    try {
-      const response = await PutData(Id, Data);
-      window.location.reload();
-      console.log("Server response:", response);
-    } catch (error) {
-      console.error("Error posting data:", error);
-    }
-  };
-
-  if (user) {
-    <Loading />;
-  }
-
   return (
-    <>
-      <Modal
-        show={show}
-        onHide={handleCloseModalStore}
-        dialogClassName="modal-90w"
-        aria-labelledby="example-custom-modal-styling-title">
-        <Modal.Header closeButton>
-          <Modal.Title id="example-custom-modal-styling-title">
-            Create your own store on TechnoMarket
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="flex flex-col gap-3">
-            {/*name, description, image, color, idOwner, Owner*/}
-            <TextField
-              error={NameStoreValidate}
-              helperText={NameStoreValidate ? "complete required field" : false}
-              id="outlined-basic"
-              label="Name"
-              variant="outlined"
-              size="small"
-              onChange={(e) => setNameStore(e.target.value)}
-            />
-            <TextField
-              error={DescriptionStoreValidate}
-              helperText={
-                DescriptionStoreValidate ? "complete required field" : false
-              }
-              id="outlined-multiline-flexible"
-              label="Description"
-              multiline
-              maxRows={4}
-              onChange={(e) => setDescriptionStore(e.target.value)}
-            />
-            <TextField
-              error={ImageStoreValidate}
-              helperText={
-                ImageStoreValidate ? "complete required field" : false
-              }
-              id="outlined-basic"
-              label="Link image"
-              variant="outlined"
-              size="small"
-              onChange={(e) => setImageStore(e.target.value)}
-            />
-            <TextField
-              error={ColorStoreValidate}
-              helperText={
-                ColorStoreValidate ? "complete required field" : false
-              }
-              type="color"
-              id="outlined-basic"
-              label="Front page color"
-              variant="outlined"
-              size="small"
-              onChange={(e) => setColorStore(e.target.value)}
-            />
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModalStore}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleCreateStore}>
-            Create Store
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+    <Modal show={show} onHide={handleCloseModalStore} dialogClassName="modal-90w" aria-labelledby="example-custom-modal-styling-title">
+      <Modal.Header closeButton>
+        <Modal.Title id="example-custom-modal-styling-title">
+          Create your own store on TechnoMarket
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div className="flex flex-col gap-3">
+          <TextField
+            error={NameStoreValidate}
+            helperText={NameStoreValidate ? "complete required field" : false}
+            id="outlined-basic"
+            label="Name"
+            variant="outlined"
+            size="small"
+            value={NameStore}
+            onChange={(e) => setNameStore(e.target.value)}
+          />
+          <TextField
+            error={DescriptionStoreValidate}
+            helperText={DescriptionStoreValidate ? "complete required field" : false}
+            id="outlined-multiline-flexible"
+            label="Description"
+            multiline
+            maxRows={4}
+            value={DescriptionStore}
+            onChange={(e) => setDescriptionStore(e.target.value)}
+          />
+          <TextField
+            error={ImageStoreValidate}
+            helperText={ImageStoreValidate ? "complete required field" : false}
+            id="outlined-basic"
+            label="Link image"
+            variant="outlined"
+            size="small"
+            value={ImageStore}
+            onChange={(e) => setImageStore(e.target.value)}
+          />
+          <TextField
+            error={ColorStoreValidate}
+            helperText={ColorStoreValidate ? "complete required field" : false}
+            type="color"
+            id="outlined-basic"
+            label="Front page color"
+            variant="outlined"
+            size="small"
+            value={ColorStore}
+            onChange={(e) => setColorStore(e.target.value)}
+          />
+        </div>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleCloseModalStore}>
+          Close
+        </Button>
+        <Button variant="primary" onClick={handleCreateStore}>
+          Create Store
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 }
 

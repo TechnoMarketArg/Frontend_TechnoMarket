@@ -1,7 +1,6 @@
 import Dropdown from "react-bootstrap/Dropdown";
 import { useGET } from "../customHook/CustomHook";
 import { Spinner } from "react-bootstrap";
-import { button } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
 
 function ButtonCategories() {
@@ -9,13 +8,12 @@ function ButtonCategories() {
     "http://localhost:3000/categories"
   );
 
-  const navegate = useNavigate();
+  const navigate = useNavigate();
 
-  const navigateCategory = (id, name) => {
-    navegate(`/categories/${name}/${id}`, {
+  const navigateCategory = (name) => {
+    navigate(`/categories/${name}`, {
       state: {
         category: {
-          id,
           name,
         },
       },
@@ -34,7 +32,7 @@ function ButtonCategories() {
         {!Loanding &&
           categories.map((category) => (
             <Dropdown.Item
-              onClick={() => navigateCategory(category.id, category.name)}
+              onClick={() => navigateCategory(category.name)}
               key={category.id}>
               {category.name}
             </Dropdown.Item>

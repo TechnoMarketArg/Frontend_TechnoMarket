@@ -14,6 +14,7 @@ import { AuthenticationContext } from "../../services/authentication/Authenticat
 import { useNavigate } from "react-router-dom";
 import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import CreateStore from "../createStore/CreateStore";
+import { RiAdminFill } from "react-icons/ri";
 
 function ButtonUser() {
   const { user, handleLogout } = useContext(AuthenticationContext);
@@ -41,7 +42,29 @@ function ButtonUser() {
   
   const handleClickStore = () => {
     const id = user.Store.id;
-    navigate(`/stores/${user.Store.id}`, {
+    navigate(`/stores/${id}`, {
+      state: {
+        stores: {
+          id,
+        },
+      },
+    });
+  };
+  const handleClickUser = () => {
+    const id = user.id;
+
+    navigate(`/users/${id}`, {
+      state: {
+        stores: {
+          id,
+        },
+      },
+    });
+  };
+  const handleClickUserAdmin = () => {
+    const id = user.id;
+
+    navigate(`/admin/${id}`, {
       state: {
         stores: {
           id,
@@ -64,21 +87,7 @@ function ButtonUser() {
               aria-haspopup="true"
               aria-expanded={open ? "true" : undefined}>
               <Avatar sx={{ width: 32, height: 32 }}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="icon icon-tabler icons-tabler-outline icon-tabler-user">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
-                  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-                </svg>
+                {user.FirstName[0]}
               </Avatar>
             </IconButton>
           </Tooltip>
@@ -117,21 +126,24 @@ function ButtonUser() {
           }}
           transformOrigin={{ horizontal: "right", vertical: "top" }}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
-          <a href={`user/${user.id}`}>
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={handleClickUser}>
               <Avatar /> {user.FirstName} {user.LastName}
             </MenuItem>
-          </a>
-
           {user.RoleId === 2 && (
-            <button onClick={handleClickStore}>
-              <MenuItem onClick={handleClose}>
+              <MenuItem onClick={handleClickStore}>
                 <Avatar>
                   <LocalGroceryStoreIcon fontSize="small" />
-                </Avatar>{" "}
+                </Avatar>
                 My Store
               </MenuItem>
-            </button>
+          )}
+          {user.RoleId === 1 && (
+              <MenuItem onClick={handleClickUserAdmin}>
+                <Avatar>
+                <RiAdminFill />
+                </Avatar>
+                Profile Admin
+              </MenuItem>
           )}
           <Divider />
           {user.RoleId === 3 && (

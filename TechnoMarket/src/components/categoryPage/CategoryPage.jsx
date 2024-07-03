@@ -9,7 +9,7 @@ import NavBar from "../navBar/NavBar";
 const CategoryPage = () => {
   const location = useLocation();
 
-  const { id, name } = location.state.category;
+  const { name } = location.state.category;
 
   const {
     ProductsData,
@@ -25,14 +25,28 @@ const CategoryPage = () => {
     return <Loading />;
   }
 
-  const getProductsByCategory = (products, categoryID) => {
-    return products.filter(
-      (product) =>
-        product.category && product.category.some((c) => c.id === categoryID)
-    );
-  };
 
-  const filteredProducts = getProductsByCategory(ProductsData, id);
+    const getProductsByDiscount = (products) => {
+      return products.filter(
+        (product) => product.offer
+      );
+    };
+    const getProductsByCategory = (products, categoryName) => {
+      return products.filter(
+        (product) =>
+          product.category &&
+          product.category.some((c) => c.name === categoryName)
+      );
+    };
+
+    let filteredProducts = [];
+
+    filteredProducts = getProductsByCategory(ProductsData, name);
+
+    if (name == "Best Offers") {
+      filteredProducts = getProductsByDiscount(ProductsData)
+    }
+
 
   return (
     <>

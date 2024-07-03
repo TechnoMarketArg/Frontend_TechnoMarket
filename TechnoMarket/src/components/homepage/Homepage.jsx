@@ -4,6 +4,7 @@ import { ProductCardSlider } from "../productCardSlider/ProductCardSlider";
 import Loading from "../loading/Loading";
 import NavBar from "../navBar/NavBar";
 import { NavBarContext } from "../navBarContext/NavBarContext.jsx";
+import { useGET } from "../customHook/CustomHook.jsx";
 
 const Homepage = () => {
   const {
@@ -16,7 +17,12 @@ const Homepage = () => {
     toggleOpen,
   } = useContext(NavBarContext);
 
-  if (ProductsLoading) {
+  const [categories, Loanding, Error] = useGET(
+    "http://localhost:3000/categories"
+  );
+
+
+  if (ProductsLoading || Loanding) {
     return <Loading />;
   }
 
@@ -41,11 +47,7 @@ const Homepage = () => {
 
   return (
     <>
-      <NavBar
-        searchHandler={searchHandler}
-        ShoppingCart={ShoppingCart}
-        toggleOpen={toggleOpen}
-      />
+      <NavBar/>
 
       <div className="animate-fade-in">
         <Carousel />

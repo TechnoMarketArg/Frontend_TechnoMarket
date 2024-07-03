@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import { toast } from "sonner";
 
-const useGET = (url, updateData) => {
+const useGET = (url) => {
   const [Data, setData] = useState([]);
   const [Loading, setLoading] = useState(true);
   const [Error, setError] = useState(null);
@@ -21,9 +21,7 @@ const useGET = (url, updateData) => {
         }
 
         setData(response.data);
-        if (updateData) {
-          updateData(response.data);
-        }
+
         setError(null);
         setLoading(false);
       } catch (error) {
@@ -33,7 +31,7 @@ const useGET = (url, updateData) => {
     };
 
     fetchData();
-  }, [url, updateData]);
+  }, [url]);
 
   return [Data, Loading, Error];
 };
@@ -135,4 +133,31 @@ const useDELETE = () => {
 
 useDELETE.propTypes = {};
 
-export { useGET, usePOST, usePUT, useDELETE };
+const useAuth = () => {
+  const [Loading, setLoading] = useState(true);
+  const [Error, setError] = useState(null);
+
+  const Authentication = async (email, password) => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`http://localhost:3000/users?email=${email}&password=${password}`);
+      setLoading(false);
+      setError(null);
+      return response.data; // Retorna los datos de la respuesta
+    } catch (error) {
+      setError(error);
+      setLoading(false);
+      throw error; // Lanza el error para que pueda ser capturado en la llamada
+    }
+  };
+
+  return [Authentication, Loading, Error];
+}
+
+useAuth.propTypes = {
+  email: PropTypes.string,
+  password: PropTypes.string,
+};
+export { useGET, usePOST, usePUT, useDELETE, useAuth };
+
+//http://localhost:3000/users?email=technomarketarg@gmail.com&password=TechnoMarket123

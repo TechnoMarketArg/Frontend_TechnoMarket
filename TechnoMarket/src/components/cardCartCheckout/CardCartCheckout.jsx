@@ -20,12 +20,14 @@ const CardCartChekout = ({ ShoppingCart }) => {
       quantity: p.quantity,
     };
   });
+
   const total = useMemo(() => {
     return ShoppingCartForTotal.reduce(
       (accumulator, product) => accumulator + product.price,
       0
     );
   }, [ShoppingCartForTotal]);
+  
   return (
     <MDBCard className="mb-4">
       <MDBCardHeader>

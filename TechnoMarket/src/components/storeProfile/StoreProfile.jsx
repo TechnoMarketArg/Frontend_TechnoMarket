@@ -58,9 +58,8 @@ const StoreProfile = () => {
       />
 
 
-      {user && (
         <div>
-          <PublishProduct toggleOpen={toggleOpenModal} setOptSmModal={setPublishModal} optSmModal={publishModal} />
+          {user.store && <PublishProduct toggleOpen={toggleOpenModal} setOptSmModal={setPublishModal} optSmModal={publishModal} />}
           <StoreHeader store={store} user={user} />
           <StoreNav toggleOpenModal={toggleOpenModal}>
             <StoreNavItem
@@ -115,7 +114,6 @@ const StoreProfile = () => {
             ventas
           </div>
         </div>
-      )}
     </>
   );
 };

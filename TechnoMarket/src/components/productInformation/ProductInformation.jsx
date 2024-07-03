@@ -1,13 +1,16 @@
 import PropTypes from "prop-types";
 import { FaCircle } from "react-icons/fa";
 import { MDBBtn, MDBBtnGroup } from "mdb-react-ui-kit";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Rating from "@mui/material/Rating";
 import Stack from "@mui/material/Stack";
 import { useNavigate } from "react-router-dom";
+import { AuthenticationContext } from "../../services/authentication/Authentication.context";
+import { toast } from "sonner";
 
 const ProductInformation = ({ product }) => {
   const [selectedVariants, setSelectedVariants] = useState({});
+  const {user} = useContext(AuthenticationContext)
 
   const handleSelection = (variantType, option) => {
     setSelectedVariants({
@@ -19,11 +22,10 @@ const ProductInformation = ({ product }) => {
   const navigate = useNavigate();
 
 
-  const navigateCategory = (id, name) => {
-    navigate(`/categories/${name}/${id}`, {
+  const navigateCategory = (name) => {
+    navigate(`/categories/${name}`, {
       state: {
         category: {
-          id,
           name,
         },
       },
@@ -31,13 +33,18 @@ const ProductInformation = ({ product }) => {
   };
 
   const handleClickStore = (id) => {
-    navigate(`/stores/${id}`, {
-      state: {
-        stores: {
-          id
+    if (user) {
+      navigate(`/stores/${id}`, {
+        state: {
+          stores: {
+            id
+          },
         },
-      },
-    });
+      });
+    }else{
+      toast.error("Sign in to view stores")
+    }
+    
   };
 
   /*const features = [
@@ -54,7 +61,7 @@ const ProductInformation = ({ product }) => {
       <div className="flex gap-2">
         {product.category.map((c) => (
           <button
-            onClick={() => navigateCategory(c.id, c.name)}
+            onClick={() => navigateCategory(c.name)}
             className="text-sm text-blue-400 cursor-pointer hover:text-blue-500"
             key={c.id}>
             {c.name}

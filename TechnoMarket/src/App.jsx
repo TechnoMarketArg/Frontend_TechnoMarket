@@ -10,10 +10,13 @@ import Cart from "./components/cart/Cart.jsx";
 import { Toaster } from "sonner";
 import Login from "./components/login/Login.jsx";
 import SignUp from "./components/signUp/SignUp.jsx";
-import 'mdb-react-ui-kit/dist/css/mdb.min.css';
+import "mdb-react-ui-kit/dist/css/mdb.min.css";
 import CategoryPage from "./components/categoryPage/CategoryPage.jsx";
 import Footer from "./components/footer/Footer.jsx";
-
+import ProtectedSession from "./components/protectedSession/ProtectedSession.jsx";
+import ProtectedRoute from "./components/protectedRoute/ProtectedRoute.jsx";
+import ProtectedRouteAdmin from "./components/protectedRouteAdmin/ProtectedRouteAdmin.jsx";
+import AdminProfile from "./components/adminProfile/AdminProfile.jsx";
 
 function App() {
   //const { filteredProduct } = useContext(NavBarContext);
@@ -32,30 +35,48 @@ function App() {
     },
     {
       path: "stores/:id",
-      element: <StoreProfile />,
+      element: (
+        <ProtectedRoute>
+          <StoreProfile />
+        </ProtectedRoute>
+      ),
     },
     {
       path: "SignIn",
       element: (
+        <ProtectedSession>
           <Login />
+        </ProtectedSession>
       ),
     },
     {
       path: "SignUp",
       element: (
+        <ProtectedSession>
           <SignUp />
+        </ProtectedSession>
       ),
     },
     {
-      path: "user/:id",
+      path: "users/:id",
       element: (
+        <ProtectedRoute>
           <h1>perfil del usuario</h1>
+        </ProtectedRoute>
       ),
     },
     {
-      path: "categories/:name/:id",
+      path: "categories/:name",
+      element: <CategoryPage />,
+    },
+    {
+      path: "admin/:id",
       element: (
-        <CategoryPage/>
+        <ProtectedRoute>
+          <ProtectedRouteAdmin>
+            <AdminProfile/>
+          </ProtectedRouteAdmin>
+        </ProtectedRoute>
       ),
     },
   ]);
@@ -65,10 +86,11 @@ function App() {
       <Toaster richColors position="top-center" />
       <Cart />
 
+      
       {/*filteredProduct ? <SearchPage filteredProduct={filteredProduct} /> : ""*/}
       {<RouterProvider router={router} />}
-      
-      <Footer/>
+
+      <Footer />
     </div>
   );
 }

@@ -1,7 +1,6 @@
 import technoMarket from "./technoMarket.jpg";
 import "mdb-react-ui-kit/dist/css/mdb.min.css";
 import "./styles.css";
-import PropTypes from 'prop-types';
 import {
   MDBBtn,
   MDBContainer,
@@ -15,17 +14,18 @@ import {
 import { useState, useRef, useContext } from "react";
 import { AuthenticationContext } from "../../services/authentication/Authentication.context";
 import { useNavigate } from "react-router-dom";
-import { useGET } from "../customHook/CustomHook";
+import { useAuth } from "../customHook/CustomHook";
 import { toast } from "sonner";
 import Loading from "../loading/Loading";
 
 const Login = () => {
   const { handleLogin } = useContext(AuthenticationContext);
   const navigate = useNavigate();
-  
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [users, loading, error] = useGET('http://localhost:3000/users');
+
+  const [Authentication, LUser, EUser] = useAuth();
 
   const [errors, setErrors] = useState({
     email: false,
@@ -46,7 +46,7 @@ const Login = () => {
     setPassword(event.target.value);
   };
 
-  const loginHandler = (event) => {
+  const loginHandler = async (event) => {
     event.preventDefault();
 
     if (!emailRef.current.value) {
@@ -63,19 +63,19 @@ const Login = () => {
 
     setErrors({ ...errors, exist: false });
 
-    const foundUser = users.find(user => user.Email === email && user.Password === password);
+    try {
+      const user = await Authentication(email, password);
 
-    if (foundUser) {
-      handleLogin(foundUser);
-      navigate("/");
-    } else {
-      toast.error('Email o Contraseña incorrecto');
+      if (user.length > 0 && user[0].status === true) {
+        handleLogin(user[0]);
+        navigate("/");
+      } else {
+        toast.error('Email or Password incorrect or the user is not active');
+      }
+    } catch (error) {
+      toast.error('Authentication Error');
     }
   };
-
-  if (loading) {
-    return <Loading />;
-  }
 
   return (
     <MDBContainer className="my-5">
@@ -145,8 +145,6 @@ const Login = () => {
       </MDBCard>
     </MDBContainer>
   );
-}
-
-Login.propTypes = {};
+};
 
 export default Login;
