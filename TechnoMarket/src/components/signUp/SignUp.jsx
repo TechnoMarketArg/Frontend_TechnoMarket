@@ -6,140 +6,204 @@ import {
   MDBCard,
   MDBCardBody,
   MDBCardImage,
-  MDBInput,
 } from 'mdb-react-ui-kit';
 import { Toaster, toast } from 'sonner';
-import technoMarket from './technoMarket.png';
-import { useState, useRef } from 'react';
-import { useContext } from 'react';
+import technoMarket from './technoMarket.jpg';
+import { useState, useContext, useEffect } from 'react';
 import { AuthenticationContext } from '../../services/authentication/Authentication.context.jsx';
-import { MDBIcon } from 'mdb-react-ui-kit';
+import { useGET, usePOST } from '../customHook/CustomHook';
+import { TextField } from '@mui/material';
+
 const SignUp = () => {
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [idGenerate, loadingID, errorID] = useGET(
+    'https://www.uuidtools.com/api/generate/v1'
+  );
+  const [PostData, loadingPOST, errorPOST] = usePOST(
+    'http://localhost:3000/users'
+  );
+  const { handleRegister, user } = useContext(AuthenticationContext);
 
-  const [errors, setErrors] = useState({
-    fullName: false,
-    email: false,
-    password: false,
-    exist: false,
-  });
+  const [users, setUsers] = useState([]); // State to store users
 
-  const { handleRegister } = useContext(AuthenticationContext);
+  const [FirstName, setFirstName] = useState('');
+  const [FirstNameValidate, setFirstNameValidate] = useState(false);
 
-  const fullNameRef = useRef(null);
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
+  const [LastName, setLastName] = useState('');
+  const [LastNameValidate, setLastNameValidate] = useState(false);
 
-  const changeFullNameHandler = (event) => {
-    setErrors({ ...errors, fullName: false });
-    setFullName(event.target.value);
+  const [Email, setEmail] = useState('');
+  const [EmailValidate, setEmailValidate] = useState(false);
+
+  const [Password, setPassword] = useState('');
+  const [PasswordValidate, setPasswordValidate] = useState(false);
+
+  const RoleSelect = 3; // Definir el rol por defecto
+
+  const handleClose = () => {
+    setFirstName('');
+    setLastName('');
+    setEmail('');
+    setPassword('');
   };
 
-  const changeEmailHandler = (event) => {
-    setErrors({ ...errors, email: false });
-    setEmail(event.target.value);
-  };
+  const [showStore, setShowStore] = useState(false); // Definir showStore state
 
-  const changePasswordHandler = (event) => {
-    setErrors({ ...errors, password: false });
-    setPassword(event.target.value);
-  };
+  
 
-  const singUpHandler = (event) => {
-    event.preventDefault();
-
-    if (!fullNameRef.current.value) {
-      fullNameRef.current.focus();
-      setErrors({ ...errors, fullName: true });
-      toast.error('Rellene el Campo del Nombre');
+  const handleCreateNewUser = () => {
+    if (!FirstName) {
+      setFirstNameValidate(true);
+      return;
+    }
+    if (!LastName) {
+      setFirstNameValidate(false);
+      setLastNameValidate(true);
+      return;
+    }
+    if (!Email) {
+      setFirstNameValidate(false);
+      setLastNameValidate(false);
+      setEmailValidate(true);
+      return;
+    }
+    if (!Password) {
+      setFirstNameValidate(false);
+      setLastNameValidate(false);
+      setEmailValidate(false);
+      setPasswordValidate(true);
       return;
     }
 
-    if (!emailRef.current.value) {
-      emailRef.current.focus();
-      setErrors({ ...errors, email: true });
-      toast.error('Rellene el Campo de Email');
+    // Reset all validation states
+    setFirstNameValidate(false);
+    setLastNameValidate(false);
+    setEmailValidate(false);
+    setPasswordValidate(false);
+
+    if (users.some((u) => u.email === Email && u.status === true)) {
+      toast.error(`User with email ${Email} already exists`);
       return;
     }
 
-    if (!passwordRef.current.value) {
-      passwordRef.current.focus();
-      setErrors({ ...errors, password: true });
-      toast.error('Rellene el Campo de la Contraseña');
-      return;
+    
+    const userData = {
+      id: idGenerate[0],
+      FirstName: FirstName,
+      LastName: LastName,
+      email: Email,
+      password: Password,
+      RoleId: RoleSelect,
+      Role: {
+        id: 3,
+        name: 'Customer',
+      },
+      status: true,
+      Store: null,
+      ProductsPurchased: [],
+      ProductsFavorites: [],
+      StoresFavorites: [],
+    };
+
+    handlePost(userData);
+  };
+
+  const handlePost = async (userData) => {
+    try {
+      const response = await PostData(userData);
+      setUsers([...users, response]); // Add new user to state
+      toast.success(`User ${response.FirstName} created successfully`);
+      handleClose();
+      if (RoleSelect === 2) {
+        setShowStore(true);
+      }
+    } catch (error) {
+      toast.error('Error when trying to create user');
     }
-
-    setErrors({ ...errors, exist: false });
-    console.log(fullNameRef.current.value, emailRef.current.value, passwordRef.current.value);
-
-    handleRegister(fullName, email, password);
-    toast.success('Registro Exitoso!');
   };
 
   return (
-    <MDBContainer fluid>
-      <Toaster richColors position='top-center' />
-      <MDBCard className='text-black m-5' style={{ borderRadius: '25px' }}>
-        <MDBCardBody className='rounded-[25px] bg-[#e4f4fd]'>
-          <MDBRow>
-            <MDBCol md='10' lg='6' className='order-2 order-lg-1 d-flex flex-column align-items-center'>
-              <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Registrate!</p>
+    <MDBContainer className="my-5">
+      <Toaster />
+      <MDBCard>
+        <MDBRow className="g-0">
+          <MDBCol md="6">
+            <MDBCardImage
+              src={technoMarket}
+              alt="login form"
+              className="rounded-start w-100"
+              style={{ borderRadius: '%' }}
+            />
+          </MDBCol>
+          <MDBCol md="6">
+            <MDBCardBody className="d-flex flex-column">
+              <div className="d-flex flex-row mt-2"></div>
+              <h5 className="fw-normal my-4 pb-3" style={{ letterSpacing: '1px' }}>
+                Registrate
+              </h5>
+              <TextField
+                error={FirstNameValidate}
+                helperText={FirstNameValidate ? 'complete required field' : false}
+                id="outlined-basic"
+                label="FirstName"
+                variant="outlined"
+                size="small"
+                value={FirstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+              <TextField
+                error={LastNameValidate}
+                helperText={LastNameValidate ? 'complete required field' : false}
+                id="outlined-basic"
+                label="LastName"
+                variant="outlined"
+                size="small"
+                value={LastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
+              <TextField
+                error={EmailValidate}
+                helperText={EmailValidate ? 'complete required field' : false}
+                id="outlined-basic"
+                label="Email"
+                variant="outlined"
+                size="small"
+                value={Email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <TextField
+                error={PasswordValidate}
+                helperText={PasswordValidate ? 'complete required field' : false}
+                id="outlined-basic"
+                label="Password"
+                variant="outlined"
+                size="small"
+                type='password'
+                value={Password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
 
-              <div className="d-flex flex-row align-items-center mb-4">
-                <MDBIcon fas icon="user me-3" size='lg' />
-                <MDBInput
-                  label='Full Name'
-                  id='form1'
-                  type='text'
-                  onChange={changeFullNameHandler}
-                  required
-                  ref={fullNameRef}
-                  value={fullName}
-                  className={`w-100 ${errors.fullName ? 'border border-danger' : ''}`}
-                />
+              <MDBBtn
+                className="mb-4 px-5"
+                size="lg"
+                type="submit"
+                color="dark"
+                onClick={handleCreateNewUser}
+              >
+                Register
+              </MDBBtn>
+              <div className="d-flex flex-row justify-content-start">
+                <a href="" className="small text-muted me-1"></a>
+                <a href="" className="small text-muted">
+                  Copyright By TechnoMarket
+                </a>
               </div>
-
-              <div className="d-flex flex-row align-items-center mb-4">
-                <MDBIcon fas icon="envelope me-3" size='lg' />
-                <MDBInput
-                  label='Your Email'
-                  id='form2'
-                  type='email'
-                  onChange={changeEmailHandler}
-                  required
-                  ref={emailRef}
-                  value={email}
-                  className={`w-100 ${errors.email ? 'border border-danger' : ''}`}
-                />
-              </div>
-
-              <div className="d-flex flex-row align-items-center mb-4">
-                <MDBIcon fas icon="lock me-3" size='lg' />
-                <MDBInput
-                  label='Password'
-                  id='form3'
-                  type='password'
-                  onChange={changePasswordHandler}
-                  required
-                  ref={passwordRef}
-                  value={password}
-                  className={`w-100 ${errors.password ? 'border border-danger' : ''}`}
-                />
-              </div>
-
-              <MDBBtn className='mb-4' size='lg' type='submit' onClick={singUpHandler}>Register</MDBBtn>
-            </MDBCol>
-
-            <MDBCol md='10' lg='6' className='order-1 order-lg-2 d-flex align-items-center'>
-              <MDBCardImage src={technoMarket} fluid style={{ borderRadius: '25px', height: "450px" }} />
-            </MDBCol>
-          </MDBRow>
-        </MDBCardBody>
+            </MDBCardBody>
+          </MDBCol>
+        </MDBRow>
       </MDBCard>
     </MDBContainer>
   );
-}
+};
 
 export default SignUp;
+
