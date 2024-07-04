@@ -32,12 +32,12 @@ const Homepage = () => {
   
 
   const getProductsByDiscount = (products, minDiscount) => {
-    return products.filter(product => product.offer && product.discount >= minDiscount);
+    return products.filter(product => product.offer && product.discount >= minDiscount && product.status);
   };
 
   const getProductsByCategory = (products, categoryName) => {
     return products.filter(
-      product => product.category && product.category.some(c => c.name === categoryName)
+      product => product.category && product.status && product.category.some(c => c.name === categoryName)
     );
   };
   
@@ -80,23 +80,6 @@ const Homepage = () => {
             </div>
           </div>
         </div>
-
-        {/*<div className="flex flex-wrap gap-2 mt-8">
-          {ProductsData.map((product) => (
-            <ProductCard
-              key={product.id}
-              offer={product.offer}
-              id={product.id}
-              title={product.title}
-              price={product.price}
-              description={product.description}
-              images={product.images}
-              variants={product.variants}
-              discount={product.discount}
-              addCart={addCart}
-            />
-          ))}
-        </div>*/}
       </div>
     </>
   );

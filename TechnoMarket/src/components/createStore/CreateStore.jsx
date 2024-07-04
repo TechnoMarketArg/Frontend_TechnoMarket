@@ -76,6 +76,7 @@ function CreateStore({ show, setShow, user }) {
 
     const storeData = {
       id: idGenerate[0],
+      status: true,
       Name: NameStore,
       description: DescriptionStore,
       image: ImageStore,

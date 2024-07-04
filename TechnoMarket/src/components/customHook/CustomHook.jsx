@@ -127,10 +127,26 @@ usePUT.propTypes = {
   url: PropTypes.string,
 };
 
-const useDELETE = () => {
-  return {};
-};
+const useDELETE = (url) => {
+  const [Loading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
+  const DeleteData = async (id) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await axios.delete(`${url}/${id}`);
+      return response.data;
+    } catch (err) {
+      setError(err);
+      toast.error('Error deleting resource:');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return [ DeleteData, Loading, error ];
+};
 useDELETE.propTypes = {};
 
 const useAuth = () => {

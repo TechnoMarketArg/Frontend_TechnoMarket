@@ -1,6 +1,7 @@
 import { useState, createContext, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import { useAuth } from "../../components/customHook/CustomHook";
+import { Navigate } from "react-router-dom";
 
 const AuthenticationContext = createContext({});
 
@@ -43,6 +44,7 @@ const AuthenticationContextProvider = ({ children }) => {
     localStorage.removeItem("password");
     localStorage.removeItem('cart')
     setUser(null);
+    return <Navigate to="/" />
   };
 
   const handleRegister = (fullName, email, password) => {

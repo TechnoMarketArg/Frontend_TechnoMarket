@@ -51,17 +51,13 @@ const StoreProfile = () => {
 
   return (
     <>
-      <NavBar
-        searchHandler={searchHandler}
-        ShoppingCart={ShoppingCart}
-        toggleOpen={toggleOpen}
-      />
+      <NavBar/>
 
 
         <div>
           {user.store && <PublishProduct toggleOpen={toggleOpenModal} setOptSmModal={setPublishModal} optSmModal={publishModal} />}
           <StoreHeader store={store} user={user} />
-          <StoreNav toggleOpenModal={toggleOpenModal}>
+          <StoreNav toggleOpenModal={toggleOpenModal} user={user} store={store}>
             <StoreNavItem
               changePage={changePage}
               activePage={activePage}

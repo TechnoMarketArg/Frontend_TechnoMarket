@@ -21,7 +21,7 @@ import { toast } from "sonner";
 import CreateStore from "../createStore/CreateStore";
 import { AuthenticationContext } from "../../services/authentication/Authentication.context";
 
-const AdminProfile = () => {
+const SuperAdminProfile = () => {
   const { user } = useContext(AuthenticationContext);
 
   const [idGenerate, loadingID, errorID] = useGET(
@@ -161,7 +161,8 @@ const AdminProfile = () => {
     setActivePage(page);
   };
   const changePageMain = (page) => {
-    setActivePageMain(page);
+      setActivePageMain(page);
+      setActivePage(1)
   };
 
   const handleCreateNewUser = () => {
@@ -208,6 +209,23 @@ const AdminProfile = () => {
       return;
     }
 
+    let nameRole
+
+    switch (RoleSelect) {
+        case 1:
+            nameRole = "Admin"
+            break;
+        case 2:
+            nameRole = "Seller"
+            break;
+        case 3:
+            nameRole = "Customer"
+            break;
+    
+        default:
+            break;
+    }
+
     const userData = {
       id: idGenerate[0],
       FirstName: FirstName,
@@ -216,8 +234,8 @@ const AdminProfile = () => {
       password: Password,
       RoleId: RoleSelect,
       Role: {
-        id: 3,
-        name: "Customer",
+        id: RoleSelect,
+        name: nameRole,
       },
       status: true,
       Store: null,
@@ -346,6 +364,7 @@ const AdminProfile = () => {
               </MenuItem>
               <MenuItem value={3}>Customer</MenuItem>
               <MenuItem value={2}>Seller</MenuItem>
+              <MenuItem value={1}>Admin</MenuItem>
             </Select>
           </FormControl>
         </Modal.Body>
@@ -370,7 +389,7 @@ const AdminProfile = () => {
                   activePageMain === 1 ? "bg-blue-300/30" : ""
                 }`}
                 onClick={() => changePageMain(1)}>
-                users
+                admins
               </MDBBtn>
               <MDBBtn
                 size="sm"
@@ -379,7 +398,7 @@ const AdminProfile = () => {
                   activePageMain === 2 ? "bg-blue-300/30" : ""
                 }`}
                 onClick={() => changePageMain(2)}>
-                stores
+                users
               </MDBBtn>
               <MDBBtn
                 size="sm"
@@ -388,6 +407,15 @@ const AdminProfile = () => {
                   activePageMain === 3 ? "bg-blue-300/30" : ""
                 }`}
                 onClick={() => changePageMain(3)}>
+                stores
+              </MDBBtn>
+              <MDBBtn
+                size="sm"
+                color="tertiary"
+                className={`hover:text-gray-700 font-bold  ${
+                  activePageMain === 4 ? "bg-blue-300/30" : ""
+                }`}
+                onClick={() => changePageMain(4)}>
                 products
               </MDBBtn>
             </div>
@@ -395,6 +423,168 @@ const AdminProfile = () => {
 
           {
             <div className={activePageMain === 1 ? "" : "hidden"}>
+              <div className="flex justify-between px-4 py-2 bg-gray-400/70 font-bold">
+                <div className="flex gap-2">
+                  <MDBBtn
+                    size="sm"
+                    color="tertiary"
+                    className={`hover:text-gray-700 font-bold  ${
+                      activePage === 1 ? "bg-blue-300/30" : ""
+                    }`}
+                    onClick={() => changePage(1)}>
+                    All
+                  </MDBBtn>
+                  <MDBBtn
+                    size="sm"
+                    color="tertiary"
+                    className={`hover:text-gray-700 font-bold  ${
+                      activePage === 4 ? "bg-blue-300/30" : ""
+                    }`}
+                    onClick={() => changePage(2)}>
+                    Active
+                  </MDBBtn>
+                  <MDBBtn
+                    size="sm"
+                    color="tertiary"
+                    className={`hover:text-gray-700 font-bold  ${
+                      activePage === 5 ? "bg-blue-300/30" : ""
+                    }`}
+                    onClick={() => changePage(3)}>
+                    Disabled
+                  </MDBBtn>
+                </div>
+                <MDBBtn size="sm" color="secondary" onClick={handleShow}>
+                  create Admin
+                </MDBBtn>
+              </div>
+              <table className="table-fixed text-center w-full max-w-[80vw]">
+                <thead>
+                  <tr className="bg-gray-300 text-sm font-mono">
+                    <th className="">Full Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody className={activePage === 1 ? "" : "hidden"}>
+                  {Users.filter(
+                    (user) => user.Role.id === 1
+                  ).map((user) => (
+                    <tr key={user.id}>
+                      <td className="py-3 px-6 text-center">
+                        <div className="flex items-center">
+                          {user.FirstName} {user.LastName}
+                        </div>
+                      </td>
+                      <td>{user.email}
+                      </td>
+                      <td className="py-3 px-6 text-center">
+                        <span className="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs">
+                          {user.Role.name}
+                        </span>
+                      </td>
+                      <td>
+                        <MDBBtn
+                          size="sm"
+                          color={user.status ? "success" : "danger"}
+                          onClick={() => handleDeactivateUser(user)}>
+                          {user.status ? "Active" : "Disabled"}
+                        </MDBBtn>
+                      </td>
+                      <td>
+                        <MDBBtn
+                          size="sm"
+                          color="danger"
+                          outline
+                          onClick={() => handleShowDelete(user)}>
+                          <DeleteForeverIcon />
+                        </MDBBtn>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                
+                
+                <tbody className={activePage === 2 ? "" : "hidden"}>
+                  {Users.filter(
+                    (user) =>
+                      (user.Role.id === 1) && user.status
+                  ).map((user) => (
+                    <tr key={user.id}>
+                      <td className="py-3 px-6 text-center">
+                        <div className="flex items-center">
+                          {user.FirstName} {user.LastName}
+                        </div>
+                      </td>
+                      <td>{user.email}</td>
+                      <td className="py-3 px-6 text-center">
+                        <span className="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs">
+                          {user.Role.name}
+                        </span>
+                      </td>
+                      <td>
+                        <MDBBtn
+                          size="sm"
+                          color={user.status ? "success" : "danger"}
+                          onClick={() => handleDeactivateUser(user)}>
+                          {user.status ? "Active" : "Disabled"}
+                        </MDBBtn>
+                      </td>
+                      <td>
+                        <MDBBtn
+                          size="sm"
+                          color="danger"
+                          outline
+                          onClick={() => handleShowDelete(user)}>
+                          <DeleteForeverIcon />
+                        </MDBBtn>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tbody className={activePage === 3 ? "" : "hidden"}>
+                  {Users.filter(
+                    (user) =>
+                      (user.Role.id === 1) && !user.status
+                  ).map((user) => (
+                    <tr key={user.id}>
+                      <td className="py-3 px-6 text-center">
+                        <div className="flex items-center">
+                          {user.FirstName} {user.LastName}
+                        </div>
+                      </td>
+                      <td>{user.email}</td>
+                      <td className="py-3 px-6 text-center">
+                        <span className="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs">
+                          {user.Role.name}
+                        </span>
+                      </td>
+                      <td>
+                        <MDBBtn
+                          size="sm"
+                          color={user.status ? "success" : "danger"}
+                          onClick={() => handleDeactivateUser(user)}>
+                          {user.status ? "Active" : "Disabled"}
+                        </MDBBtn>
+                      </td>
+                      <td>
+                        <MDBBtn
+                          size="sm"
+                          color="danger"
+                          outline
+                          onClick={() => handleShowDelete(user)}>
+                          <DeleteForeverIcon />
+                        </MDBBtn>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          }
+          {
+            <div className={activePageMain === 2 ? "" : "hidden"}>
               <div className="flex justify-between px-4 py-2 bg-gray-400/70 font-bold">
                 <div className="flex gap-2">
                   <MDBBtn
@@ -640,7 +830,7 @@ const AdminProfile = () => {
           }
 
           {
-            <div className={activePageMain === 2 ? "" : "hidden"}>
+            <div className={activePageMain === 3 ? "" : "hidden"}>
               <div className="flex justify-between px-4 py-2 bg-gray-400/70 font-bold">
                 <div className="flex gap-2">
                   <MDBBtn
@@ -768,7 +958,7 @@ const AdminProfile = () => {
           }
 
           {
-            <div className={activePageMain === 3 ? "" : "hidden"}>
+            <div className={activePageMain === 4 ? "" : "hidden"}>
               <div className="flex justify-between px-4 py-2 bg-gray-400/70 font-bold">
                 <div className="flex gap-2">
                   <MDBBtn
@@ -904,6 +1094,6 @@ const AdminProfile = () => {
   );
 };
 
-AdminProfile.propTypes = {};
+SuperAdminProfile.propTypes = {};
 
-export default AdminProfile;
+export default SuperAdminProfile;

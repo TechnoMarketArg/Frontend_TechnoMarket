@@ -4,11 +4,11 @@ import { AuthenticationContext } from '../../services/authentication/Authenticat
 import { Navigate } from 'react-router-dom';
 
 
-const ProtectedRouteAdmin = ({children}) => {
+const ProtectedRouteSuperAdmin = ({children}) => {
 
     const { user } = useContext(AuthenticationContext)
 
-    if (user.Role.id === 1 && user.Role.name == 'Admin') {
+    if (user.Role.id === 0 && user.Role.name == 'Super-Admin' && user.id === "f47ac10b-58cc-4372-a567-0e02b2c3d479") {
         return children
     }
 
@@ -16,9 +16,9 @@ const ProtectedRouteAdmin = ({children}) => {
 };
 
 
-ProtectedRouteAdmin.propTypes = {
+ProtectedRouteSuperAdmin.propTypes = {
     children: PropTypes.node.isRequired
 };
 
 
-export default ProtectedRouteAdmin;
+export default ProtectedRouteSuperAdmin;

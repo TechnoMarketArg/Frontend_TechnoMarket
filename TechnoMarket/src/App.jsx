@@ -17,7 +17,9 @@ import ProtectedSession from "./components/protectedSession/ProtectedSession.jsx
 import ProtectedRoute from "./components/protectedRoute/ProtectedRoute.jsx";
 import ProtectedRouteAdmin from "./components/protectedRouteAdmin/ProtectedRouteAdmin.jsx";
 import AdminProfile from "./components/adminProfile/AdminProfile.jsx";
-
+import NotFoundPage from "./components/notFoundPage/NotFoundPage.jsx";
+import ProtectedRouteSuperAdmin from "./components/protectedRouteSuperAdmin/ProtectedRouteSuperAdmin.jsx";
+import SuperAdminProfile from "./components/superAdminProfile/SuperAdminProfile.jsx";
 function App() {
   //const { filteredProduct } = useContext(NavBarContext);
 
@@ -25,7 +27,6 @@ function App() {
     {
       path: "/",
       element: (
-        //proteger ruta
         <Homepage />
       ),
     },
@@ -78,6 +79,20 @@ function App() {
           </ProtectedRouteAdmin>
         </ProtectedRoute>
       ),
+    },
+    {
+      path: "super-admin/:id",
+      element: (
+        <ProtectedRoute>
+          <ProtectedRouteSuperAdmin>
+            <SuperAdminProfile/>
+          </ProtectedRouteSuperAdmin>
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "*",
+      element: <NotFoundPage/>,
     },
   ]);
 
