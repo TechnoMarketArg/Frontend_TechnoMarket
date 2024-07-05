@@ -82,6 +82,16 @@ const Login = () => {
       <MDBCard>
         <MDBRow className="g-0">
           <MDBCol md="6">
+          <MDBBtn
+                className="mb-4 px-3"
+                size="l"
+                type="button"
+                color="ligth"
+                style={{ backgroundColor: '#87CEEB', borderColor: '#87CEEB' }}
+                onClick={() => navigate('/')}
+              >
+                Inicio
+              </MDBBtn>
             <MDBCardImage
               src={technoMarket}
               alt="login form"
