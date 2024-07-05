@@ -17,8 +17,10 @@ import { useGET, usePOST, usePUT } from "../customHook/CustomHook";
 import DropDownCategories from "../dropDown/DropDownCategories";
 import { AuthenticationContext } from "../../services/authentication/Authentication.context.jsx";
 import { useNavigate } from "react-router-dom";
+import { useDarkMode } from "../../services/DarkMode/DarkModeContext.jsx";
 
 const PublishProduct = ({ optSmModal, setOptSmModal, toggleOpen }) => {
+  const { darkMode } = useDarkMode();
   const [Data, Loading, Error] = useGET(
     "https://www.uuidtools.com/api/generate/v1"
   );
@@ -243,7 +245,7 @@ const PublishProduct = ({ optSmModal, setOptSmModal, toggleOpen }) => {
                   onClick={toggleOpen}></MDBBtn>
               </MDBModalHeader>
               <Toaster richColors position="top-center" />
-              <MDBModalBody className="max-h-[70vh] overflow-y-auto">
+              <MDBModalBody className={`flex flex-col gap-3 ${darkMode ? 'bg-gray-700 text-white' : ''}`}>
                 <form>
                   <MDBInput
                     id="Name"

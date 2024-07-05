@@ -13,14 +13,27 @@ import Loading from "../loading/Loading";
 import Offers from "../offers/Offers";
 import PublishProduct from "../publishProduct/PublishProduct";
 import { ProductCard } from "../productCard/ProductCard";
-
+import { useDarkMode } from "../../services/DarkMode/DarkModeContext";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Typography,
+} from "@mui/material";
+import { MDBBtn } from "mdb-react-ui-kit";
 const StoreProfile = () => {
-  const [publishModal, setPublishModal] = useState(false);
+  const [optSmModal, setOptSmModal] = useState(false);
 
-  const toggleOpenModal = () => setPublishModal(!publishModal);
+  const toggleOpenP = () => {
+    console.log(optSmModal);
+    setOptSmModal(!optSmModal);
+  };
 
-  const { ShoppingCart, searchHandler, toggleOpen, addCart } =
-    useContext(NavBarContext);
+  const { addCart } = useContext(NavBarContext);
 
   const { user } = useContext(AuthenticationContext);
   const location = useLocation();
@@ -52,16 +65,15 @@ const StoreProfile = () => {
       <NavBar />
 
       <div>
-        {user.store && (
-          <PublishProduct
-            toggleOpen={toggleOpenModal}
-            setOptSmModal={setPublishModal}
-            optSmModal={publishModal}
-          />
-        )}
+        <PublishProduct
+          toggleOpen={toggleOpenP}
+          setOptSmModal={setOptSmModal}
+          optSmModal={optSmModal}
+        />
         <StoreHeader store={store} user={user} />
         {user.RoleId === 2 && user.Store.id == store.id ? (
-          <StoreNav toggleOpenModal={toggleOpenModal} user={user} store={store}>
+          
+          <StoreNav toggleOpen={toggleOpenP} user={user} store={store}>
             <StoreNavItem
               changePage={changePage}
               activePage={activePage}
@@ -82,7 +94,7 @@ const StoreProfile = () => {
             </StoreNavItem>
           </StoreNav>
         ) : (
-          <StoreNav toggleOpenModal={toggleOpenModal} user={user} store={store}>
+          <StoreNav user={user} store={store}>
             <StoreNavItem
               changePage={changePage}
               activePage={activePage}
@@ -103,7 +115,7 @@ const StoreProfile = () => {
               user.RoleId === 2 &&
               user.Store.id == store.id && (
                 <div className={`flex justify-center w-full`}>
-                  <Inventory inventory={store.inventory} />
+                  <Inventory inventory={store.inventory} store={store} />
                 </div>
               )}
             {activePage === 2 &&
@@ -118,7 +130,56 @@ const StoreProfile = () => {
             {activePage === 3 &&
               user.RoleId === 2 &&
               user.Store.id == store.id && (
-                <div className={`flex justify-center w-full`}>ventas</div>
+                <div className={`flex justify-center w-full`}>
+                  <div className="p-4">
+                    <Typography variant="h4" className="mb-4">
+                      Listado de Ventas
+                    </Typography>
+                    <TableContainer component={Paper}>
+                      <Table>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>Comprador</TableCell>
+                            <TableCell>Correo</TableCell>
+                            <TableCell>Producto</TableCell>
+                            <TableCell>Precio</TableCell>
+                            <TableCell>Cantidad</TableCell>
+                            <TableCell>Total</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {store.sales.map((sale, saleIndex) =>
+                            sale.products.map((product, productIndex) => (
+                              <TableRow key={`${saleIndex}-${productIndex}`}>
+                                {productIndex === 0 && (
+                                  <TableCell rowSpan={sale.products.length}>
+                                    {sale.buyer.FirstName} {sale.buyer.LastName}
+                                  </TableCell>
+                                )}
+                                {productIndex === 0 && (
+                                  <TableCell rowSpan={sale.products.length}>
+                                    {sale.buyer.email}
+                                  </TableCell>
+                                )}
+                                <TableCell>{product.title}</TableCell>
+                                <TableCell>
+                                  ${product.price.toFixed(2)}
+                                </TableCell>
+                                <TableCell>{product.quantity}</TableCell>
+                                <TableCell>
+                                  $
+                                  {(product.price * product.quantity).toFixed(
+                                    2
+                                  )}
+                                </TableCell>
+                              </TableRow>
+                            ))
+                          )}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </div>
+                </div>
               )}
           </>
         ) : (

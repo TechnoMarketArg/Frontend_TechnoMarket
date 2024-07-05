@@ -1,5 +1,3 @@
-import { useState, useEffect, useContext } from "react";
-import PropTypes from "prop-types";
 import NavBar from "../navBar/NavBar";
 import { MDBBtn } from "mdb-react-ui-kit";
 import { useDELETE, useGET, usePOST, usePUT } from "../customHook/CustomHook";
@@ -147,8 +145,15 @@ const AdminProfile = () => {
     const updatedProduct = { ...product, status: !product.status };
     PutDataProduct(updatedProduct, product.id)
       .then((data) => {
+        const finalData = {
+          ...updatedProduct, // Combinamos los datos originales modificados con los devueltos por la API
+          ...data,
+          idStore: data.idStore || product.idStore,
+          store: data.store || product.store,
+        };
+        
         const updatedProducts = Products.map((p) =>
-          p.id === product.id ? data : p
+          p.id === product.id ? finalData : p
         );
         setProducts(updatedProducts);
       })
@@ -267,99 +272,105 @@ const AdminProfile = () => {
       {NewUser && (
         <CreateStore show={showStore} setShow={setShowStore} user={NewUser} />
       )}
-      <Modal show={showDelete} onHide={handleCloseDelete}>
-        <Modal.Header closeButton>
-          <Modal.Title>
-            This user is permanently removed from the data. Are you sure to
-            continue?
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="flex flex-col gap-3">
-          <Button
-            variant="secondary"
-            onClick={handleCloseDelete}
-            disabled={loadingDelete}>
-            NO
-          </Button>
-          <Button
-            variant="primary"
-            onClick={handleDeleteUser}
-            disabled={loadingDelete}>
-            {loadingDelete ? "Deleting..." : "YES"}
-          </Button>
-          {errorDelete && (
-            <div style={{ color: "red" }}>Error: {errorDelete.message}</div>
-          )}
-        </Modal.Body>
-      </Modal>
+      <Modal
+      show={showDelete}
+      onHide={handleCloseDelete}
+    >
+      <Modal.Header closeButton className={darkMode ? 'bg-gray-700' : ''}>
+        <Modal.Title>
+          This user is permanently removed from the data. Are you sure to continue?
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body className={`flex flex-col gap-3 ${darkMode ? 'bg-gray-800 text-white' : ''}`}>
+        <Button
+          variant="secondary"
+          onClick={handleCloseDelete}
+          disabled={loadingDelete}
+        >
+          NO
+        </Button>
+        <Button
+          variant="primary"
+          onClick={handleDeleteUser}
+          disabled={loadingDelete}
+        >
+          {loadingDelete ? "Deleting..." : "YES"}
+        </Button>
+        {errorDelete && (
+          <div className="text-red-500">
+            Error: {errorDelete.message}
+          </div>
+        )}
+      </Modal.Body>
+    </Modal>
 
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Create User</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="flex flex-col gap-3">
-          <TextField
-            error={FirstNameValidate}
-            helperText={FirstNameValidate ? "complete required field" : false}
-            id="outlined-basic"
-            label="FirsName"
-            variant="outlined"
-            size="small"
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-          <TextField
-            error={LastNameValidate}
-            helperText={LastNameValidate ? "complete required field" : false}
-            id="outlined-basic"
-            label="LastName"
-            variant="outlined"
-            size="small"
-            onChange={(e) => setLastName(e.target.value)}
-          />
-          <TextField
-            error={EmailValidate}
-            helperText={EmailValidate ? "complete required field" : false}
-            id="outlined-basic"
-            label="Email"
-            variant="outlined"
-            size="small"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <TextField
-            error={PasswordValidate}
-            helperText={PasswordValidate ? "complete required field" : false}
-            id="outlined-basic"
-            label="Password"
-            variant="outlined"
-            size="small"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <FormControl size="small" error={RoleSelectValidate}>
-            <InputLabel id="demo-simple-select-error-label">Role</InputLabel>
-            <Select
-              labelId="demo-simple-select-error-label"
-              id="demo-simple-select-error"
-              value={RoleSelect}
-              label="Role"
-              onChange={(e) => setRoleSelect(e.target.value)}
-              renderValue={(value) => `${value}`}>
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={3}>Customer</MenuItem>
-              <MenuItem value={2}>Seller</MenuItem>
-            </Select>
-          </FormControl>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleCreateNewUser}>
-            Create New User
-          </Button>
-        </Modal.Footer>
-      </Modal>
+    <Modal show={show} onHide={handleClose} >
+      <Modal.Header closeButton className={`  ${darkMode ? 'text-white bg-gray-700' : 'text-black'}`}>
+        <Modal.Title>Create User</Modal.Title>
+      </Modal.Header>
+      <Modal.Body className={`flex flex-col gap-3 ${darkMode ? 'bg-gray-700 text-white' : ''}`}>
+        <TextField
+          error={FirstNameValidate}
+          helperText={FirstNameValidate ? "Complete required field" : ""}
+          label="First Name"
+          variant="outlined"
+          size="small"
+          onChange={(e) => setFirstName(e.target.value)}
+          className={`bg-white dark:bg-gray-700 ${darkMode ? 'text-white' : 'text-black'}`}
+        />
+        <TextField
+          error={LastNameValidate}
+          helperText={LastNameValidate ? "Complete required field" : ""}
+          label="Last Name"
+          variant="outlined"
+          size="small"
+          onChange={(e) => setLastName(e.target.value)}
+          className={`bg-white dark:bg-gray-700 ${darkMode ? 'text-white' : 'text-black'}`}
+        />
+        <TextField
+          error={EmailValidate}
+          helperText={EmailValidate ? "Complete required field" : ""}
+          label="Email"
+          variant="outlined"
+          size="small"
+          onChange={(e) => setEmail(e.target.value)}
+          className={`bg-white dark:bg-gray-700 ${darkMode ? 'text-white' : 'text-black'}`}
+        />
+        <TextField
+          error={PasswordValidate}
+          helperText={PasswordValidate ? "Complete required field" : ""}
+          label="Password"
+          variant="outlined"
+          size="small"
+          onChange={(e) => setPassword(e.target.value)}
+          className={`bg-white dark:bg-gray-700 ${darkMode ? 'text-white' : 'text-black'}`}
+        />
+        <FormControl size="small" error={RoleSelectValidate} className="bg-white dark:bg-gray-700">
+          <InputLabel id="role-select-label">Role</InputLabel>
+          <Select
+            labelId="role-select-label"
+            value={RoleSelect}
+            label="Role"
+            onChange={(e) => setRoleSelect(e.target.value)}
+            className={`bg-white dark:bg-gray-700 ${darkMode ? 'text-white' : 'text-black'}`}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            <MenuItem value={3}>Customer</MenuItem>
+            <MenuItem value={2}>Seller</MenuItem>
+          </Select>
+        </FormControl>
+      </Modal.Body>
+      <Modal.Footer className={`bg-gray-200  ${darkMode ? 'text-white bg-gray-700' : 'text-black'}`}>
+        <Button variant="secondary" onClick={handleClose}>
+          Close
+        </Button>
+        <Button variant="primary" onClick={handleCreateNewUser}>
+          Create New User
+        </Button>
+      </Modal.Footer>
+    </Modal>
 
       <div className="flex flex-col justify-center items-center">
         <div className="font-mono w-[1000px] min-h-[80vh] mb-8">
@@ -449,9 +460,9 @@ const AdminProfile = () => {
                   create user
                 </MDBBtn>
               </div>
-              <table className="table-fixed text-center w-full max-w-[80vw]">
+              <table className={`table-fixed text-center w-full max-w-[80vw]  ${darkMode ? "bg-dark text-white" : "bg-white text-dark"}`}>
                 <thead>
-                  <tr className="bg-gray-300 text-sm font-mono">
+                  <tr className="bg-gray-400 text-sm font-mono">
                     <th className="">Full Name</th>
                     <th>Email</th>
                     <th>Role</th>
@@ -674,9 +685,9 @@ const AdminProfile = () => {
                   </MDBBtn>
                 </div>
               </div>
-              <table className="table-fixed text-center w-full max-w-[80vw]">
+              <table className={`table-fixed text-center w-full max-w-[80vw] ${darkMode ? "bg-dark text-white" : "bg-white text-dark"}`}>
                 <thead>
-                  <tr className="bg-gray-300 text-sm font-mono">
+                  <tr className="bg-gray-400 text-sm font-mono">
                     <th className="">Image</th>
                     <th>Name</th>
                     <th>Inventory</th>
@@ -802,9 +813,9 @@ const AdminProfile = () => {
                   </MDBBtn>
                 </div>
               </div>
-              <table className="table-fixed text-center w-full max-w-[80vw]">
+              <table className={`table-fixed text-center w-full max-w-[80vw]   ${darkMode ? "bg-dark text-white" : "bg-white text-dark"}`}>
                 <thead>
-                  <tr className="bg-gray-300 text-sm font-mono">
+                  <tr className="bg-gray-400 text-sm font-mono">
                     <th className="">Image</th>
                     <th>Title</th>
                     <th>Price</th>

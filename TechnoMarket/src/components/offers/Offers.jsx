@@ -1,9 +1,10 @@
 import PropTypes from "prop-types";
 import OffersItem from "../offersItem/OffersItem";
+import { useDarkMode } from "../../services/DarkMode/DarkModeContext";
 
 
 const Offers = ({ products }) => {
-
+  const { darkMode } = useDarkMode();
 
   return (
     <div className="font-mono w-[1000px] min-h-[80vh] mb-8">
@@ -13,7 +14,7 @@ const Offers = ({ products }) => {
         </div>
         
       </div>
-      <table className="table-fixed text-center w-full">
+      <table className={`table-fixed text-center w-full ${darkMode ? "bg-dark text-white" : "bg-white text-dark"}`}>
         <thead>
           <tr className="bg-gray-300 text-sm font-mono">
             

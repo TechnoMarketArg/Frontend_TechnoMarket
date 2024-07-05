@@ -174,6 +174,6 @@ useAuth.propTypes = {
   email: PropTypes.string,
   password: PropTypes.string,
 };
-export { useGET, usePOST, usePUT, useDELETE, useAuth };
+export { useGET, usePOST, usePUT, useDELETE, useAuth};
 
 //http://localhost:3000/users?email=technomarketarg@gmail.com&password=TechnoMarket123

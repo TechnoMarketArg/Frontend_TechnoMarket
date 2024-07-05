@@ -23,6 +23,7 @@ const OffersItem = ({ product }) => {
       </td>
       <td className="text-center">
         <TextField
+        className="bg-white"
           label="Discount"
           type="text"
           value={DiscountProduct * 100}
@@ -37,6 +38,7 @@ const OffersItem = ({ product }) => {
       <td className="text-center text-sm">
         <span className="mx-2 font-semibold">
           <TextField
+          className="bg-white"
             label="Stock"
             type="text"
             value={QuantityProduct}
