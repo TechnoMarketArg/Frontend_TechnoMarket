@@ -129,9 +129,9 @@ const Login = () => {
               </MDBBtn>
               <p className="mb-5 pb-lg-2" style={{ color: "#393f81" }}>
                 No tienes una Cuenta?{" "}
-                <a href="" style={{ color: "#393f81" }}>
+                <button onClick={() => navigate('/SignUp')}>
                   Registrate Aqui
-                </a>
+                </button>
               </p>
               <div className="d-flex flex-row justify-content-start">
                 <a href="" className="small text-muted me-1"></a>

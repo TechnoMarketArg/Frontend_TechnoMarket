@@ -9,21 +9,19 @@ import {
 } from 'mdb-react-ui-kit';
 import { Toaster, toast } from 'sonner';
 import technoMarket from './technoMarket.jpg';
-import { useState, useContext, useEffect } from 'react';
-import { AuthenticationContext } from '../../services/authentication/Authentication.context.jsx';
+import { useState, useContext } from 'react';
 import { useGET, usePOST } from '../customHook/CustomHook';
 import { TextField } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { AuthenticationContext } from '../../services/authentication/Authentication.context';
+
 
 const SignUp = () => {
-  const [idGenerate, loadingID, errorID] = useGET(
-    'https://www.uuidtools.com/api/generate/v1'
-  );
-  const [PostData, loadingPOST, errorPOST] = usePOST(
-    'http://localhost:3000/users'
-  );
-  const { handleRegister, user } = useContext(AuthenticationContext);
-
-  const [users, setUsers] = useState([]); // State to store users
+  const [idGenerate, loadingID, errorID] = useGET('https://www.uuidtools.com/api/generate/v1');
+  const [postData, loadingPOST, errorPOST] = usePOST('http://localhost:3000/users');
+  const [users, LUsers, EUsers] = useGET('http://localhost:3000/users');
+  const navigate = useNavigate();
+  const { handleLogin } = useContext(AuthenticationContext);
 
   const [FirstName, setFirstName] = useState('');
   const [FirstNameValidate, setFirstNameValidate] = useState(false);
@@ -37,20 +35,11 @@ const SignUp = () => {
   const [Password, setPassword] = useState('');
   const [PasswordValidate, setPasswordValidate] = useState(false);
 
-  const RoleSelect = 3; // Definir el rol por defecto
+  const RoleSelect = 3;
 
-  const handleClose = () => {
-    setFirstName('');
-    setLastName('');
-    setEmail('');
-    setPassword('');
-  };
 
-  const [showStore, setShowStore] = useState(false); // Definir showStore state
 
-  
-
-  const handleCreateNewUser = () => {
+  const handleCreateNewUser = async () => {
     if (!FirstName) {
       setFirstNameValidate(true);
       return;
@@ -74,7 +63,6 @@ const SignUp = () => {
       return;
     }
 
-    // Reset all validation states
     setFirstNameValidate(false);
     setLastNameValidate(false);
     setEmailValidate(false);
@@ -85,7 +73,6 @@ const SignUp = () => {
       return;
     }
 
-    
     const userData = {
       id: idGenerate[0],
       FirstName: FirstName,
@@ -104,38 +91,44 @@ const SignUp = () => {
       StoresFavorites: [],
     };
 
-    handlePost(userData);
-  };
-
-  const handlePost = async (userData) => {
     try {
-      const response = await PostData(userData);
-      setUsers([...users, response]); // Add new user to state
+      const response = await postData(userData);
       toast.success(`User ${response.FirstName} created successfully`);
-      handleClose();
-      if (RoleSelect === 2) {
-        setShowStore(true);
-      }
+      handleLogin(response); // Loguear al usuario
+      navigate('/'); // Redirigir al home
     } catch (error) {
       toast.error('Error when trying to create user');
+      console.error(error);
     }
   };
 
   return (
     <MDBContainer className="my-5">
-      <Toaster />
+      
       <MDBCard>
-        <MDBRow className="g-0">
+        <MDBRow className="g-0" >
           <MDBCol md="6">
+          <MDBBtn
+                className="mb-4 px-3"
+                size="l"
+                type="button"
+                color="ligth"
+                style={{ backgroundColor: '#87CEEB', borderColor: '#87CEEB' }}
+                onClick={() => navigate('/')}
+              >
+                Inicio
+              </MDBBtn>
             <MDBCardImage
               src={technoMarket}
               alt="login form"
               className="rounded-start w-100"
               style={{ borderRadius: '%' }}
             />
+           
           </MDBCol>
+          
           <MDBCol md="6">
-            <MDBCardBody className="d-flex flex-column">
+            <MDBCardBody className="flex flex-col gap-4">
               <div className="d-flex flex-row mt-2"></div>
               <h5 className="fw-normal my-4 pb-3" style={{ letterSpacing: '1px' }}>
                 Registrate
@@ -177,7 +170,7 @@ const SignUp = () => {
                 label="Password"
                 variant="outlined"
                 size="small"
-                type='password'
+                type="password"
                 value={Password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -206,4 +199,3 @@ const SignUp = () => {
 };
 
 export default SignUp;
-
