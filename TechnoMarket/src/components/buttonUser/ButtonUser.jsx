@@ -15,6 +15,7 @@ import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import CreateStore from "../createStore/CreateStore";
 import { RiAdminFill } from "react-icons/ri";
 import { MdAdminPanelSettings } from "react-icons/md";
+import SwitchDarkMode from "../switchDarkMode/SwitchDarkMode";
 
 function ButtonUser() {
   const { user, handleLogout } = useContext(AuthenticationContext);
@@ -85,7 +86,7 @@ function ButtonUser() {
   return (
     <>
       <CreateStore show={show} setShow={setShow} user={user} />
-      <Fragment>
+      <Fragment >
         <div>
           <Tooltip title="Account settings">
             <IconButton
@@ -111,7 +112,7 @@ function ButtonUser() {
             elevation: 0,
             sx: {
               overflow: "visible",
-              filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+              filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.52))",
               mt: 1.5,
               "& .MuiAvatar-root": {
                 width: 32,
@@ -171,11 +172,9 @@ function ButtonUser() {
               Open my Store
             </MenuItem>
           )}
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <Settings fontSize="small" />
-            </ListItemIcon>
-            Settings
+          <MenuItem >
+            <SwitchDarkMode/>
+            
           </MenuItem>
           <MenuItem onClick={handleClose}>
             <ListItemIcon>

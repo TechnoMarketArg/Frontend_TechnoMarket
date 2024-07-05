@@ -11,6 +11,7 @@ import { AuthenticationContext } from "../../services/authentication/Authenticat
 import ButtonUser from "../buttonUser/ButtonUser";
 import ButtonSignUp from "../buttonSignUp/ButtonSignUp";
 import { NavBarContext } from "../navBarContext/NavBarContext";
+import { useDarkMode } from "../../services/DarkMode/DarkModeContext";
 
 function NavBar() {
   const {
@@ -21,10 +22,12 @@ function NavBar() {
 
   const { user } = useContext(AuthenticationContext);
 
+  const { darkMode } = useDarkMode();
+
   return (
     <Navbar
       expand="lg"
-      className="bg-gradient-to-r from-[rgba(15,69,113,1)] via-[rgba(56,109,189,1)] to-[rgba(0,157,221,1)]">
+      className={`bg-gradient-to-r from-[rgba(15,69,113,1)] via-[rgba(56,109,189,1)] to-[rgba(0,157,221,1)] ${darkMode ? "to-gray-800" : "to-[rgba(0,157,221,1)]"}`}>
       <Container fluid>
         <Navbar.Brand href="/">
           <img

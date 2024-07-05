@@ -1,6 +1,6 @@
 
-import Carousel from 'react-bootstrap/Carousel';
-
+import {Carousel} from 'react-bootstrap';
+import { useDarkMode } from '../../services/DarkMode/DarkModeContext';
 
 const HoreCarousel = () => {
 
@@ -13,20 +13,19 @@ const HoreCarousel = () => {
     'https://http2.mlstatic.com/storage/splinter-admin/o:f_webp,q_auto:best/1693600048144-home-sliderdesktop2x.jpg'
   ];
 
+  const { darkMode } = useDarkMode()
+
   return (
 
-    <div>
-    <Carousel>
-      {imagenes.map((img, i) => (
-        <Carousel.Item key={i} interval={3000} className='h-[400px]'>
-          <>
+      <Carousel>
+        {imagenes.map((img, i) => (
+          <Carousel.Item key={i} interval={3000} className='relative h-[400px]'>
             <img src={img} className='w-full h-full object-cover' alt={`Slide ${i}`} />
-            <div className="absolute bottom-0 left-0 w-full h-1/4 bg-gradient-to-b from-transparent to-gray-100" ></div>
-          </>
-        </Carousel.Item>
-      ))}
-    </Carousel>
-    </div>
+            {darkMode && <div className='absolute inset-0 bg-black opacity-30 pointer-events-none z-10'></div>}
+            <div className={`absolute bottom-0 left-0 w-full h-1/4 bg-gradient-to-b from-transparent ${darkMode ? "to-gray-800" : "to-gray-100"} z-20`}></div>
+          </Carousel.Item>
+        ))}
+      </Carousel>
   )
 }
 

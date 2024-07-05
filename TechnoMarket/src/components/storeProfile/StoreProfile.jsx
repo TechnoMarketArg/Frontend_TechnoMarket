@@ -12,19 +12,19 @@ import NavBar from "../navBar/NavBar";
 import Loading from "../loading/Loading";
 import Offers from "../offers/Offers";
 import PublishProduct from "../publishProduct/PublishProduct";
+import { ProductCard } from "../productCard/ProductCard";
 
 const StoreProfile = () => {
-
   const [publishModal, setPublishModal] = useState(false);
 
   const toggleOpenModal = () => setPublishModal(!publishModal);
 
-  const { ShoppingCart, searchHandler, toggleOpen } = useContext(NavBarContext);
+  const { ShoppingCart, searchHandler, toggleOpen, addCart } =
+    useContext(NavBarContext);
 
   const { user } = useContext(AuthenticationContext);
   const location = useLocation();
   const { id } = location.state.stores;
-
 
   const [store, loading, error] = useGET(`http://localhost:3000/stores/${id}`);
   const [activePage, setActivePage] = useState(1);
@@ -41,75 +41,135 @@ const StoreProfile = () => {
     return <>error...</>;
   }
 
-  
-    const getProductsByDiscount = (products) => {
-      return products.filter((product) => product.offer);
-    };
-    
-    const productOffers = getProductsByDiscount(store.inventory);
+  const getProductsByDiscount = (products) => {
+    return products.filter((product) => product.offer);
+  };
 
+  const productOffers = getProductsByDiscount(store.inventory);
 
   return (
     <>
-      <NavBar/>
+      <NavBar />
 
-
-        <div>
-          {user.store && <PublishProduct toggleOpen={toggleOpenModal} setOptSmModal={setPublishModal} optSmModal={publishModal} />}
-          <StoreHeader store={store} user={user} />
+      <div>
+        {user.store && (
+          <PublishProduct
+            toggleOpen={toggleOpenModal}
+            setOptSmModal={setPublishModal}
+            optSmModal={publishModal}
+          />
+        )}
+        <StoreHeader store={store} user={user} />
+        {user.RoleId === 2 && user.Store.id == store.id ? (
           <StoreNav toggleOpenModal={toggleOpenModal} user={user} store={store}>
             <StoreNavItem
               changePage={changePage}
               activePage={activePage}
               numPage={1}>
-              {user.RoleId === 2 && user.Store.id == store.id
-                ? "Inventory"
-                : "Products"}
+              Inventory
             </StoreNavItem>
             <StoreNavItem
               changePage={changePage}
               activePage={activePage}
               numPage={2}>
-              {user.RoleId === 2 && user.Store.id == store.id
-                ? "My Offers"
-                : "Offers"}
+              My Offers
             </StoreNavItem>
             <StoreNavItem
               changePage={changePage}
               activePage={activePage}
               numPage={3}>
-              {user.RoleId === 2 && user.Store.id == store.id
-                ? "Sales"
-                : "Best sellers"}
+              Sales
             </StoreNavItem>
           </StoreNav>
-          <div
-            className={`flex justify-center w-full ${
-              activePage === 1 && user.RoleId === 2 && user.Store.id == store.id
-                ? ""
-                : "hidden"
-            }`}>
-            <Inventory inventory={store.inventory} />
-          </div>
-          <div
-            className={`flex justify-center w-full ${
-              activePage === 2 && user.RoleId === 2 && user.Store.id == store.id
-                ? ""
-                : "hidden"
-            }`}>
-            <div className="">
-              <Offers products={productOffers} />
-            </div>
-          </div>
-          <div
-            className={`flex justify-center w-full ${
-              activePage === 3 && user.RoleId === 2 && user.Store.id == store.id
-                ? ""
-                : "hidden"
-            }`}>
-            ventas
-          </div>
-        </div>
+        ) : (
+          <StoreNav toggleOpenModal={toggleOpenModal} user={user} store={store}>
+            <StoreNavItem
+              changePage={changePage}
+              activePage={activePage}
+              numPage={1}>
+              Products
+            </StoreNavItem>
+            <StoreNavItem
+              changePage={changePage}
+              activePage={activePage}
+              numPage={2}>
+              Offers
+            </StoreNavItem>
+          </StoreNav>
+        )}
+        {user.RoleId === 2 && user.Store.id == store.id ? (
+          <>
+            {activePage === 1 &&
+              user.RoleId === 2 &&
+              user.Store.id == store.id && (
+                <div className={`flex justify-center w-full`}>
+                  <Inventory inventory={store.inventory} />
+                </div>
+              )}
+            {activePage === 2 &&
+              user.RoleId === 2 &&
+              user.Store.id == store.id && (
+                <div className={`flex justify-center w-full`}>
+                  <div className="">
+                    <Offers products={productOffers} />
+                  </div>
+                </div>
+              )}
+            {activePage === 3 &&
+              user.RoleId === 2 &&
+              user.Store.id == store.id && (
+                <div className={`flex justify-center w-full`}>ventas</div>
+              )}
+          </>
+        ) : (
+          <>
+            {activePage === 1 && (
+              <div className={`flex justify-center w-full`}>
+                <div className="flex flex-wrap gap-2 w-full justify-center my-6">
+                  {store.inventory.map((product) => {
+                    return (
+                      <ProductCard
+                        key={product.id}
+                        id={product.id}
+                        title={product.title}
+                        description={product.description}
+                        price={product.price}
+                        images={product.images}
+                        variants={product.variants}
+                        offer={product.offer}
+                        discount={product.discount}
+                        addCart={addCart}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+            {activePage === 2 && (
+              <div className={`flex justify-center w-full`}>
+                {store.inventory
+                  .filter((product) => product.offer)
+                  .map((product) => {
+                    return (
+                      <ProductCard
+                        key={product.id}
+                        id={product.id}
+                        title={product.title}
+                        description={product.description}
+                        price={product.price}
+                        images={product.images}
+                        variants={product.variants}
+                        offer={product.offer}
+                        discount={product.discount}
+                        addCart={addCart}
+                      />
+                    );
+                  })}
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </>
   );
 };

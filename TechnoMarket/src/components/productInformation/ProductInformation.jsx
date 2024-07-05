@@ -7,8 +7,10 @@ import Stack from "@mui/material/Stack";
 import { useNavigate } from "react-router-dom";
 import { AuthenticationContext } from "../../services/authentication/Authentication.context";
 import { toast } from "sonner";
+import { useDarkMode } from "../../services/DarkMode/DarkModeContext";
 
 const ProductInformation = ({ product }) => {
+  const { darkMode } = useDarkMode();
   const [selectedVariants, setSelectedVariants] = useState({});
   const {user} = useContext(AuthenticationContext)
 
@@ -57,26 +59,26 @@ const ProductInformation = ({ product }) => {
   const rating = 3.5;
 
   return (
-    <div className="w-[380px] min-h-[380px] bg-gray-50 p-6 flex flex-col gap-2 rounded-xl">
+    <div className={`w-[380px] min-h-[380px] p-6 flex flex-col gap-2 rounded-xl ${darkMode ? 'bg-gray-800 text-white' : 'bg-gray-50'}`}>
       <div className="flex gap-2">
         {product.category.map((c) => (
           <button
             onClick={() => navigateCategory(c.name)}
-            className="text-sm text-blue-400 cursor-pointer hover:text-blue-500"
+            className={`text-sm cursor-pointer hover:text-blue-500 ${darkMode ? 'text-gray-300' : 'text-blue-400'}`}
             key={c.id}>
             {c.name}
           </button>
         ))}
       </div>
-
-      <h2 className="text-xl font-bold">{product.title}</h2>
-      <div  className="bg-gray-100 ">
-        <button onClick={() => handleClickStore(product.idStore)} className="font-bold bg-gradient-to-l from-[rgba(15,69,113,1)] via-[rgba(56,109,189,1)] to-[rgba(0,157,221,1)] bg-clip-text text-transparent">
+  
+      <h2 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-black'}`}>{product.title}</h2>
+      <div className={`${darkMode ? 'bg-gray-700' : 'bg-gray-100'} rounded-md p-1`}>
+        <button onClick={() => handleClickStore(product.idStore)} className={`font-bold bg-gradient-to-l from-[rgba(15,69,113,1)] via-[rgba(56,109,189,1)] to-[rgba(0,157,221,1)] bg-clip-text text-transparent ${darkMode ? 'hover:from-gray-800 hover:via-gray-900 hover:to-gray-600' : 'hover:from-blue-600 hover:via-blue-700 hover:to-blue-800'}`}>
           {product.store.Name}
         </button>
       </div>
-      <div className="flex">
-        <div className=" text-sm mr-2">{rating}</div>
+      <div className="flex items-center">
+        <div className={`${darkMode ? 'text-gray-300' : 'text-black'} text-sm mr-2`}>{rating}</div>
         <Stack spacing={1}>
           <Rating
             name="half-rating"
@@ -86,9 +88,9 @@ const ProductInformation = ({ product }) => {
             defaultValue={rating}
           />
         </Stack>
-        <div className="text-sm ml-2">(10)</div>
+        <div className={`${darkMode ? 'text-gray-300' : 'text-black'} text-sm ml-2`}>(10)</div>
       </div>
-      <div className="text-2xl font-semibold">${product.price}</div>
+      <div className={`text-2xl font-semibold ${darkMode ? 'text-white' : 'text-black'}`}>${product.price}</div>
       <hr />
       {/*<table className="min-w-[200px] overflow-y-scroll scrollbar-thumb-gray-500 scrollbar-track-gray-200 text-xs">
         {features.map((feature, index) => (
@@ -121,7 +123,7 @@ const ProductInformation = ({ product }) => {
                     }
                     onClick={() => handleSelection(variantType, option.name)}
                     key={option.name}
-                    className="text-[9.6px] font-bold">
+                    className={`text-[9.6px] font-bold ${darkMode ? 'text-gray-300' : ''}`}>
                     {option.name}
                   </MDBBtn>
                 ))}
@@ -131,12 +133,13 @@ const ProductInformation = ({ product }) => {
       </div>
       <div>
         <div className="max-h-[120px] overflow-y-scroll scrollbar-thumb-gray-500 scrollbar-track-gray-200 p-1">
-          <span className="font-bold text-blue-500">Description: </span>
-          <p className="text-md text-justify">{product.description}</p>
+          <span className={`${darkMode ? 'text-gray-300' : 'text-blue-500'} font-bold`}>Description: </span>
+          <p className={`${darkMode ? 'text-white' : 'text-black'} text-md text-justify`}>{product.description}</p>
         </div>
       </div>
     </div>
   );
+  
 };
 
 ProductInformation.propTypes = {

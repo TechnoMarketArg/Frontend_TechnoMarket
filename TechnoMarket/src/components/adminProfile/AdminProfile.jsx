@@ -162,6 +162,8 @@ const AdminProfile = () => {
   };
   const changePageMain = (page) => {
     setActivePageMain(page);
+    setActivePage(1);
+
   };
 
   const handleCreateNewUser = () => {
