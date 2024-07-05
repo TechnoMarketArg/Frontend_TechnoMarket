@@ -17,6 +17,7 @@ import ProtectedSession from "./components/protectedSession/ProtectedSession.jsx
 import ProtectedRoute from "./components/protectedRoute/ProtectedRoute.jsx";
 import ProtectedRouteAdmin from "./components/protectedRouteAdmin/ProtectedRouteAdmin.jsx";
 import AdminProfile from "./components/adminProfile/AdminProfile.jsx";
+import UserProfile from "./components/userProfile/UserProfile.jsx";
 
 function App() {
   //const { filteredProduct } = useContext(NavBarContext);
@@ -61,7 +62,7 @@ function App() {
       path: "users/:id",
       element: (
         <ProtectedRoute>
-          <h1>perfil del usuario</h1>
+          <UserProfile/>
         </ProtectedRoute>
       ),
     },
