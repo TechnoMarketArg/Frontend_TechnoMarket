@@ -1,3 +1,4 @@
+import { useState, useEffect} from "react";
 import NavBar from "../navBar/NavBar";
 import { MDBBtn } from "mdb-react-ui-kit";
 import { useDELETE, useGET, usePOST, usePUT } from "../customHook/CustomHook";
@@ -17,10 +18,10 @@ import {
 } from "@mui/material";
 import { toast } from "sonner";
 import CreateStore from "../createStore/CreateStore";
-import { AuthenticationContext } from "../../services/authentication/Authentication.context";
+import { useDarkMode } from "../../services/DarkMode/DarkModeContext";
 
 const AdminProfile = () => {
-  const { user } = useContext(AuthenticationContext);
+  const { darkMode } = useDarkMode();
 
   const [idGenerate, loadingID, errorID] = useGET(
     "https://www.uuidtools.com/api/generate/v1"
@@ -145,6 +146,7 @@ const AdminProfile = () => {
     const updatedProduct = { ...product, status: !product.status };
     PutDataProduct(updatedProduct, product.id)
       .then((data) => {
+        // Mantén los campos `idStore` y `store` si no están en la respuesta de la API
         const finalData = {
           ...updatedProduct, // Combinamos los datos originales modificados con los devueltos por la API
           ...data,
