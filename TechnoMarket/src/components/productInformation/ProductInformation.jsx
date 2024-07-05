@@ -7,10 +7,21 @@ import Stack from "@mui/material/Stack";
 import { useNavigate } from "react-router-dom";
 import { AuthenticationContext } from "../../services/authentication/Authentication.context";
 import { toast } from "sonner";
-
+import { useUpdateUser } from "../customHook/CustomHook";
 const ProductInformation = ({ product }) => {
   const [selectedVariants, setSelectedVariants] = useState({});
   const {user} = useContext(AuthenticationContext)
+  const [isFollower, setIsFollower] = useState(false);
+  const { loading, updateUser } = useUpdateUser();
+
+  useEffect(() => {
+    if (user && user.ProductsFavorites) {
+      const isFavorited = user.ProductsFavorites.some(
+        (favProduct) => favProduct.id === product.id
+      );
+      setIsFollower(isFavorited);
+    }
+  }, [user, product.id]);
 
   const handleSelection = (variantType, option) => {
     setSelectedVariants({
@@ -47,6 +58,43 @@ const ProductInformation = ({ product }) => {
     
   };
 
+  const handleToggleFollower = async () => {
+    if (!user || !user.ProductsFavorites) {
+      console.error("User or ProductsFavorites not defined");
+      return;
+    }
+
+    const updatedFavorites = isFollower
+      ? user.ProductsFavorites.filter(
+          (favProduct) => favProduct.id !== product.id
+        )
+      : [...user.ProductsFavorites, product];
+
+    const updatedUser = {
+      ...user,
+      ProductsFavorites: updatedFavorites,
+    };
+
+    console.log("Updating user favorites:", updatedUser);
+
+    // Actualización optimista: actualizar localmente antes de llamar a updateUser
+   
+    setIsFollower(!isFollower); // Invertir el estado de isFollower localmente
+
+    // Llamar a updateUser para persistir los cambios
+    try {
+      await updateUser(user.id, updatedUser);
+      console.log("User favorites updated successfully.");
+    } catch (error) {
+      console.error("Error updating favorites", error);
+      // Revertir los cambios locales en caso de error
+      // Restaurar el estado original del usuario
+      setIsFollower(!isFollower); // Restaurar el estado original de isFollower
+    }
+  };
+
+
+
   /*const features = [
     { brand: "ASUS" },
     { condition: "New" },
@@ -68,6 +116,33 @@ const ProductInformation = ({ product }) => {
           </button>
         ))}
       </div>
+      <div className="cursor-pointer animate-zoom-in bg-gray-100/30 rounded-lg hover:bg-gray-100/40">
+        <button
+          className={`cursor-pointer animate-zoom-in p-1 rounded-lg flex justify-center items-center ${
+            isFollower ? "bg-gray-100/30 hover:bg-gray-100/40" : "bg-gray-400"
+          }`}
+          onClick={handleToggleFollower}
+          disabled={loading}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill={isFollower ? "#c81414" : "none"}
+            stroke={isFollower ? "#c81414" : "#ffffff"}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M12 20l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.96 6.053" />
+            <path d="M16 19h6" />
+            <path d="M19 16v6" />
+          </svg>
+        </button>
+      </div>
+
 
       <h2 className="text-xl font-bold">{product.title}</h2>
       <div  className="bg-gray-100 ">
