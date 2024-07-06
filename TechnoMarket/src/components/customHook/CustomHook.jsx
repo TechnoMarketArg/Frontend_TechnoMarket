@@ -83,7 +83,7 @@ const useUpdateUser = () => {
     setLoading(true);
     try {
       const response = await axios.put(
-        `https://cvrdqj9p-3000.brs.devtunnels.ms/users/${userId}`,
+        `http://localhost:3000/users/${userId}`,
         updatedData
       );
       setUser(response.data);
@@ -174,6 +174,6 @@ useAuth.propTypes = {
   email: PropTypes.string,
   password: PropTypes.string,
 };
-export { useGET, usePOST, usePUT, useDELETE, useAuth};
+export { useGET, usePOST, usePUT, useDELETE, useAuth,useUpdateUser };
 
 //http://localhost:3000/users?email=technomarketarg@gmail.com&password=TechnoMarket123

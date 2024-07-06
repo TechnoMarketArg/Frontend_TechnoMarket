@@ -20,6 +20,7 @@ import SuperAdminProfile from "./components/superAdminProfile/SuperAdminProfile.
 import { useDarkMode } from "./services/DarkMode/DarkModeContext.jsx";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import UserProfile from "./components/userProfile/UserProfile.jsx";
 
 function App() {
   //const { filteredProduct } = useContext(NavBarContext);
@@ -63,7 +64,7 @@ function App() {
       path: "users/:id",
       element: (
         <ProtectedRoute>
-          <h1>perfil del usuario</h1>
+          <UserProfile/>
         </ProtectedRoute>
       ),
     },
