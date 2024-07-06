@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-
 import { MDBBtn, MDBBtnGroup } from "mdb-react-ui-kit";
 import { useContext, useEffect, useState } from "react";
 import Rating from "@mui/material/Rating";
@@ -13,9 +12,11 @@ import { useUpdateUser } from "../customHook/CustomHook";
 const ProductInformation = ({ product }) => {
   const { darkMode } = useDarkMode();
   const [selectedVariants, setSelectedVariants] = useState({});
+  const [currentPrice, setCurrentPrice] = useState(product.price); // Estado para el precio actual
   const { user, updateUserFavorites } = useContext(AuthenticationContext);
   const [isFollower, setIsFollower] = useState(false);
   const { loading, updateUser } = useUpdateUser();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user && user.ProductsFavorites) {
@@ -31,9 +32,16 @@ const ProductInformation = ({ product }) => {
       ...selectedVariants,
       [variantType]: option,
     });
-  };
 
-  const navigate = useNavigate();
+    // Buscar el precio de la variante seleccionada
+    const variant = product.variants[variantType].find(
+      (variant) => variant.name === option
+    );
+
+    if (variant) {
+      setCurrentPrice(variant.price);
+    }
+  };
 
   const navigateCategory = (name) => {
     navigate(`/categories/${name}`, {
@@ -82,7 +90,7 @@ const ProductInformation = ({ product }) => {
     setIsFollower(!isFollower); // Invertir el estado de isFollower localmente
     updateUserFavorites(updatedFavorites); // Actualizar el contexto
 
-    // Llamar a updateUser para persistir los cambios
+    // Llamar a updateUser para actualizar los cambios
     try {
       await updateUser(user.id, updatedUser);
       console.log("User favorites updated successfully.");
@@ -90,6 +98,7 @@ const ProductInformation = ({ product }) => {
       console.error("Error updating favorites", error);
       // Revertir los cambios locales en caso de error
       // Restaurar el estado original del usuario
+
       setIsFollower(!isFollower); // Restaurar el estado original de isFollower
       updateUserFavorites(user.ProductsFavorites); // Restaurar el contexto
     }
@@ -135,7 +144,6 @@ const ProductInformation = ({ product }) => {
           </svg>
         </button>
       </div>
-
   
       <h2 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-black'}`}>{product.title}</h2>
       <div className={`${darkMode ? 'bg-gray-700' : 'bg-gray-100'} rounded-md p-1`}>
@@ -156,7 +164,7 @@ const ProductInformation = ({ product }) => {
         </Stack>
         <div className={`${darkMode ? 'text-gray-300' : 'text-black'} text-sm ml-2`}>(10)</div>
       </div>
-      <div className={`text-2xl font-semibold ${darkMode ? 'text-white' : 'text-black'}`}>${product.price}</div>
+      <div className={`text-2xl font-semibold ${darkMode ? 'text-white' : 'text-black'}`}>${currentPrice}</div> {/* Usar currentPrice en lugar de product.price */}
       <hr />
       <div>
         {product.variants &&
@@ -193,7 +201,6 @@ const ProductInformation = ({ product }) => {
       </div>
     </div>
   );
-  
 };
 
 ProductInformation.propTypes = {
