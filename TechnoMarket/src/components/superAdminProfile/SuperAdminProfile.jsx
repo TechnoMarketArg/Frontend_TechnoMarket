@@ -1,4 +1,5 @@
-import { useState, useEffect} from "react";
+import { useState, useEffect, useContext } from "react";
+import PropTypes from "prop-types";
 import NavBar from "../navBar/NavBar";
 import { MDBBtn } from "mdb-react-ui-kit";
 import { useDELETE, useGET, usePOST, usePUT } from "../customHook/CustomHook";
@@ -18,10 +19,10 @@ import {
 } from "@mui/material";
 import { toast } from "sonner";
 import CreateStore from "../createStore/CreateStore";
-import { useDarkMode } from "../../services/DarkMode/DarkModeContext";
+import { AuthenticationContext } from "../../services/authentication/Authentication.context";
 
-const AdminProfile = () => {
-  const { darkMode } = useDarkMode();
+const SuperAdminProfile = () => {
+  const { user } = useContext(AuthenticationContext);
 
   const [idGenerate, loadingID, errorID] = useGET(
     "https://www.uuidtools.com/api/generate/v1"
@@ -146,16 +147,8 @@ const AdminProfile = () => {
     const updatedProduct = { ...product, status: !product.status };
     PutDataProduct(updatedProduct, product.id)
       .then((data) => {
-        // Mantén los campos `idStore` y `store` si no están en la respuesta de la API
-        const finalData = {
-          ...updatedProduct, // Combinamos los datos originales modificados con los devueltos por la API
-          ...data,
-          idStore: data.idStore || product.idStore,
-          store: data.store || product.store,
-        };
-        
         const updatedProducts = Products.map((p) =>
-          p.id === product.id ? finalData : p
+          p.id === product.id ? data : p
         );
         setProducts(updatedProducts);
       })
@@ -168,9 +161,8 @@ const AdminProfile = () => {
     setActivePage(page);
   };
   const changePageMain = (page) => {
-    setActivePageMain(page);
-    setActivePage(1);
-
+      setActivePageMain(page);
+      setActivePage(1)
   };
 
   const handleCreateNewUser = () => {
@@ -217,6 +209,23 @@ const AdminProfile = () => {
       return;
     }
 
+    let nameRole
+
+    switch (RoleSelect) {
+        case 1:
+            nameRole = "Admin"
+            break;
+        case 2:
+            nameRole = "Seller"
+            break;
+        case 3:
+            nameRole = "Customer"
+            break;
+    
+        default:
+            break;
+    }
+
     const userData = {
       id: idGenerate[0],
       FirstName: FirstName,
@@ -225,8 +234,8 @@ const AdminProfile = () => {
       password: Password,
       RoleId: RoleSelect,
       Role: {
-        id: 3,
-        name: "Customer",
+        id: RoleSelect,
+        name: nameRole,
       },
       status: true,
       Store: null,
@@ -274,105 +283,100 @@ const AdminProfile = () => {
       {NewUser && (
         <CreateStore show={showStore} setShow={setShowStore} user={NewUser} />
       )}
-      <Modal
-      show={showDelete}
-      onHide={handleCloseDelete}
-    >
-      <Modal.Header closeButton className={darkMode ? 'bg-gray-700' : ''}>
-        <Modal.Title>
-          This user is permanently removed from the data. Are you sure to continue?
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body className={`flex flex-col gap-3 ${darkMode ? 'bg-gray-800 text-white' : ''}`}>
-        <Button
-          variant="secondary"
-          onClick={handleCloseDelete}
-          disabled={loadingDelete}
-        >
-          NO
-        </Button>
-        <Button
-          variant="primary"
-          onClick={handleDeleteUser}
-          disabled={loadingDelete}
-        >
-          {loadingDelete ? "Deleting..." : "YES"}
-        </Button>
-        {errorDelete && (
-          <div className="text-red-500">
-            Error: {errorDelete.message}
-          </div>
-        )}
-      </Modal.Body>
-    </Modal>
+      <Modal show={showDelete} onHide={handleCloseDelete}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            This user is permanently removed from the data. Are you sure to
+            continue?
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="flex flex-col gap-3">
+          <Button
+            variant="secondary"
+            onClick={handleCloseDelete}
+            disabled={loadingDelete}>
+            NO
+          </Button>
+          <Button
+            variant="primary"
+            onClick={handleDeleteUser}
+            disabled={loadingDelete}>
+            {loadingDelete ? "Deleting..." : "YES"}
+          </Button>
+          {errorDelete && (
+            <div style={{ color: "red" }}>Error: {errorDelete.message}</div>
+          )}
+        </Modal.Body>
+      </Modal>
 
-    <Modal show={show} onHide={handleClose} >
-      <Modal.Header closeButton className={`  ${darkMode ? 'text-white bg-gray-700' : 'text-black'}`}>
-        <Modal.Title>Create User</Modal.Title>
-      </Modal.Header>
-      <Modal.Body className={`flex flex-col gap-3 ${darkMode ? 'bg-gray-700 text-white' : ''}`}>
-        <TextField
-          error={FirstNameValidate}
-          helperText={FirstNameValidate ? "Complete required field" : ""}
-          label="First Name"
-          variant="outlined"
-          size="small"
-          onChange={(e) => setFirstName(e.target.value)}
-          className={`bg-white dark:bg-gray-700 ${darkMode ? 'text-white' : 'text-black'}`}
-        />
-        <TextField
-          error={LastNameValidate}
-          helperText={LastNameValidate ? "Complete required field" : ""}
-          label="Last Name"
-          variant="outlined"
-          size="small"
-          onChange={(e) => setLastName(e.target.value)}
-          className={`bg-white dark:bg-gray-700 ${darkMode ? 'text-white' : 'text-black'}`}
-        />
-        <TextField
-          error={EmailValidate}
-          helperText={EmailValidate ? "Complete required field" : ""}
-          label="Email"
-          variant="outlined"
-          size="small"
-          onChange={(e) => setEmail(e.target.value)}
-          className={`bg-white dark:bg-gray-700 ${darkMode ? 'text-white' : 'text-black'}`}
-        />
-        <TextField
-          error={PasswordValidate}
-          helperText={PasswordValidate ? "Complete required field" : ""}
-          label="Password"
-          variant="outlined"
-          size="small"
-          onChange={(e) => setPassword(e.target.value)}
-          className={`bg-white dark:bg-gray-700 ${darkMode ? 'text-white' : 'text-black'}`}
-        />
-        <FormControl size="small" error={RoleSelectValidate} className="bg-white dark:bg-gray-700">
-          <InputLabel id="role-select-label">Role</InputLabel>
-          <Select
-            labelId="role-select-label"
-            value={RoleSelect}
-            label="Role"
-            onChange={(e) => setRoleSelect(e.target.value)}
-            className={`bg-white dark:bg-gray-700 ${darkMode ? 'text-white' : 'text-black'}`}
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value={3}>Customer</MenuItem>
-            <MenuItem value={2}>Seller</MenuItem>
-          </Select>
-        </FormControl>
-      </Modal.Body>
-      <Modal.Footer className={`bg-gray-200  ${darkMode ? 'text-white bg-gray-700' : 'text-black'}`}>
-        <Button variant="secondary" onClick={handleClose}>
-          Close
-        </Button>
-        <Button variant="primary" onClick={handleCreateNewUser}>
-          Create New User
-        </Button>
-      </Modal.Footer>
-    </Modal>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Create User</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="flex flex-col gap-3">
+          <TextField
+            error={FirstNameValidate}
+            helperText={FirstNameValidate ? "complete required field" : false}
+            id="outlined-basic"
+            label="FirsName"
+            variant="outlined"
+            size="small"
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+          <TextField
+            error={LastNameValidate}
+            helperText={LastNameValidate ? "complete required field" : false}
+            id="outlined-basic"
+            label="LastName"
+            variant="outlined"
+            size="small"
+            onChange={(e) => setLastName(e.target.value)}
+          />
+          <TextField
+            error={EmailValidate}
+            helperText={EmailValidate ? "complete required field" : false}
+            id="outlined-basic"
+            label="Email"
+            variant="outlined"
+            size="small"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <TextField
+            error={PasswordValidate}
+            helperText={PasswordValidate ? "complete required field" : false}
+            id="outlined-basic"
+            label="Password"
+            variant="outlined"
+            size="small"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <FormControl size="small" error={RoleSelectValidate}>
+            <InputLabel id="demo-simple-select-error-label">Role</InputLabel>
+            <Select
+              labelId="demo-simple-select-error-label"
+              id="demo-simple-select-error"
+              value={RoleSelect}
+              label="Role"
+              onChange={(e) => setRoleSelect(e.target.value)}
+              renderValue={(value) => `${value}`}>
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={3}>Customer</MenuItem>
+              <MenuItem value={2}>Seller</MenuItem>
+              <MenuItem value={1}>Admin</MenuItem>
+            </Select>
+          </FormControl>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleCreateNewUser}>
+            Create New User
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       <div className="flex flex-col justify-center items-center">
         <div className="font-mono w-[1000px] min-h-[80vh] mb-8">
@@ -385,7 +389,7 @@ const AdminProfile = () => {
                   activePageMain === 1 ? "bg-blue-300/30" : ""
                 }`}
                 onClick={() => changePageMain(1)}>
-                users
+                admins
               </MDBBtn>
               <MDBBtn
                 size="sm"
@@ -394,7 +398,7 @@ const AdminProfile = () => {
                   activePageMain === 2 ? "bg-blue-300/30" : ""
                 }`}
                 onClick={() => changePageMain(2)}>
-                stores
+                users
               </MDBBtn>
               <MDBBtn
                 size="sm"
@@ -403,6 +407,15 @@ const AdminProfile = () => {
                   activePageMain === 3 ? "bg-blue-300/30" : ""
                 }`}
                 onClick={() => changePageMain(3)}>
+                stores
+              </MDBBtn>
+              <MDBBtn
+                size="sm"
+                color="tertiary"
+                className={`hover:text-gray-700 font-bold  ${
+                  activePageMain === 4 ? "bg-blue-300/30" : ""
+                }`}
+                onClick={() => changePageMain(4)}>
                 products
               </MDBBtn>
             </div>
@@ -410,6 +423,168 @@ const AdminProfile = () => {
 
           {
             <div className={activePageMain === 1 ? "" : "hidden"}>
+              <div className="flex justify-between px-4 py-2 bg-gray-400/70 font-bold">
+                <div className="flex gap-2">
+                  <MDBBtn
+                    size="sm"
+                    color="tertiary"
+                    className={`hover:text-gray-700 font-bold  ${
+                      activePage === 1 ? "bg-blue-300/30" : ""
+                    }`}
+                    onClick={() => changePage(1)}>
+                    All
+                  </MDBBtn>
+                  <MDBBtn
+                    size="sm"
+                    color="tertiary"
+                    className={`hover:text-gray-700 font-bold  ${
+                      activePage === 4 ? "bg-blue-300/30" : ""
+                    }`}
+                    onClick={() => changePage(2)}>
+                    Active
+                  </MDBBtn>
+                  <MDBBtn
+                    size="sm"
+                    color="tertiary"
+                    className={`hover:text-gray-700 font-bold  ${
+                      activePage === 5 ? "bg-blue-300/30" : ""
+                    }`}
+                    onClick={() => changePage(3)}>
+                    Disabled
+                  </MDBBtn>
+                </div>
+                <MDBBtn size="sm" color="secondary" onClick={handleShow}>
+                  create Admin
+                </MDBBtn>
+              </div>
+              <table className="table-fixed text-center w-full max-w-[80vw]">
+                <thead>
+                  <tr className="bg-gray-300 text-sm font-mono">
+                    <th className="">Full Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody className={activePage === 1 ? "" : "hidden"}>
+                  {Users.filter(
+                    (user) => user.Role.id === 1
+                  ).map((user) => (
+                    <tr key={user.id}>
+                      <td className="py-3 px-6 text-center">
+                        <div className="flex items-center">
+                          {user.FirstName} {user.LastName}
+                        </div>
+                      </td>
+                      <td>{user.email}
+                      </td>
+                      <td className="py-3 px-6 text-center">
+                        <span className="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs">
+                          {user.Role.name}
+                        </span>
+                      </td>
+                      <td>
+                        <MDBBtn
+                          size="sm"
+                          color={user.status ? "success" : "danger"}
+                          onClick={() => handleDeactivateUser(user)}>
+                          {user.status ? "Active" : "Disabled"}
+                        </MDBBtn>
+                      </td>
+                      <td>
+                        <MDBBtn
+                          size="sm"
+                          color="danger"
+                          outline
+                          onClick={() => handleShowDelete(user)}>
+                          <DeleteForeverIcon />
+                        </MDBBtn>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                
+                
+                <tbody className={activePage === 2 ? "" : "hidden"}>
+                  {Users.filter(
+                    (user) =>
+                      (user.Role.id === 1) && user.status
+                  ).map((user) => (
+                    <tr key={user.id}>
+                      <td className="py-3 px-6 text-center">
+                        <div className="flex items-center">
+                          {user.FirstName} {user.LastName}
+                        </div>
+                      </td>
+                      <td>{user.email}</td>
+                      <td className="py-3 px-6 text-center">
+                        <span className="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs">
+                          {user.Role.name}
+                        </span>
+                      </td>
+                      <td>
+                        <MDBBtn
+                          size="sm"
+                          color={user.status ? "success" : "danger"}
+                          onClick={() => handleDeactivateUser(user)}>
+                          {user.status ? "Active" : "Disabled"}
+                        </MDBBtn>
+                      </td>
+                      <td>
+                        <MDBBtn
+                          size="sm"
+                          color="danger"
+                          outline
+                          onClick={() => handleShowDelete(user)}>
+                          <DeleteForeverIcon />
+                        </MDBBtn>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tbody className={activePage === 3 ? "" : "hidden"}>
+                  {Users.filter(
+                    (user) =>
+                      (user.Role.id === 1) && !user.status
+                  ).map((user) => (
+                    <tr key={user.id}>
+                      <td className="py-3 px-6 text-center">
+                        <div className="flex items-center">
+                          {user.FirstName} {user.LastName}
+                        </div>
+                      </td>
+                      <td>{user.email}</td>
+                      <td className="py-3 px-6 text-center">
+                        <span className="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs">
+                          {user.Role.name}
+                        </span>
+                      </td>
+                      <td>
+                        <MDBBtn
+                          size="sm"
+                          color={user.status ? "success" : "danger"}
+                          onClick={() => handleDeactivateUser(user)}>
+                          {user.status ? "Active" : "Disabled"}
+                        </MDBBtn>
+                      </td>
+                      <td>
+                        <MDBBtn
+                          size="sm"
+                          color="danger"
+                          outline
+                          onClick={() => handleShowDelete(user)}>
+                          <DeleteForeverIcon />
+                        </MDBBtn>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          }
+          {
+            <div className={activePageMain === 2 ? "" : "hidden"}>
               <div className="flex justify-between px-4 py-2 bg-gray-400/70 font-bold">
                 <div className="flex gap-2">
                   <MDBBtn
@@ -462,9 +637,9 @@ const AdminProfile = () => {
                   create user
                 </MDBBtn>
               </div>
-              <table className={`table-fixed text-center w-full max-w-[80vw]  ${darkMode ? "bg-dark text-white" : "bg-white text-dark"}`}>
+              <table className="table-fixed text-center w-full max-w-[80vw]">
                 <thead>
-                  <tr className="bg-gray-400 text-sm font-mono">
+                  <tr className="bg-gray-300 text-sm font-mono">
                     <th className="">Full Name</th>
                     <th>Email</th>
                     <th>Role</th>
@@ -655,7 +830,7 @@ const AdminProfile = () => {
           }
 
           {
-            <div className={activePageMain === 2 ? "" : "hidden"}>
+            <div className={activePageMain === 3 ? "" : "hidden"}>
               <div className="flex justify-between px-4 py-2 bg-gray-400/70 font-bold">
                 <div className="flex gap-2">
                   <MDBBtn
@@ -687,9 +862,9 @@ const AdminProfile = () => {
                   </MDBBtn>
                 </div>
               </div>
-              <table className={`table-fixed text-center w-full max-w-[80vw] ${darkMode ? "bg-dark text-white" : "bg-white text-dark"}`}>
+              <table className="table-fixed text-center w-full max-w-[80vw]">
                 <thead>
-                  <tr className="bg-gray-400 text-sm font-mono">
+                  <tr className="bg-gray-300 text-sm font-mono">
                     <th className="">Image</th>
                     <th>Name</th>
                     <th>Inventory</th>
@@ -783,7 +958,7 @@ const AdminProfile = () => {
           }
 
           {
-            <div className={activePageMain === 3 ? "" : "hidden"}>
+            <div className={activePageMain === 4 ? "" : "hidden"}>
               <div className="flex justify-between px-4 py-2 bg-gray-400/70 font-bold">
                 <div className="flex gap-2">
                   <MDBBtn
@@ -815,9 +990,9 @@ const AdminProfile = () => {
                   </MDBBtn>
                 </div>
               </div>
-              <table className={`table-fixed text-center w-full max-w-[80vw]   ${darkMode ? "bg-dark text-white" : "bg-white text-dark"}`}>
+              <table className="table-fixed text-center w-full max-w-[80vw]">
                 <thead>
-                  <tr className="bg-gray-400 text-sm font-mono">
+                  <tr className="bg-gray-300 text-sm font-mono">
                     <th className="">Image</th>
                     <th>Title</th>
                     <th>Price</th>
@@ -919,6 +1094,6 @@ const AdminProfile = () => {
   );
 };
 
-AdminProfile.propTypes = {};
+SuperAdminProfile.propTypes = {};
 
-export default AdminProfile;
+export default SuperAdminProfile;

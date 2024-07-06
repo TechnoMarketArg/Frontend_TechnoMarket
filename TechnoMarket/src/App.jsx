@@ -2,7 +2,6 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Homepage from "./components/homepage/Homepage.jsx";
 import StoreProfile from "./components/storeProfile/StoreProfile.jsx";
 import "mdb-react-ui-kit/dist/css/mdb.min.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 import ProductDetails from "./components/productDetails/ProductDetails.jsx";
 import { useContext } from "react";
 import { NavBarContext } from "./components/navBarContext/NavBarContext.jsx";
@@ -19,6 +18,13 @@ import ProtectedRouteAdmin from "./components/protectedRouteAdmin/ProtectedRoute
 import AdminProfile from "./components/adminProfile/AdminProfile.jsx";
 import SearchPage from "./components/searchPage/SearchPage.jsx";
 
+import NotFoundPage from "./components/notFoundPage/NotFoundPage.jsx";
+import ProtectedRouteSuperAdmin from "./components/protectedRouteSuperAdmin/ProtectedRouteSuperAdmin.jsx";
+import SuperAdminProfile from "./components/superAdminProfile/SuperAdminProfile.jsx";
+import { useDarkMode } from "./services/DarkMode/DarkModeContext.jsx";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import UserProfile from "./components/userProfile/UserProfile.jsx";
 
 function App() {
   const { filteredProduct } = useContext(NavBarContext);
@@ -27,7 +33,6 @@ function App() {
     {
       path: "/",
       element: (
-        //proteger ruta
         <Homepage />
       ),
     },
@@ -69,7 +74,7 @@ function App() {
       path: "users/:id",
       element: (
         <ProtectedRoute>
-          <h1>perfil del usuario</h1>
+          <UserProfile/>
         </ProtectedRoute>
       ),
     },
@@ -87,10 +92,24 @@ function App() {
         </ProtectedRoute>
       ),
     },
+    {
+      path: "super-admin/:id",
+      element: (
+        <ProtectedRoute>
+          <ProtectedRouteSuperAdmin>
+            <SuperAdminProfile/>
+          </ProtectedRouteSuperAdmin>
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "*",
+      element: <NotFoundPage/>,
+    },
   ]);
-
+  const { darkMode } = useDarkMode()
   return (
-    <div className="bg-gray-100">
+    <div className={darkMode ? "bg-gray-800":"bg-gray-100"}>
       <Toaster richColors position="top-center" />
       <Cart />
 

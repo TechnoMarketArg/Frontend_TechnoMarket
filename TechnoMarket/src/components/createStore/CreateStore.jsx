@@ -6,8 +6,10 @@ import { TextField } from "@mui/material";
 import { useGET, usePOST, usePUT } from "../customHook/CustomHook";
 import Loading from "../loading/Loading";
 import { toast } from "sonner";
+import { useDarkMode } from "../../services/DarkMode/DarkModeContext";
 
 function CreateStore({ show, setShow, user }) {
+  const { darkMode } = useDarkMode();
   const [NameStore, setNameStore] = useState('');
   const [DescriptionStore, setDescriptionStore] = useState('');
   const [ImageStore, setImageStore] = useState('');
@@ -76,6 +78,7 @@ function CreateStore({ show, setShow, user }) {
 
     const storeData = {
       id: idGenerate[0],
+      status: true,
       Name: NameStore,
       description: DescriptionStore,
       image: ImageStore,
@@ -135,7 +138,7 @@ function CreateStore({ show, setShow, user }) {
           Create your own store on TechnoMarket
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className={`flex flex-col gap-3 ${darkMode ? 'bg-gray-800 text-white' : ''}`}>
         <div className="flex flex-col gap-3">
           <TextField
             error={NameStoreValidate}

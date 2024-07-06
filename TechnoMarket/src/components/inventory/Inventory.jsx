@@ -1,21 +1,78 @@
 import PropTypes from "prop-types";
 import { MDBBtn, MDBCheckbox } from "mdb-react-ui-kit";
 import InventoryItem from "../inventoryItem/InventoryItem";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDarkMode } from "../../services/DarkMode/DarkModeContext";
+import { usePUT } from "../customHook/CustomHook";
+import axios from "axios";
 
-const Inventory = ({ inventory }) => {
-  const [AllChecked, setAllChecked] = useState(false);
+const Inventory = ({ inventory, store }) => {
+  const { darkMode } = useDarkMode();
   const [activePage, setActivePage] = useState(1);
+  const [Inventory, setInventory] = useState([]);
 
-  const handleClickCheckbox = (productId, isChecked) => {
-    // Aquí deberías actualizar el estado de IsChecked para el producto específico
-    console.log(`Checkbox clicked for product ${productId}, checked: ${isChecked}`);
-  };
+  useEffect(() => {
+    if (inventory) {
+      setInventory(inventory);
+    }
+  }, [inventory]);
 
-  const handleClickActive = (productId, isActive) => {
-    // Aquí deberías actualizar el estado de Active para el producto específico
-    console.log(`Active button clicked for product ${productId}, active: ${isActive}`);
+
+  const [UpdatedDataProduct, PutDataProduct, loadingProduct, errorProduct] =
+  usePUT("http://localhost:3000/products");
+
+  const [UpdatedDataStore, PutDataStore, loadingStore, errorStore] =
+  usePUT(`http://localhost:3000/stores`);
+
+  const handleDeactivateProduct = (productId) => {
+    // Paso 1: Obtener el producto completo
+    axios.get(`http://localhost:3000/products/${productId}`)
+      .then((response) => {
+        const product = response.data;
+  
+        // Paso 2: Modificar el estado del producto
+        const updatedProduct = { ...product, status: !product.status };
+  
+        // Paso 3: Actualizar el producto en el servidor
+        PutDataProduct(updatedProduct, productId)
+          .then((data) => {
+            // Mantén los campos `idStore` y `store` si no están en la respuesta de la API
+            const finalData = {
+              ...updatedProduct, // Combinamos los datos originales modificados con los devueltos por la API
+              ...data,
+              idStore: data.idStore || product.idStore,
+              store: data.store || product.store,
+            };
+  
+            // Actualizar el inventario de la tienda
+            const updatedInventory = store.inventory.map((p) =>
+              p.id === productId ? finalData : p
+            );
+  
+            const updatedStore = { ...store, inventory: updatedInventory };
+  
+            // Actualizar el inventario de la tienda en el servidor
+            PutDataStore(updatedStore, store.id)
+              .then(() => {
+                // Actualizar el estado local del inventario si es necesario
+                const updatedProducts = Inventory.map((p) =>
+                  p.id === productId ? finalData : p
+                );
+                setInventory(updatedProducts);
+              })
+              .catch((err) => {
+                console.error("Error updating store inventory:", err);
+              });
+          })
+          .catch((err) => {
+            console.error("Error updating product:", err);
+          });
+      })
+      .catch((err) => {
+        console.error("Error fetching product:", err);
+      });
   };
+  
 
   const changePage = (page) => {
     setActivePage(page);
@@ -44,26 +101,10 @@ const Inventory = ({ inventory }) => {
             Disabled
           </MDBBtn>
         </div>
-        {AllChecked && (
-          <div className="flex gap-8 animate-fade-in">
-            <MDBBtn
-              onClick={() => setAllChecked(!AllChecked)}
-              color="danger"
-              className="px-8">
-              Disable all
-            </MDBBtn>
-          </div>
-        )}
       </div>
-      <table className="table-fixed text-center w-full">
+      <table className={`table-fixed text-center w-full ${darkMode ? "bg-dark text-white" : "bg-white text-dark"}`}>
         <thead>
           <tr className="bg-gray-300 text-sm font-mono">
-            <th className="lg:px-4 md:px-3 sm:px-2 p-2 w-20">
-              <MDBCheckbox
-                checked={AllChecked}
-                onChange={() => setAllChecked(!AllChecked)}
-              />
-            </th>
             <th className="">Image</th>
             <th>Title</th>
             <th>Status</th>
@@ -72,39 +113,31 @@ const Inventory = ({ inventory }) => {
           </tr>
         </thead>
         <tbody className={activePage === 1 ? "" : "hidden"}>
-          {inventory.map((product) => (
+          {Inventory.map((product) => (
             <InventoryItem
               key={product.id}
               product={product}
-              IsChecked={AllChecked}
-              handleClickCheckbox={handleClickCheckbox}
-              handleClickActive={handleClickActive}
+              handleDeactivateProduct={handleDeactivateProduct}
             />
           ))}
         </tbody>
         <tbody className={activePage === 2 ? "" : "hidden"}>
-          {inventory
+          {Inventory
             .filter((p) => p.status)
             .map((product) => (
               <InventoryItem
                 key={product.id}
                 product={product}
-                IsChecked={AllChecked}
-                handleClickCheckbox={handleClickCheckbox}
-                handleClickActive={handleClickActive}
               />
             ))}
         </tbody>
         <tbody className={activePage === 3 ? "" : "hidden"}>
-          {inventory
+          {Inventory
             .filter((p) => !p.status)
             .map((product) => (
               <InventoryItem
                 key={product.id}
                 product={product}
-                IsChecked={AllChecked}
-                handleClickCheckbox={handleClickCheckbox}
-                handleClickActive={handleClickActive}
               />
             ))}
         </tbody>
@@ -115,6 +148,7 @@ const Inventory = ({ inventory }) => {
 
 Inventory.propTypes = {
   inventory: PropTypes.array,
+  store: PropTypes.object,
 };
 
 export default Inventory;

@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { MDBBtn, MDBRipple } from "mdb-react-ui-kit";
 import { useNavigate } from "react-router-dom";
+import { useDarkMode } from "../../services/DarkMode/DarkModeContext";
 
 const ProductCard = ({
   id,
@@ -13,7 +14,6 @@ const ProductCard = ({
   discount,
   addCart,
 }) => {
-
   const product = {
     id: id,
     title: title,
@@ -30,17 +30,18 @@ const ProductCard = ({
     navigate(`/products/${id}`, {
       state: {
         product: {
-          id
+          id,
         },
       },
     });
   };
 
-
-
-
+  const { darkMode } = useDarkMode();
   return (
-    <div className="flex bg-image rounded hover-zoom hover-overlay h-[380px]  sm:min-w-[180px] sm:max-w-[200px] w-full cursor-pointer flex-col justify-between bg-white overflow-hidden">
+    <div
+      className={`flex bg-image rounded hover-zoom hover-overlay h-[380px]  sm:min-w-[180px] sm:max-w-[200px] w-full cursor-pointer flex-col justify-between  overflow-hidden ${
+        darkMode ? "bg-dark" : "bg-white"
+      }`}>
       <button onClick={handleClick}>
         <div className="relative w-full">
           {offer && (
@@ -48,16 +49,16 @@ const ProductCard = ({
               {discount * 100}% OFF
             </div>
           )}
-          <MDBRipple
-            rippleTag="div"
-            rippleColor="light"
-            className="bg-image rounded hover-zoom hover-overlay object-cover h-[250px] flex justify-center items-center bg-white"
-            onClick={handleClick}>
-            <img src={images[0]} alt={title} />
-            <div
-              className="mask"
-              style={{ backgroundColor: "rgba(251, 251, 251, 0.2)" }}></div>
-          </MDBRipple>
+          <div className="relative">
+            <MDBRipple
+              rippleTag="div"
+              rippleColor="light"
+              className="bg-image rounded hover-zoom hover-overlay object-cover h-[250px] flex justify-center items-center bg-white"
+              onClick={handleClick}>
+              <img src={images[0]} alt={title} className="relative z-0" />
+              {darkMode && <div className="absolute inset-0 bg-dark opacity-30 pointer-events-none z-10"></div>}
+            </MDBRipple>
+          </div>
         </div>
       </button>
       <div className="w-full">
@@ -69,7 +70,7 @@ const ProductCard = ({
           )}
           {offer && (
             <h4 className=" text-2xl font-bold text-green-700">
-              ${(price - (price * discount)).toFixed(1)}
+              ${(price - price * discount).toFixed(1)}
               {offer && (
                 <span className="text-base font-medium text-red-500 line-through mx-2">
                   ${price.toFixed(1)}

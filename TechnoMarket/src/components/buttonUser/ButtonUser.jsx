@@ -5,7 +5,6 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import LocalGroceryStoreIcon from "@mui/icons-material/LocalGroceryStore";
@@ -15,6 +14,8 @@ import { useNavigate } from "react-router-dom";
 import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import CreateStore from "../createStore/CreateStore";
 import { RiAdminFill } from "react-icons/ri";
+import { MdAdminPanelSettings } from "react-icons/md";
+import SwitchDarkMode from "../switchDarkMode/SwitchDarkMode";
 
 function ButtonUser() {
   const { user, handleLogout } = useContext(AuthenticationContext);
@@ -22,7 +23,7 @@ function ButtonUser() {
   const [show, setShow] = useState(false);
 
   const handleShowModalStore = () => setShow(true);
-  
+
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -34,12 +35,10 @@ function ButtonUser() {
 
   const handleLogoutHandler = () => {
     handleLogout();
-    navigate("/");
   };
 
-  
   const navigate = useNavigate();
-  
+
   const handleClickStore = () => {
     const id = user.Store.id;
     navigate(`/stores/${id}`, {
@@ -72,11 +71,22 @@ function ButtonUser() {
       },
     });
   };
+  const handleClickUserSuperAdmin = () => {
+    const id = user.id;
+
+    navigate(`/super-admin/${id}`, {
+      state: {
+        stores: {
+          id,
+        },
+      },
+    });
+  };
 
   return (
     <>
-      <CreateStore show={show} setShow={setShow}  user={user}/>
-      <Fragment>
+      <CreateStore show={show} setShow={setShow} user={user} />
+      <Fragment >
         <div>
           <Tooltip title="Account settings">
             <IconButton
@@ -102,7 +112,7 @@ function ButtonUser() {
             elevation: 0,
             sx: {
               overflow: "visible",
-              filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+              filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.52))",
               mt: 1.5,
               "& .MuiAvatar-root": {
                 width: 32,
@@ -126,24 +136,32 @@ function ButtonUser() {
           }}
           transformOrigin={{ horizontal: "right", vertical: "top" }}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
-            <MenuItem onClick={handleClickUser}>
-              <Avatar /> {user.FirstName} {user.LastName}
-            </MenuItem>
+          <MenuItem onClick={handleClickUser}>
+            <Avatar /> {user.FirstName} {user.LastName}
+          </MenuItem>
           {user.RoleId === 2 && (
-              <MenuItem onClick={handleClickStore}>
-                <Avatar>
-                  <LocalGroceryStoreIcon fontSize="small" />
-                </Avatar>
-                My Store
-              </MenuItem>
+            <MenuItem onClick={handleClickStore}>
+              <Avatar>
+                <LocalGroceryStoreIcon fontSize="small" />
+              </Avatar>
+              My Store
+            </MenuItem>
           )}
           {user.RoleId === 1 && (
-              <MenuItem onClick={handleClickUserAdmin}>
-                <Avatar>
+            <MenuItem onClick={handleClickUserAdmin}>
+              <Avatar>
                 <RiAdminFill />
-                </Avatar>
-                Profile Admin
-              </MenuItem>
+              </Avatar>
+              Profile Admin
+            </MenuItem>
+          )}
+          {user.RoleId === 0 && (
+            <MenuItem onClick={handleClickUserSuperAdmin}>
+              <Avatar>
+                <MdAdminPanelSettings />
+              </Avatar>
+              Profile Super-Admin
+            </MenuItem>
           )}
           <Divider />
           {user.RoleId === 3 && (
@@ -153,12 +171,10 @@ function ButtonUser() {
               </ListItemIcon>
               Open my Store
             </MenuItem>
-            )}
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <Settings fontSize="small" />
-            </ListItemIcon>
-            Settings
+          )}
+          <MenuItem >
+            <SwitchDarkMode/>
+            
           </MenuItem>
           <MenuItem onClick={handleClose}>
             <ListItemIcon>
@@ -171,6 +187,5 @@ function ButtonUser() {
     </>
   );
 }
-
 
 export default ButtonUser;

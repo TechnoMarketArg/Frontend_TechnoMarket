@@ -134,7 +134,7 @@ const ProductCardSlider = ({ Title, Data, addCart }) => {
 
   return (
     <div className="slider-container my-4 lg:ml-2 w-[380px] sm:w-[500px] md:w-[735px] lg:w-[984px] xl:w-[1240px] 2xl:w-[1524px]">
-      <button onClick={() => navigateCategory(Title)} className="bg-gray-100 ml-2 mb-4">
+      <button onClick={() => navigateCategory(Title)} className=" ml-2 mb-4">
         <h1 className="text-3xl font-bold hover:bg-gradient-to-r hover:text-shadow-sm bg-gradient-to-l from-[rgba(15,69,113,1)] via-[rgba(56,109,189,1)] to-[rgba(0,157,221,1)] bg-clip-text text-transparent">
           {Title}
         </h1>
