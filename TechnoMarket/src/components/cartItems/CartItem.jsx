@@ -56,24 +56,6 @@ const CartItem = ({
               <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
             </svg>
           </Button>
-
-          <Button variant="danger" title="Move to the wish list">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#000000"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round">
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M12 20l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.96 6.053" />
-              <path d="M16 19h6" />
-              <path d="M19 16v6" />
-            </svg>
-          </Button>
         </MDBCol>
         <MDBCol lg="4" md="6" className="mb-4 mb-lg-0">
           <div className="d-flex mb-4" style={{ maxWidth: "300px" }}>

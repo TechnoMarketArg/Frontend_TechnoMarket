@@ -40,7 +40,7 @@ const ProductCard = ({
   return (
     <div
       className={`flex bg-image rounded hover-zoom hover-overlay h-[380px]  sm:min-w-[180px] sm:max-w-[200px] w-full cursor-pointer flex-col justify-between  overflow-hidden ${
-        darkMode ? "bg-dark" : "bg-white"
+        darkMode ? "bg-dark text-white" : "bg-white"
       }`}>
       <button onClick={handleClick}>
         <div className="relative w-full">
