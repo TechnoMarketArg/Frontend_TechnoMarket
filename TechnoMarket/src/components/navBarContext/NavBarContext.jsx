@@ -82,6 +82,16 @@ const NavBarProvider = ({ children }) => {
 
   const toggleOpen = () => setOptSmModal(!optSmModal);
 
+
+
+  //const [ashe, setAshe] = useState({});
+
+  //const optionSelected = (chechekd) => {
+
+  //  setAshe(chechekd);
+
+  //}
+
   return (
     <NavBarContext.Provider
       value={{
@@ -100,7 +110,9 @@ const NavBarProvider = ({ children }) => {
         toggleOpen,
         filteredProduct,
         setFilteredProduct,
-        cleanCart
+        cleanCart,
+        //optionSelected,
+        //ashe
       }}>
       {children}
     </NavBarContext.Provider>
@@ -112,3 +124,6 @@ NavBarProvider.propTypes = {
 };
 
 export { NavBarContext, NavBarProvider };
+
+
+

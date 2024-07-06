@@ -16,8 +16,10 @@ import { useUpdateUser } from "../customHook/CustomHook";
 import { toast } from "sonner";
 import NavBar from "../navBar/NavBar";
 import { NavBarContext } from "../navBarContext/NavBarContext";
+import { useDarkMode } from "../../services/DarkMode/DarkModeContext";
 
 const UserProfile = () => {
+    const { darkMode } = useDarkMode()
   const { user } = useContext(AuthenticationContext);
 
   const { searchHandler, ShoppingCart, toggleOpen } = useContext(NavBarContext);
@@ -29,7 +31,7 @@ const UserProfile = () => {
   const [password, setPassword] = useState(user?.password || "");
   const [activePage, setActivePage] = useState(1);
 
-  const { loading, userUpdate, error, updateUser } = useUpdateUser(); // Usa el custom hook
+  const { loading, userUpdate, error, updateUser } = useUpdateUser();
 
   useEffect(() => {
     if (user) {
@@ -76,39 +78,39 @@ const UserProfile = () => {
               changePage={changePage}
               activePage={activePage}
               numPage={1}>
-              Datos de Usuario
+              Your Data
             </UserNavItem>
             <UserNavItem
               changePage={changePage}
               activePage={activePage}
               numPage={2}>
-              Productos Comprados
+              Buyed Products 
             </UserNavItem>
             <UserNavItem
               changePage={changePage}
               activePage={activePage}
               numPage={3}>
-              Productos Favoritos
+              Favorite Products
             </UserNavItem>
             <UserNavItem
               changePage={changePage}
               activePage={activePage}
               numPage={4}>
-              Tiendas Favoritas
+              Favorite Stores
             </UserNavItem>
           </UserNav>
           <div
             className={`flex justify-center w-full ${
               activePage === 1 ? "" : "hidden"
             }`}>
-            <div>
+            <div className="flex flex-col bg-gray-100">
               <TextField
                 label="First Name"
                 type="text"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 id="outlined-start-adornment"
-                sx={{ m: 1, width: "25ch" }}
+                sx={{ m: 1, width: "30ch" }}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start"></InputAdornment>
@@ -121,7 +123,7 @@ const UserProfile = () => {
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 id="outlined-start-adornment2"
-                sx={{ m: 1, width: "25ch" }}
+                sx={{ m: 1, width: "30ch" }}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start"></InputAdornment>
@@ -142,7 +144,7 @@ const UserProfile = () => {
                 }}
               />
 
-              <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
+              <FormControl sx={{ m: 1, width: "30ch" }} variant="outlined">
                 <OutlinedInput
                   id="outlined-start-adornment2"
                   label="Password"
@@ -168,7 +170,7 @@ const UserProfile = () => {
                 onClick={handleUpdateUser}
                 sx={{ m: 1 }}
                 disabled={loading}>
-                {loading ? "Guardando..." : "Guardar Cambios"}
+                {loading ? "Loanding..." : "Save Changes"}
               </Button>
               {error && <p className="text-red-500">{error}</p>}
             </div>
@@ -177,18 +179,25 @@ const UserProfile = () => {
             className={`flex justify-center w-full ${
               activePage === 2 ? "" : "hidden"
             }`}>
-            <ul>
+            <ul className="flex flex-wrap w-full justify-center">
               {user.ProductsPurchased.map((product) => (
-                <li key={product.id}>
-                  <h3>{product.title}</h3>
-                  <p>{product.description}</p>
-                  <p>Precio: ${product.price}</p>
-                  <img
-                    src={product.images[0]}
-                    alt={product.title}
-                    style={{ width: "100px" }}
-                  />
-                </li>
+                <li
+                key={product.id}
+                className={`flex items-center border rounded-lg p-4 mb-4 shadow-md w-[400px] ${darkMode ? 'bg-gray-800 border-gray-700 text-gray-300' : 'bg-white border-gray-200 text-gray-900'}`}
+              >
+                <img
+                  src={product.images[0]}
+                  alt={product.title}
+                  className="w-24 h-auto rounded mr-4"
+                />
+                <div>
+                  <h3 className={`text-lg font-bold mb-2 ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>{product.title}</h3>
+                  <p className={`mb-2 ${darkMode ? 'text-gray-400' : 'text-gray-700'}`}>{product.description}</p>
+                  <p className={`font-semibold ${darkMode ? 'text-blue-300' : 'text-blue-600'}`}>Precio: ${product.price}</p>
+                </div>
+              </li>
+              
+              
               ))}
             </ul>
           </div>
@@ -196,18 +205,24 @@ const UserProfile = () => {
             className={`flex justify-center w-full ${
               activePage === 3 ? "" : "hidden"
             }`}>
-            <ul>
+            <ul className="flex flex-wrap w-full justify-center">
               {user.ProductsFavorites.map((product) => (
-                <li key={product.id}>
-                  <h3>{product.title}</h3>
-                  <p>{product.description}</p>
-                  <p>Precio: ${product.price}</p>
-                  <img
-                    src={product.images[0]}
-                    alt={product.title}
-                    style={{ width: "100px" }}
-                  />
-                </li>
+                <li
+                key={product.id}
+                className={`flex items-center border rounded-lg p-4 mb-4 shadow-md w-[400px] ${darkMode ? 'bg-gray-800 border-gray-700 text-gray-300' : 'bg-white border-gray-200 text-gray-900'}`}
+              >
+                <img
+                  src={product.images[0]}
+                  alt={product.title}
+                  className="w-24 h-auto rounded mr-4"
+                />
+                <div>
+                  <h3 className={`text-lg font-bold mb-2 ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>{product.title}</h3>
+                  <p className={`mb-2 ${darkMode ? 'text-gray-400' : 'text-gray-700'}`}>{product.description}</p>
+                  <p className={`font-semibold ${darkMode ? 'text-blue-300' : 'text-blue-600'}`}>Precio: ${product.price}</p>
+                </div>
+              </li>
+              
               ))}
             </ul>
           </div>

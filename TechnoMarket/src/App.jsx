@@ -3,6 +3,8 @@ import Homepage from "./components/homepage/Homepage.jsx";
 import StoreProfile from "./components/storeProfile/StoreProfile.jsx";
 import "mdb-react-ui-kit/dist/css/mdb.min.css";
 import ProductDetails from "./components/productDetails/ProductDetails.jsx";
+import { useContext } from "react";
+import { NavBarContext } from "./components/navBarContext/NavBarContext.jsx";
 import Cart from "./components/cart/Cart.jsx";
 import { Toaster } from "sonner";
 import Login from "./components/login/Login.jsx";
@@ -14,6 +16,8 @@ import ProtectedSession from "./components/protectedSession/ProtectedSession.jsx
 import ProtectedRoute from "./components/protectedRoute/ProtectedRoute.jsx";
 import ProtectedRouteAdmin from "./components/protectedRouteAdmin/ProtectedRouteAdmin.jsx";
 import AdminProfile from "./components/adminProfile/AdminProfile.jsx";
+import SearchPage from "./components/searchPage/SearchPage.jsx";
+
 import NotFoundPage from "./components/notFoundPage/NotFoundPage.jsx";
 import ProtectedRouteSuperAdmin from "./components/protectedRouteSuperAdmin/ProtectedRouteSuperAdmin.jsx";
 import SuperAdminProfile from "./components/superAdminProfile/SuperAdminProfile.jsx";
@@ -23,7 +27,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import UserProfile from "./components/userProfile/UserProfile.jsx";
 
 function App() {
-  //const { filteredProduct } = useContext(NavBarContext);
+  const { filteredProduct } = useContext(NavBarContext);
 
   const router = createBrowserRouter([
     {
@@ -36,6 +40,12 @@ function App() {
       path: "products/:id",
       element: <ProductDetails />,
     },
+    {
+      path: "searchProducts/:name",
+      element: 
+      <SearchPage />,
+    }
+    ,
     {
       path: "stores/:id",
       element: (
@@ -104,7 +114,7 @@ function App() {
       <Cart />
 
       
-      {/*filteredProduct ? <SearchPage filteredProduct={filteredProduct} /> : ""*/}
+      
       {<RouterProvider router={router} />}
 
       <Footer />

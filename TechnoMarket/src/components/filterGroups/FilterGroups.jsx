@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 
 const FilterGroups = ({ filters, isCheckedList, handleCheckboxChange }) => {
+
+    
     return (
         <div>
             {
