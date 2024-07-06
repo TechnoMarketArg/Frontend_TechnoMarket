@@ -27,7 +27,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import UserProfile from "./components/userProfile/UserProfile.jsx";
 
 function App() {
-  const { filteredProduct } = useContext(NavBarContext);
 
   const router = createBrowserRouter([
     {

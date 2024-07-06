@@ -232,15 +232,20 @@ const UserProfile = () => {
             }`}>
             <ul>
               {user.StoresFavorites.map((product) => (
-                <li key={product.id}>
-                  <h3>{product.Name}</h3>
-                  <p>{product.description}</p>
-                  <img
-                    src={product.image}
-                    alt={product.title}
-                    style={{ width: "100px" }}
-                  />
-                </li>
+                <li
+                key={product.id}
+                className={`flex items-center border rounded-lg p-4 mb-4 shadow-md w-[400px] ${darkMode ? 'bg-gray-800 border-gray-700 text-gray-300' : 'bg-white border-gray-200 text-gray-900'}`}
+              >
+                <img
+                  src={product.image}
+                  alt={product.title}
+                  className="w-24 h-auto rounded mr-4"
+                />
+                <div>
+                  <h3 className={`text-lg font-bold mb-2 ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>{product.Name}</h3>
+                  <p className={`mb-2 ${darkMode ? 'text-gray-400' : 'text-gray-700'}`}>{product.description}</p>
+                </div>
+              </li>
               ))}
             </ul>
           </div>
