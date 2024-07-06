@@ -9,10 +9,11 @@ import { AuthenticationContext } from "../../services/authentication/Authenticat
 import { toast } from "sonner";
 import { useDarkMode } from "../../services/DarkMode/DarkModeContext";
 import { useUpdateUser } from "../customHook/CustomHook";
+
 const ProductInformation = ({ product }) => {
   const { darkMode } = useDarkMode();
   const [selectedVariants, setSelectedVariants] = useState({});
-  const {user} = useContext(AuthenticationContext)
+  const { user, updateUserFavorites } = useContext(AuthenticationContext);
   const [isFollower, setIsFollower] = useState(false);
   const { loading, updateUser } = useUpdateUser();
 
@@ -34,7 +35,6 @@ const ProductInformation = ({ product }) => {
 
   const navigate = useNavigate();
 
-
   const navigateCategory = (name) => {
     navigate(`/categories/${name}`, {
       state: {
@@ -50,14 +50,13 @@ const ProductInformation = ({ product }) => {
       navigate(`/stores/${id}`, {
         state: {
           stores: {
-            id
+            id,
           },
         },
       });
-    }else{
-      toast.error("Sign in to view stores")
+    } else {
+      toast.error("Sign in to view stores");
     }
-    
   };
 
   const handleToggleFollower = async () => {
@@ -80,8 +79,8 @@ const ProductInformation = ({ product }) => {
     console.log("Updating user favorites:", updatedUser);
 
     // Actualización optimista: actualizar localmente antes de llamar a updateUser
-   
     setIsFollower(!isFollower); // Invertir el estado de isFollower localmente
+    updateUserFavorites(updatedFavorites); // Actualizar el contexto
 
     // Llamar a updateUser para persistir los cambios
     try {
@@ -92,17 +91,9 @@ const ProductInformation = ({ product }) => {
       // Revertir los cambios locales en caso de error
       // Restaurar el estado original del usuario
       setIsFollower(!isFollower); // Restaurar el estado original de isFollower
+      updateUserFavorites(user.ProductsFavorites); // Restaurar el contexto
     }
   };
-
-
-
-  /*const features = [
-    { brand: "ASUS" },
-    { condition: "New" },
-    { Color: "Black" },
-    { Graphic: "NVIDIA GeForce GTX 1650" },
-  ];*/
 
   const rating = 3.5;
 
@@ -153,7 +144,7 @@ const ProductInformation = ({ product }) => {
         </button>
       </div>
       <div className="flex items-center">
-        <div className={`${darkMode ? 'text-gray-300' : 'text-black'} text-sm mr-2`}>{rating}</div>
+        <div className={`${darkMode ? 'text-gray-300' : 'text-black'}text-sm mr-2`}>{rating}</div>
         <Stack spacing={1}>
           <Rating
             name="half-rating"
@@ -167,18 +158,6 @@ const ProductInformation = ({ product }) => {
       </div>
       <div className={`text-2xl font-semibold ${darkMode ? 'text-white' : 'text-black'}`}>${product.price}</div>
       <hr />
-      {/*<table className="min-w-[200px] overflow-y-scroll scrollbar-thumb-gray-500 scrollbar-track-gray-200 text-xs">
-        {features.map((feature, index) => (
-          <tbody key={index}>
-            {Object.entries(feature).map(([key, value], index) => (
-              <tr key={index}>
-                <td className="font-bold ">{key}:</td>
-                <td>{value}</td>
-              </tr>
-            ))}
-          </tbody>
-        ))}
-      </table>*/}
       <div>
         {product.variants &&
           Object.keys(product.variants).map((variantType) => (
