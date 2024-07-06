@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { FaCircle } from "react-icons/fa";
+
 import { MDBBtn, MDBBtnGroup } from "mdb-react-ui-kit";
 import { useContext, useEffect, useState } from "react";
 import Rating from "@mui/material/Rating";
