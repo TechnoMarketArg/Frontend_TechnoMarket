@@ -61,6 +61,7 @@ const StoreProfile = () => {
         <div>
           {user.store && <PublishProduct toggleOpen={toggleOpenModal} setOptSmModal={setPublishModal} optSmModal={publishModal} />}
           <StoreHeader store={store} user={user} />
+          
           <StoreNav toggleOpenModal={toggleOpenModal}>
             <StoreNavItem
               changePage={changePage}

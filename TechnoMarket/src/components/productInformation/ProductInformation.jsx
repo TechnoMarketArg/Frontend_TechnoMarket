@@ -8,9 +8,10 @@ import { useNavigate } from "react-router-dom";
 import { AuthenticationContext } from "../../services/authentication/Authentication.context";
 import { toast } from "sonner";
 import { useUpdateUser } from "../customHook/CustomHook";
+
 const ProductInformation = ({ product }) => {
   const [selectedVariants, setSelectedVariants] = useState({});
-  const {user} = useContext(AuthenticationContext)
+  const { user, updateUserFavorites } = useContext(AuthenticationContext);
   const [isFollower, setIsFollower] = useState(false);
   const { loading, updateUser } = useUpdateUser();
 
@@ -32,7 +33,6 @@ const ProductInformation = ({ product }) => {
 
   const navigate = useNavigate();
 
-
   const navigateCategory = (name) => {
     navigate(`/categories/${name}`, {
       state: {
@@ -48,14 +48,13 @@ const ProductInformation = ({ product }) => {
       navigate(`/stores/${id}`, {
         state: {
           stores: {
-            id
+            id,
           },
         },
       });
-    }else{
-      toast.error("Sign in to view stores")
+    } else {
+      toast.error("Sign in to view stores");
     }
-    
   };
 
   const handleToggleFollower = async () => {
@@ -78,8 +77,8 @@ const ProductInformation = ({ product }) => {
     console.log("Updating user favorites:", updatedUser);
 
     // Actualización optimista: actualizar localmente antes de llamar a updateUser
-   
     setIsFollower(!isFollower); // Invertir el estado de isFollower localmente
+    updateUserFavorites(updatedFavorites); // Actualizar el contexto
 
     // Llamar a updateUser para persistir los cambios
     try {
@@ -90,17 +89,9 @@ const ProductInformation = ({ product }) => {
       // Revertir los cambios locales en caso de error
       // Restaurar el estado original del usuario
       setIsFollower(!isFollower); // Restaurar el estado original de isFollower
+      updateUserFavorites(user.ProductsFavorites); // Restaurar el contexto
     }
   };
-
-
-
-  /*const features = [
-    { brand: "ASUS" },
-    { condition: "New" },
-    { Color: "Black" },
-    { Graphic: "NVIDIA GeForce GTX 1650" },
-  ];*/
 
   const rating = 3.5;
 
@@ -111,7 +102,8 @@ const ProductInformation = ({ product }) => {
           <button
             onClick={() => navigateCategory(c.name)}
             className="text-sm text-blue-400 cursor-pointer hover:text-blue-500"
-            key={c.id}>
+            key={c.id}
+          >
             {c.name}
           </button>
         ))}
@@ -143,15 +135,17 @@ const ProductInformation = ({ product }) => {
         </button>
       </div>
 
-
       <h2 className="text-xl font-bold">{product.title}</h2>
-      <div  className="bg-gray-100 ">
-        <button onClick={() => handleClickStore(product.idStore)} className="font-bold bg-gradient-to-l from-[rgba(15,69,113,1)] via-[rgba(56,109,189,1)] to-[rgba(0,157,221,1)] bg-clip-text text-transparent">
+      <div className="bg-gray-100">
+        <button
+          onClick={() => handleClickStore(product.idStore)}
+          className="font-bold bg-gradient-to-l from-[rgba(15,69,113,1)] via-[rgba(56,109,189,1)] to-[rgba(0,157,221,1)] bg-clip-text text-transparent"
+        >
           {product.store.Name}
         </button>
       </div>
       <div className="flex">
-        <div className=" text-sm mr-2">{rating}</div>
+        <div className="text-sm mr-2">{rating}</div>
         <Stack spacing={1}>
           <Rating
             name="half-rating"
@@ -165,18 +159,6 @@ const ProductInformation = ({ product }) => {
       </div>
       <div className="text-2xl font-semibold">${product.price}</div>
       <hr />
-      {/*<table className="min-w-[200px] overflow-y-scroll scrollbar-thumb-gray-500 scrollbar-track-gray-200 text-xs">
-        {features.map((feature, index) => (
-          <tbody key={index}>
-            {Object.entries(feature).map(([key, value], index) => (
-              <tr key={index}>
-                <td className="font-bold ">{key}:</td>
-                <td>{value}</td>
-              </tr>
-            ))}
-          </tbody>
-        ))}
-      </table>*/}
       <div>
         {product.variants &&
           Object.keys(product.variants).map((variantType) => (
@@ -196,7 +178,8 @@ const ProductInformation = ({ product }) => {
                     }
                     onClick={() => handleSelection(variantType, option.name)}
                     key={option.name}
-                    className="text-[9.6px] font-bold">
+                    className="text-[9.6px] font-bold"
+                  >
                     {option.name}
                   </MDBBtn>
                 ))}

@@ -53,9 +53,16 @@ const AuthenticationContextProvider = ({ children }) => {
     setUser(newUser);
   };
 
+  const updateUserFavorites = (updatedFavorites) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      ProductsFavorites: updatedFavorites,
+    }));
+  };
+  
   return (
     <AuthenticationContext.Provider
-      value={{ user, handleLogin, handleLogout, handleRegister }}>
+      value={{ user, handleLogin, handleLogout, handleRegister, updateUserFavorites }}>
       {children}
     </AuthenticationContext.Provider>
   );
