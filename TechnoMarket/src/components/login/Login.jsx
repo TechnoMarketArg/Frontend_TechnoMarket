@@ -98,7 +98,7 @@ const Login = () => {
               <MDBInput
                 wrapperClass="mb-4"
                 label="Email address"
-                id="formControlLg"
+                id="formControllg"
                 type="email"
                 size="lg"
                 onChange={changeEmailHandler}

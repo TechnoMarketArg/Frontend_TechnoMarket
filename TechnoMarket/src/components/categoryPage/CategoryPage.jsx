@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import { useContext } from "react";
 import { useLocation } from "react-router-dom";
 import { NavBarContext } from "../navBarContext/NavBarContext";
 import Loading from "../loading/Loading";

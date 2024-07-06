@@ -21,6 +21,9 @@ function NavBar() {
 
   const { user } = useContext(AuthenticationContext);
 
+
+
+
   return (
     <Navbar
       expand="lg"

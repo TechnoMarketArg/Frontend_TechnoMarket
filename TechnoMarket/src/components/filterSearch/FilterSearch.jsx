@@ -1,18 +1,12 @@
-import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
+import { useState, useEffect } from 'react';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import PropTypes from 'prop-types';
 import Filter from '../filter/Filter';
 import FilterGroups from '../filterGroups/FilterGroups';
 import { MDBBtn } from 'mdb-react-ui-kit';
+//import { NavBarContext } from "../navBarContext/NavBarContext";
 
-//const FiltersObject = [
-//    { Brand: ["Apple", "Dell", "HP", "Lenovo", "Acer", "Asus", "Microsoft", "MSI", "Samsung", "Sony", "Toshiba", "Huawei"] },
-//    { colors: ["rojo", "azul", "verde", "amarillo", "naranja", "morado", "rosa", "blanco", "negro", "gris", "marrón", "turquesa"] }
-//];
-
-const FilterSearch = ({FiltersObject}) => {
-
+const FilterSearch = ({ FiltersObject }) => {
     const [show, setShow] = useState(false);
     const [isCheckedList, setIsCheckedList] = useState({});
 
@@ -24,7 +18,14 @@ const FilterSearch = ({FiltersObject}) => {
             ...prevState,
             [filter]: !prevState[filter]
         }));
-    }
+    };
+
+    //const { optionSelected } = useContext(NavBarContext);
+    //const optFilter = isCheckedList;
+
+    //useEffect(() => {
+    //    optionSelected(optFilter);
+    //}, [optFilter, optionSelected]);
 
     return (
         <>
@@ -46,12 +47,10 @@ const FilterSearch = ({FiltersObject}) => {
             </Offcanvas>
         </>
     );
-}
-
+};
 
 FilterSearch.propTypes = {
     FiltersObject: PropTypes.array,
 };
-
 
 export { FilterSearch, FilterGroups, Filter };
