@@ -1,8 +1,10 @@
 import { Rating } from "@mui/material";
 import PropTypes from "prop-types";
-import { useState } from "react";
+
 import ModalChangeImageStore from "../modalChangeImageStore/ModalChangeImageStore";
 import { Toaster, toast } from "sonner";
+import { useState } from "react";
+
 
 const StoreHeader = ({ store, user }) => {
   const [IsFollower, setIsFollower] = useState(false);
@@ -10,6 +12,8 @@ const StoreHeader = ({ store, user }) => {
   const [ImgStore, setImgStore] = useState(store.image);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  
+
 
   return (
     <>

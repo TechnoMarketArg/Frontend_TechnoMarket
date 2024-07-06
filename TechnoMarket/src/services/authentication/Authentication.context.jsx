@@ -7,6 +7,7 @@ const AuthenticationContext = createContext({});
 
 const AuthenticationContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  
   const [Authentication, LUser, EUser ] = useAuth()
 
   // Recuperar usuario del Local Storage
@@ -61,10 +62,17 @@ const AuthenticationContextProvider = ({ children }) => {
       ProductsFavorites: updatedFavorites,
     }));
   };
+
+  const updateStoresFavorites = (updatedFavorites) => {
+    setUser((prevStores) => ({
+      ...prevStores,
+      StoresFavorites: updatedFavorites,
+    }));
+  };
   
   return (
     <AuthenticationContext.Provider
-      value={{ user, handleLogin, handleLogout, handleRegister, updateUserFavorites }}>
+      value={{ user, handleLogin, handleLogout, handleRegister, updateUserFavorites, updateStoresFavorites }}>
       {children}
     </AuthenticationContext.Provider>
   );

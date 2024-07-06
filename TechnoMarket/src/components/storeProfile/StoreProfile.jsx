@@ -1,11 +1,10 @@
-import PropTypes from "prop-types";
 import Inventory from "../inventory/Inventory";
 import StoreHeader from "../storeHeader/StoreHeader";
 import StoreNav from "../storeNav/StoreNav";
 import { useContext, useState, useEffect } from "react";
 import StoreNavItem from "../storeNavItem/StoreNavItem";
 import { AuthenticationContext } from "../../services/authentication/Authentication.context";
-import { useGET } from "../customHook/CustomHook";
+import { useGET, useUpdateUser } from "../customHook/CustomHook";
 import { useLocation } from "react-router-dom";
 import { NavBarContext } from "../navBarContext/NavBarContext";
 import NavBar from "../navBar/NavBar";
@@ -13,7 +12,7 @@ import Loading from "../loading/Loading";
 import Offers from "../offers/Offers";
 import PublishProduct from "../publishProduct/PublishProduct";
 import { ProductCard } from "../productCard/ProductCard";
-import { useDarkMode } from "../../services/DarkMode/DarkModeContext";
+
 import {
   Table,
   TableBody,
@@ -24,23 +23,32 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import { MDBBtn } from "mdb-react-ui-kit";
+
 const StoreProfile = () => {
   const [optSmModal, setOptSmModal] = useState(false);
 
   const toggleOpenP = () => {
-    console.log(optSmModal);
     setOptSmModal(!optSmModal);
   };
 
   const { addCart } = useContext(NavBarContext);
-
-  const { user } = useContext(AuthenticationContext);
+  const { user, updateStoresFavorites } = useContext(AuthenticationContext);
+  const [isFollower, setIsFollower] = useState(false);
   const location = useLocation();
   const { id } = location.state.stores;
+  const { loading, updateUser } = useUpdateUser();
 
-  const [store, loading, error] = useGET(`http://localhost:3000/stores/${id}`);
+  const [store, error] = useGET(`http://localhost:3000/stores/${id}`);
   const [activePage, setActivePage] = useState(1);
+
+  useEffect(() => {
+    if (user && user.StoresFavorites) {
+      const isFavorited = user.StoresFavorites.some(
+        (favStore) => favStore.id === store.id
+      );
+      setIsFollower(isFavorited);
+    }
+  }, [user, store]);
 
   const changePage = (page) => {
     setActivePage(page);
@@ -60,36 +68,103 @@ const StoreProfile = () => {
 
   const productOffers = getProductsByDiscount(store.inventory);
 
+  const handleToggleFollower = async (event) => {
+    event.preventDefault();
+    if (!user || !user.StoresFavorites) {
+      console.error("User or StoresFavorites not defined");
+      return;
+    }
+
+    const updatedFavorites = isFollower
+      ? user.StoresFavorites.filter(
+          (favStore) => favStore.id !== store.id
+        )
+      : [...user.StoresFavorites, store];
+
+    const updatedUser = {
+      ...user,
+      StoresFavorites: updatedFavorites,
+    };
+
+    console.log("Updating user favorites:", updatedUser);
+
+    // Actualización optimista: actualizar localmente antes de llamar a updateUser
+    setIsFollower(!isFollower); // Invertir el estado de isFollower localmente
+    updateStoresFavorites(updatedFavorites); // Actualizar el contexto
+
+    // Llamar a updateUser para persistir los cambios
+    try {
+      await updateUser(user.id, updatedUser);
+      console.log("User favorites updated successfully.");
+    } catch (error) {
+      console.error("Error updating favorites", error);
+      // Revertir los cambios locales en caso de error
+      // Restaurar el estado original del usuario
+      setIsFollower(!isFollower); // Restaurar el estado original de isFollower
+      updateStoresFavorites(user.StoresFavorites); // Restaurar el contexto
+    }
+  };
+
   return (
     <>
       <NavBar />
+      <div className="cursor-pointer animate-zoom-in bg-gray-100/30 rounded-lg hover:bg-gray-100/40">
+        <button
+          className={`cursor-pointer animate-zoom-in p-1 rounded-lg flex justify-center items-center ${
+            isFollower ? "bg-gray-100/30 hover:bg-gray-100/40" : "bg-gray-400"
+          }`}
+          onClick={handleToggleFollower}
+          disabled={loading}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill={isFollower ? "#c81414" : "none"}
+            stroke={isFollower ? "#c81414" : "#ffffff"}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M12 20l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.96 6.053" />
+            <path d="M16 19h6" />
+            <path d="M19 16v6" />
+          </svg>
+        </button>
+      </div>
 
       <div>
-        <PublishProduct
-          toggleOpen={toggleOpenP}
-          setOptSmModal={setOptSmModal}
-          optSmModal={optSmModal}
-        />
+        {store && user && user.Store && (
+          <PublishProduct
+            toggleOpen={toggleOpenP}
+            setOptSmModal={setOptSmModal}
+            optSmModal={optSmModal}
+          />
+        )}
         <StoreHeader store={store} user={user} />
         {user.RoleId === 2 && user.Store.id == store.id ? (
-          
           <StoreNav toggleOpen={toggleOpenP} user={user} store={store}>
             <StoreNavItem
               changePage={changePage}
               activePage={activePage}
-              numPage={1}>
+              numPage={1}
+            >
               Inventory
             </StoreNavItem>
             <StoreNavItem
               changePage={changePage}
               activePage={activePage}
-              numPage={2}>
+              numPage={2}
+            >
               My Offers
             </StoreNavItem>
             <StoreNavItem
               changePage={changePage}
               activePage={activePage}
-              numPage={3}>
+              numPage={3}
+            >
               Sales
             </StoreNavItem>
           </StoreNav>
@@ -98,134 +173,124 @@ const StoreProfile = () => {
             <StoreNavItem
               changePage={changePage}
               activePage={activePage}
-              numPage={1}>
+              numPage={1}
+            >
               Products
             </StoreNavItem>
             <StoreNavItem
               changePage={changePage}
               activePage={activePage}
-              numPage={2}>
+              numPage={2}
+            >
               Offers
             </StoreNavItem>
           </StoreNav>
         )}
         {user.RoleId === 2 && user.Store.id == store.id ? (
           <>
-            {activePage === 1 &&
-              user.RoleId === 2 &&
-              user.Store.id == store.id && (
-                <div className={`flex justify-center w-full`}>
-                  <Inventory inventory={store.inventory} store={store} />
+            {activePage === 1 && (
+              <div className="flex justify-center w-full">
+                <Inventory inventory={store.inventory} store={store} />
+              </div>
+            )}
+            {activePage === 2 && (
+              <div className="flex justify-center w-full">
+                <div className="">
+                  <Offers products={productOffers} />
                 </div>
-              )}
-            {activePage === 2 &&
-              user.RoleId === 2 &&
-              user.Store.id == store.id && (
-                <div className={`flex justify-center w-full`}>
-                  <div className="">
-                    <Offers products={productOffers} />
-                  </div>
-                </div>
-              )}
-            {activePage === 3 &&
-              user.RoleId === 2 &&
-              user.Store.id == store.id && (
-                <div className={`flex justify-center w-full`}>
-                  <div className="p-4">
-                    <Typography variant="h4" className="mb-4">
-                      Listado de Ventas
-                    </Typography>
-                    <TableContainer component={Paper}>
-                      <Table>
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>Comprador</TableCell>
-                            <TableCell>Correo</TableCell>
-                            <TableCell>Producto</TableCell>
-                            <TableCell>Precio</TableCell>
-                            <TableCell>Cantidad</TableCell>
-                            <TableCell>Total</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {store.sales.map((sale, saleIndex) =>
-                            sale.products.map((product, productIndex) => (
-                              <TableRow key={`${saleIndex}-${productIndex}`}>
-                                {productIndex === 0 && (
-                                  <TableCell rowSpan={sale.products.length}>
-                                    {sale.buyer.FirstName} {sale.buyer.LastName}
-                                  </TableCell>
-                                )}
-                                {productIndex === 0 && (
-                                  <TableCell rowSpan={sale.products.length}>
-                                    {sale.buyer.email}
-                                  </TableCell>
-                                )}
-                                <TableCell>{product.title}</TableCell>
-                                <TableCell>
-                                  ${product.price.toFixed(2)}
+              </div>
+            )}
+            {activePage === 3 && (
+              <div className="flex justify-center w-full">
+                <div className="p-4">
+                  <Typography variant="h4" className="mb-4">
+                    Listado de Ventas
+                  </Typography>
+                  <TableContainer component={Paper}>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Comprador</TableCell>
+                          <TableCell>Correo</TableCell>
+                          <TableCell>Producto</TableCell>
+                          <TableCell>Precio</TableCell>
+                          <TableCell>Cantidad</TableCell>
+                          <TableCell>Total</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {store.sales.map((sale, saleIndex) =>
+                          sale.products.map((product, productIndex) => (
+                            <TableRow key={`${saleIndex}-${productIndex}`}>
+                              {productIndex === 0 && (
+                                <TableCell rowSpan={sale.products.length}>
+                                  {sale.buyer.FirstName} {sale.buyer.LastName}
                                 </TableCell>
-                                <TableCell>{product.quantity}</TableCell>
-                                <TableCell>
-                                  $
-                                  {(product.price * product.quantity).toFixed(
-                                    2
-                                  )}
+                              )}
+                              {productIndex === 0 && (
+                                <TableCell rowSpan={sale.products.length}>
+                                  {sale.buyer.email}
                                 </TableCell>
-                              </TableRow>
-                            ))
-                          )}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                  </div>
+                              )}
+                              <TableCell>{product.title}</TableCell>
+                              <TableCell>
+                                ${product.price.toFixed(2)}
+                              </TableCell>
+                              <TableCell>{product.quantity}</TableCell>
+                              <TableCell>
+                                $
+                                {(product.price * product.quantity).toFixed(2)}
+                              </TableCell>
+                            </TableRow>
+                          ))
+                        )}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
                 </div>
-              )}
+              </div>
+            )}
           </>
         ) : (
           <>
             {activePage === 1 && (
-              <div className={`flex justify-center w-full`}>
+              <div className="flex justify-center w-full">
                 <div className="flex flex-wrap gap-2 w-full justify-center my-6">
-                  {store.inventory.map((product) => {
-                    return (
-                      <ProductCard
-                        key={product.id}
-                        id={product.id}
-                        title={product.title}
-                        description={product.description}
-                        price={product.price}
-                        images={product.images}
-                        variants={product.variants}
-                        offer={product.offer}
-                        discount={product.discount}
-                        addCart={addCart}
-                      />
-                    );
-                  })}
+                  {store.inventory.map((product) => (
+                    <ProductCard
+                      key={product.id}
+                      id={product.id}
+                      title={product.title}
+                      description={product.description}
+                      price={product.price}
+                      images={product.images}
+                      variants={product.variants}
+                      offer={product.offer}
+                      discount={product.discount}
+                      addCart={addCart}
+                    />
+                  ))}
                 </div>
               </div>
             )}
             {activePage === 2 && (
-              <div className={`flex justify-center w-full`}>
+              <div className="flex justify-center w-full">
                 {store.inventory
                   .filter((product) => product.offer)
-                  .map((product) => {
-                    return (
-                      <ProductCard
-                        key={product.id}
-                        id={product.id}
-                        title={product.title}
-                        description={product.description}
-                        price={product.price}
-                        images={product.images}
-                        variants={product.variants}
-                        offer={product.offer}
-                        discount={product.discount}
-                        addCart={addCart}
-                      />
-                    );
-                  })}
+                  .map((product) => (
+                    <ProductCard
+                      key={product.id}
+                      id={product.id}
+                      title={product.title}
+                      description={product.description}
+                      price={product.price}
+                      images={product.images}
+                      variants={product.variants}
+                      offer={product.offer}
+                      discount={product.discount}
+                      addCart={addCart}
+                    />
+                  ))}
               </div>
             )}
           </>
